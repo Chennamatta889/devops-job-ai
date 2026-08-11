@@ -10,11 +10,34 @@ KNOWN_DEVOPS_SKILLS = [
     "Prometheus", "Grafana", "Istio", "Vault", "Packer", "CloudFormation",
     "EKS", "AKS", "GKE", "Snyk", "Aqua Security", "GitLeaks", "CloudWatch",
     "Splunk", "Dynatrace", "IAM", "ACR", "VPC", "EC2", "RDS", "S3",
+    "CI/CD", "DevSecOps", "Infrastructure as Code", "REST API", "REST APIs",
+]
+
+# Titles that are strong enough to be considered genuine DevOps/Cloud/Platform work.
+# Generic IT titles are intentionally excluded so Python/Azure alone cannot make
+# unrelated jobs such as GIS Developer or Application Developer look like matches.
+PRIMARY_ROLE_TERMS = [
+    "devops", "dev sec ops", "devsecops", "cloud engineer", "cloud devops",
+    "platform engineer", "platform devops", "site reliability", "sre",
+    "release engineer", "build engineer", "build release", "infrastructure engineer",
+    "cloud infrastructure", "production engineer", "systems engineer",
+]
+
+SECONDARY_ROLE_TERMS = [
+    "cloud operations", "platform operations", "infrastructure automation",
+    "reliability engineer", "automation engineer",
+]
+
+NON_DEVOPS_ROLE_TERMS = [
+    "software developer", "application developer", "frontend", "backend developer",
+    "full stack", "data scientist", "data engineer", "gis developer", "gis",
+    "technical project manager", "project manager", "sales", "inside sales",
+    "security consultant", "cyber security consultant", "qa engineer", "test manager",
 ]
 
 
 def normalize(text: str) -> str:
-    return re.sub(r"[^a-z0-9+#.\- ]+", " ", str(text or "").lower())
+    return re.sub(r"[^a-z0-9+#.\-/ ]+", " ", str(text or "").lower())
 
 
 def contains_term(text: str, term: str) -> bool:
@@ -22,7 +45,7 @@ def contains_term(text: str, term: str) -> bool:
     term_n = normalize(term).strip()
     if not term_n:
         return False
-    pattern = r"(?<![a-z0-9+#.\-])" + re.escape(term_n) + r"(?![a-z0-9+#.\-])"
+    pattern = r"(?<![a-z0-9+#.\-/])" + re.escape(term_n) + r"(?![a-z0-9+#.\-/])"
     return re.search(pattern, text_n) is not None
 
 
@@ -66,10 +89,12 @@ def _job_url(job: Any) -> str:
 def calculate_skill_score(job_text: str, candidate_skills: list[str]):
     job_skills = [skill for skill in KNOWN_DEVOPS_SKILLS if contains_term(job_text, skill)]
     if not job_skills:
-        return 30, [], []
+        return 10, [], []
 
     matched = []
     missing = []
+    candidate_skills = candidate_skills or []
+
     for skill in job_skills:
         if any(
             contains_term(skill, candidate_skill) or contains_term(candidate_skill, skill)
@@ -79,19 +104,32 @@ def calculate_skill_score(job_text: str, candidate_skills: list[str]):
         else:
             missing.append(skill)
 
-    return round(len(matched) / len(job_skills) * 60), matched, missing
+    coverage = len(matched) / len(job_skills)
+
+    # Avoid the old problem where one matching skill could produce a 100% score.
+    # A single skill gives useful credit, but strong scores require multiple skills.
+    skill_score = min(40, round((min(len(matched), 3) * 8) + (coverage * 16)))
+
+    return skill_score, matched, missing
 
 
 def calculate_role_score(job_title: str, target_roles: list[str]):
     title = str(job_title or "")
-    if any(contains_term(title, role) for role in target_roles):
+
+    if any(contains_term(title, term) for term in NON_DEVOPS_ROLE_TERMS):
+        return 0
+
+    # A user's explicit target role is strongest evidence.
+    if target_roles and any(contains_term(title, role) for role in target_roles):
+        return 30
+
+    if any(contains_term(title, term) for term in PRIMARY_ROLE_TERMS):
+        return 30
+
+    if any(contains_term(title, term) for term in SECONDARY_ROLE_TERMS):
         return 20
 
-    related_terms = [
-        "devops", "cloud engineer", "platform engineer",
-        "site reliability", "sre", "release engineer"
-    ]
-    return 15 if any(contains_term(title, term) for term in related_terms) else 0
+    return 0
 
 
 def calculate_location_score(job_location: str, preferred_locations: list[str]):
@@ -105,8 +143,10 @@ def calculate_experience_score(job_text: str, candidate_experience: float):
     if required_years is None:
         return 10, None
     if required_years <= candidate_experience:
-        return 10, required_years
+        return 20, required_years
     if required_years <= candidate_experience + 1:
+        return 10, required_years
+    if required_years <= candidate_experience + 2:
         return 5, required_years
     return 0, required_years
 
@@ -130,9 +170,11 @@ def score_job(job: Any, profile: CandidateProfile):
 
     total_score = min(100, skill_score + role_score + location_score + experience_score)
 
-    if total_score >= 85:
+    # Automatic application requires both a genuinely relevant role and enough
+    # demonstrated skill overlap. This prevents unrelated jobs from being queued.
+    if role_score >= 30 and skill_score >= 24 and total_score >= 85:
         decision = "APPLY"
-    elif total_score >= 70:
+    elif role_score >= 20 and total_score >= 65:
         decision = "REVIEW"
     else:
         decision = "SKIP"
