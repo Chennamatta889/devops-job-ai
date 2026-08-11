@@ -2,7 +2,7 @@ from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
@@ -142,7 +142,7 @@ def recommended_jobs(keyword: str = "DevOps", location: str = "Hyderabad", min_s
     if not profile:
         raise HTTPException(status_code=400, detail="Candidate profile not found. Create /profile first.")
 
-    result = search_jobs(keyword=keyword, location=location)
+    result = search_jobs(keyword=keyword, location=location, results_per_page=min(max(limit * 3, 20), 100))
     raw_jobs = result.get("results", [])
     scored = []
     for raw in raw_jobs:
@@ -186,7 +186,14 @@ def analyze_external_job(job: ExternalJobRequest, db: Session = Depends(get_db))
         "description": job.description,
         "url": job.url,
     })
-    return {"job_id": job.job_id, "title": job.title, "company": job.company, "location": job.location, "url": job.url, "ai_analysis": analyze_job(job_data, profile)}
+    return {
+        "job_id": job.job_id,
+        "title": job.title,
+        "company": job.company,
+        "location": job.location,
+        "url": job.url,
+        "ai_analysis": analyze_job(job_data, profile),
+    }
 
 
 class QueueApplicationRequest(BaseModel):
@@ -226,15 +233,16 @@ def queue_application(payload: QueueApplicationRequest, db: Session = Depends(ge
 def auto_prepare_applications(
     keyword: str = "DevOps",
     location: str = "Hyderabad",
-    min_score: int = Field(default=85, ge=0, le=100),
-    limit: int = Field(default=10, ge=1, le=50),
+    min_score: int = 85,
+    limit: int = 10,
     db: Session = Depends(get_db),
 ):
-    """Search, score, deduplicate and generate application packages in one call.
+    """Search, score, deduplicate and generate application packages in one call."""
+    if not 0 <= min_score <= 100:
+        raise HTTPException(status_code=400, detail="min_score must be between 0 and 100")
+    if not 1 <= limit <= 50:
+        raise HTTPException(status_code=400, detail="limit must be between 1 and 50")
 
-    External job submission is intentionally not performed here. Packages are
-    placed in READY_FOR_REVIEW so the candidate can explicitly approve them.
-    """
     profile = db.query(CandidateProfile).first()
     if not profile:
         raise HTTPException(status_code=400, detail="Candidate profile not found. Create /profile first.")
@@ -260,9 +268,6 @@ def queue_recommended_applications(keyword: str = "DevOps", location: str = "Hyd
     if not profile:
         raise HTTPException(status_code=400, detail="Candidate profile not found. Create /profile first.")
     result = search_jobs(keyword=keyword, location=location, results_per_page=min(max(limit * 3, 20), 100))
-    queued = queue_and_prepare(db, profile, None, result.get("results", []), min_score, limit, generate_packages=False) if False else None
-
-    # Preserve the existing endpoint semantics while using the same matcher.
     created = []
     for raw in result.get("results", []):
         if len(created) >= limit:
@@ -327,6 +332,7 @@ def generate_application_package(application_id: int, db: Session = Depends(get_
     application.status = "READY_FOR_REVIEW"
     application.notes = "Application package generated. Explicit approval is required before external submission."
     db.commit()
+    db.refresh(artifact)
     return {"application_id": application.id, "status": application.status, "job": {"title": application.title, "company": application.company, "apply_url": application.apply_url}, "package": package}
 
 
@@ -356,12 +362,7 @@ def get_application_package(application_id: int, db: Session = Depends(get_db)):
 
 @app.post("/applications/{application_id}/approve")
 def approve_application(application_id: int, db: Session = Depends(get_db)):
-    """Explicitly approve an application package for submission.
-
-    This endpoint records the candidate's approval. It does not submit to a
-    third-party employer site because those sites use different forms, login,
-    CAPTCHA and consent flows that cannot safely be assumed to be equivalent.
-    """
+    """Record explicit candidate approval before external submission."""
     application = db.query(Application).filter(Application.id == application_id).first()
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
