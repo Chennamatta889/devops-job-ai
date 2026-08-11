@@ -5,6 +5,7 @@ import re
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlparse
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
@@ -58,7 +59,9 @@ def _make_resume_pdf(text: str) -> Path:
             story.append(Paragraph(line.replace("&", "&amp;"), styles["BodyText"]))
             story.append(Spacer(1, 3))
 
-    SimpleDocTemplate(str(path), pagesize=A4, rightMargin=42, leftMargin=42, topMargin=42, bottomMargin=42).build(story)
+    SimpleDocTemplate(
+        str(path), pagesize=A4, rightMargin=42, leftMargin=42, topMargin=42, bottomMargin=42
+    ).build(story)
     return path
 
 
@@ -136,16 +139,75 @@ def _attach_resume(page, pdf_path: Path):
     return False
 
 
-def _find_submit_button(page):
+def _dismiss_overlays(page):
+    """Close common popups/modals that can intercept clicks on external job pages."""
+    try:
+        page.keyboard.press("Escape")
+    except Exception:
+        pass
+
+    selectors = [
+        '[aria-label="Close"]',
+        '[aria-label="close"]',
+        'button:has-text("Close")',
+        '.mfp-close',
+        '.modal-close',
+        '[data-dismiss="modal"]',
+    ]
+    for selector in selectors:
+        locator = page.locator(selector)
+        try:
+            count = locator.count()
+            for index in range(min(count, 3)):
+                item = locator.nth(index)
+                if item.is_visible():
+                    item.click(timeout=1500, force=True)
+                    page.wait_for_timeout(200)
+        except Exception:
+            continue
+
+
+def _find_apply_link(page):
+    """Find an external/application link before considering generic submit buttons."""
     candidates = [
-        'button:has-text("Submit application")',
-        'button:has-text("Submit Application")',
+        'a:has-text("Apply now")',
+        'a:has-text("Apply Now")',
+        'a:has-text("Apply")',
         'button:has-text("Apply now")',
         'button:has-text("Apply Now")',
-        'input[type="submit"]',
-        'button[type="submit"]',
+        'button:has-text("Apply")',
     ]
     return _first_visible(page, candidates)
+
+
+def _find_submit_button(page):
+    """Find a real application submit control, never the Adzuna search button."""
+    candidates = [
+        'form button:has-text("Submit application")',
+        'form button:has-text("Submit Application")',
+        'form button:has-text("Submit")',
+        'form input[type="submit"]',
+        'button:has-text("Submit application")',
+        'button:has-text("Submit Application")',
+        'button:has-text("Submit")',
+        'input[type="submit"]',
+    ]
+    for selector in candidates:
+        locator = page.locator(selector)
+        try:
+            count = locator.count()
+            for index in range(count):
+                item = locator.nth(index)
+                if not item.is_visible():
+                    continue
+                element_id = (item.get_attribute("id") or "").lower()
+                name = (item.get_attribute("name") or "").lower()
+                if element_id == "search-btn" or "search" in element_id or "search" in name:
+                    continue
+                return item
+        except Exception:
+            continue
+    return None
 
 
 def submit_application(application, artifact, profile) -> SubmissionResult:
@@ -174,8 +236,31 @@ def submit_application(application, artifact, profile) -> SubmissionResult:
                 page.goto(application.apply_url, wait_until="domcontentloaded", timeout=30000)
                 page.wait_for_timeout(1500)
             except PlaywrightTimeoutError:
-                # A slow external ATS can still be usable after navigation timeout.
                 pass
+
+            # Adzuna can display an inline search/modal overlay on job pages. It can
+            # intercept pointer events and also contains a search submit button.
+            _dismiss_overlays(page)
+
+            # If the supplied URL is an Adzuna listing, first follow the actual
+            # employer/application link. Do not mistake Adzuna's search button for
+            # the job application's submit button.
+            hostname = (urlparse(page.url).hostname or "").lower()
+            if "adzuna." in hostname:
+                apply_link = _find_apply_link(page)
+                if apply_link:
+                    try:
+                        apply_link.click(timeout=5000)
+                        page.wait_for_timeout(1800)
+                    except Exception:
+                        try:
+                            href = apply_link.get_attribute("href")
+                            if href:
+                                page.goto(href, wait_until="domcontentloaded", timeout=30000)
+                                page.wait_for_timeout(1500)
+                        except Exception:
+                            pass
+                    _dismiss_overlays(page)
 
             final_url = page.url
             body_text = page.locator("body").inner_text(timeout=5000)
@@ -193,7 +278,7 @@ def submit_application(application, artifact, profile) -> SubmissionResult:
             if not submit_button:
                 return SubmissionResult("MANUAL_ACTION_REQUIRED", "No supported application submit button was detected.", final_url)
 
-            submit_button.click()
+            submit_button.click(timeout=timeout_ms)
             try:
                 page.wait_for_load_state("domcontentloaded", timeout=15000)
             except PlaywrightTimeoutError:
