@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const API_BASE_URL = "http://50.17.126.62";
+const API_BASE_URL = 'http://50.17.126.62'
 
 function scoreClass(score) {
   if (score >= 85) return 'score-high'
@@ -27,9 +27,11 @@ function App() {
         location
       })
 
-      const response = await fetch(
-        `${API_BASE_URL}/jobs/search?${params.toString()}`
-      )
+      const url = `${API_BASE_URL}/jobs/search?${params.toString()}`
+
+      console.log('Searching:', url)
+
+      const response = await fetch(url)
 
       if (!response.ok) {
         throw new Error(`API returned ${response.status}`)
@@ -37,39 +39,113 @@ function App() {
 
       const data = await response.json()
 
+      console.log('API RESPONSE:', data)
+
+      /*
+        Backend response:
+
+        {
+          count: 1821,
+          jobs: [...]
+        }
+      */
+
       const list = Array.isArray(data)
         ? data
-        : data.jobs || data.results || []
+        : Array.isArray(data.jobs)
+          ? data.jobs
+          : Array.isArray(data.results)
+            ? data.results
+            : []
+
+      console.log('JOB COUNT:', list.length)
+
+      if (list.length === 0) {
+        console.warn('No jobs found in API response')
+      }
 
       const normalized = list.map((job, index) => ({
-        job_id: job.job_id ?? job.id ?? index + 1,
-        title: job.title || 'Untitled job',
+        job_id:
+          job.job_id ??
+          job.id ??
+          index + 1,
+
+        title:
+          job.title ??
+          'Untitled job',
+
         company:
-          job.company ||
-          job.company_name ||
-          'Unknown company',
+          typeof job.company === 'string'
+            ? job.company
+            : job.company?.display_name ??
+              job.company_name ??
+              'Unknown company',
+
         location:
-          job.location ||
-          job.location_display ||
-          location,
-        description: job.description || '',
-        url:
-          job.url ||
-          job.redirect_url ||
+          typeof job.location === 'string'
+            ? job.location
+            : job.location?.display_name ??
+              job.location_display ??
+              location,
+
+        description:
+          job.description ??
           '',
-        score: job.score ?? null,
-        decision: job.decision ?? null,
+
+        url:
+          job.url ??
+          job.redirect_url ??
+          '',
+
+        created:
+          job.created ??
+          '',
+
+        salary_min:
+          job.salary_min ??
+          null,
+
+        salary_max:
+          job.salary_max ??
+          null,
+
+        category:
+          typeof job.category === 'string'
+            ? job.category
+            : job.category?.label ??
+              '',
+
+        score:
+          typeof job.score === 'number'
+            ? job.score
+            : null,
+
+        decision:
+          job.decision ??
+          null,
+
         matched_skills:
-          job.matched_skills || [],
+          Array.isArray(job.matched_skills)
+            ? job.matched_skills
+            : [],
+
         missing_skills:
-          job.missing_skills || []
+          Array.isArray(job.missing_skills)
+            ? job.missing_skills
+            : []
       }))
+
+      console.log('NORMALIZED JOBS:', normalized)
 
       setJobs(normalized)
 
     } catch (err) {
+      console.error('SEARCH ERROR:', err)
+
+      setJobs([])
+
       setError(
-        `${err.message}. Check VITE_API_BASE_URL and make sure the backend is reachable.`
+        `${err.message}. Check API connectivity and frontend configuration.`
       )
     } finally {
       setLoading(false)
@@ -107,6 +183,8 @@ function App() {
       })
 
     } catch (err) {
+      console.error('AI ANALYSIS ERROR:', err)
+
       setSelectedJob(null)
       setError(err.message)
     }
@@ -208,12 +286,11 @@ function App() {
 
         <section className="job-list">
 
-          {jobs.length === 0 &&
-            !loading && (
-              <div className="empty-state">
-                Search for DevOps jobs to get started.
-              </div>
-            )}
+          {jobs.length === 0 && !loading && (
+            <div className="empty-state">
+              Search for DevOps jobs to get started.
+            </div>
+          )}
 
           {jobs.map((job) => (
 
@@ -239,7 +316,6 @@ function App() {
                   </div>
 
                   {job.score !== null && (
-
                     <div
                       className={`score ${scoreClass(
                         job.score
@@ -255,7 +331,6 @@ function App() {
                       </span>
 
                     </div>
-
                   )}
 
                 </div>
@@ -263,6 +338,23 @@ function App() {
                 <div className="meta">
                   {job.location}
                 </div>
+
+                {job.category && (
+                  <div className="meta">
+                    {job.category}
+                  </div>
+                )}
+
+                {job.salary_min !== null && (
+                  <div className="meta">
+                    Salary: ₹
+                    {Number(job.salary_min).toLocaleString('en-IN')}
+                    {job.salary_max !== null &&
+                      ` - ₹${Number(
+                        job.salary_max
+                      ).toLocaleString('en-IN')}`}
+                  </div>
+                )}
 
                 {job.matched_skills?.length > 0 && (
 
@@ -289,8 +381,8 @@ function App() {
 
                   <div className="missing">
 
-                    Missing:
-                    {' '}
+                    Missing:{' '}
+
                     {job.missing_skills
                       .slice(0, 5)
                       .join(', ')}
