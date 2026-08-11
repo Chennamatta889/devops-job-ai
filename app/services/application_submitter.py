@@ -170,14 +170,57 @@ def _dismiss_overlays(page):
 def _find_apply_link(page):
     """Find an external/application link before considering generic submit buttons."""
     candidates = [
+        'a:has-text("Apply for this job")',
+        'button:has-text("Apply for this job")',
         'a:has-text("Apply now")',
         'a:has-text("Apply Now")',
         'a:has-text("Apply")',
         'button:has-text("Apply now")',
         'button:has-text("Apply Now")',
         'button:has-text("Apply")',
+        'a[href*="apply" i]',
     ]
     return _first_visible(page, candidates)
+
+
+def _follow_apply_link(page):
+    """Follow an Adzuna apply control, including controls that open a new tab."""
+    apply_link = _find_apply_link(page)
+    if not apply_link:
+        return False
+
+    try:
+        href = apply_link.get_attribute("href")
+    except Exception:
+        href = None
+
+    try:
+        # Some Adzuna controls open the employer ATS in a popup/new tab.
+        with page.expect_popup(timeout=5000) as popup_info:
+            apply_link.click(timeout=5000)
+        popup = popup_info.value
+        popup.wait_for_load_state("domcontentloaded", timeout=30000)
+        popup.wait_for_timeout(1500)
+        return popup
+    except Exception:
+        pass
+
+    try:
+        apply_link.click(timeout=5000)
+        page.wait_for_timeout(1800)
+        return page
+    except Exception:
+        pass
+
+    if href and not href.startswith("#") and not href.lower().startswith("javascript:"):
+        try:
+            page.goto(href, wait_until="domcontentloaded", timeout=30000)
+            page.wait_for_timeout(1500)
+            return page
+        except Exception:
+            pass
+
+    return False
 
 
 def _find_submit_button(page):
@@ -238,29 +281,14 @@ def submit_application(application, artifact, profile) -> SubmissionResult:
             except PlaywrightTimeoutError:
                 pass
 
-            # Adzuna can display an inline search/modal overlay on job pages. It can
-            # intercept pointer events and also contains a search submit button.
             _dismiss_overlays(page)
 
-            # If the supplied URL is an Adzuna listing, first follow the actual
-            # employer/application link. Do not mistake Adzuna's search button for
-            # the job application's submit button.
             hostname = (urlparse(page.url).hostname or "").lower()
             if "adzuna." in hostname:
-                apply_link = _find_apply_link(page)
-                if apply_link:
-                    try:
-                        apply_link.click(timeout=5000)
-                        page.wait_for_timeout(1800)
-                    except Exception:
-                        try:
-                            href = apply_link.get_attribute("href")
-                            if href:
-                                page.goto(href, wait_until="domcontentloaded", timeout=30000)
-                                page.wait_for_timeout(1500)
-                        except Exception:
-                            pass
-                    _dismiss_overlays(page)
+                destination = _follow_apply_link(page)
+                if destination:
+                    page = destination
+                _dismiss_overlays(page)
 
             final_url = page.url
             body_text = page.locator("body").inner_text(timeout=5000)
