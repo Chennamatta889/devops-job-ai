@@ -9,64 +9,38 @@ from app.database import Base
 class CandidateProfile(Base):
     __tablename__ = "candidate_profiles"
 
-    id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
-        index=True
-    )
-
-    name: Mapped[str] = mapped_column(
-        String(100)
-    )
-
-    years_experience: Mapped[float] = mapped_column(
-        Float
-    )
-
-    target_roles: Mapped[str] = mapped_column(
-        Text
-    )
-
-    skills: Mapped[str] = mapped_column(
-        Text
-    )
-
-    preferred_locations: Mapped[str] = mapped_column(
-        Text
-    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100))
+    years_experience: Mapped[float] = mapped_column(Float)
+    target_roles: Mapped[str] = mapped_column(Text)
+    skills: Mapped[str] = mapped_column(Text)
+    preferred_locations: Mapped[str] = mapped_column(Text)
 
 
 class Job(Base):
     __tablename__ = "jobs"
 
-    id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
-        index=True
-    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String(200))
+    company: Mapped[str] = mapped_column(String(200))
+    location: Mapped[str] = mapped_column(String(200))
+    description: Mapped[str] = mapped_column(Text)
+    url: Mapped[str] = mapped_column(String(500), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    title: Mapped[str] = mapped_column(
-        String(200)
-    )
 
-    company: Mapped[str] = mapped_column(
-        String(200)
-    )
+class Application(Base):
+    __tablename__ = "applications"
 
-    location: Mapped[str] = mapped_column(
-        String(200)
-    )
-
-    description: Mapped[str] = mapped_column(
-        Text
-    )
-
-    url: Mapped[str] = mapped_column(
-        String(500),
-        default=""
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        default=datetime.utcnow
-    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    external_job_id: Mapped[str] = mapped_column(String(100), index=True)
+    title: Mapped[str] = mapped_column(String(200))
+    company: Mapped[str] = mapped_column(String(200))
+    location: Mapped[str] = mapped_column(String(200))
+    apply_url: Mapped[str] = mapped_column(String(1000))
+    match_score: Mapped[float] = mapped_column(Float, default=0)
+    decision: Mapped[str] = mapped_column(String(30), default="REVIEW")
+    status: Mapped[str] = mapped_column(String(40), default="QUEUED")
+    notes: Mapped[str] = mapped_column(Text, default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
