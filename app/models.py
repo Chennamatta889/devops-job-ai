@@ -17,6 +17,17 @@ class CandidateProfile(Base):
     preferred_locations: Mapped[str] = mapped_column(Text)
 
 
+class CandidateResume(Base):
+    __tablename__ = "candidate_resumes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    profile_id: Mapped[int] = mapped_column(Integer, index=True)
+    filename: Mapped[str] = mapped_column(String(255), default="resume.txt")
+    resume_text: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
 class Job(Base):
     __tablename__ = "jobs"
 
@@ -44,3 +55,13 @@ class Application(Base):
     notes: Mapped[str] = mapped_column(Text, default="")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class ApplicationArtifact(Base):
+    __tablename__ = "application_artifacts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    application_id: Mapped[int] = mapped_column(Integer, index=True)
+    tailored_resume: Mapped[str] = mapped_column(Text, default="")
+    cover_letter: Mapped[str] = mapped_column(Text, default="")
+    generated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
