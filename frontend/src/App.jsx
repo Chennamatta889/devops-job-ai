@@ -39,7 +39,7 @@ function App() {
 
       const list = Array.isArray(data)
         ? data
-        : data.results || []
+        : data.jobs || data.results || []
 
       const normalized = list.map((job, index) => ({
         job_id: job.job_id ?? job.id ?? index + 1,
