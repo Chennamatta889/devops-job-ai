@@ -1,4 +1,3 @@
-```python
 from app.services.matcher import score_job
 
 from fastapi import FastAPI, Depends
@@ -301,4 +300,3 @@ def search_real_jobs(
         "count": result.get("count", 0),
         "jobs": result.get("results", [])
     }
-```
