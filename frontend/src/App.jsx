@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL
+const API_BASE_URL = "http://50.17.126.62";
 
 function scoreClass(score) {
   if (score >= 85) return 'score-high'
