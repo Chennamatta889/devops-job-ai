@@ -1,0 +1,31 @@
+# Secrets
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+
+# Tests/cache
+.pytest_cache/
+.coverage
+
+# Documentation/local files
+README.md
