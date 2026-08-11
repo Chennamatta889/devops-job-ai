@@ -8,11 +8,14 @@ WORKDIR /app
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && playwright install --with-deps chromium
 
 COPY app ./app
 
 ENV PORT=8000
+ENV PLAYWRIGHT_HEADLESS=true
+ENV APPLICATION_BROWSER_TIMEOUT_MS=15000
 
 EXPOSE 8000
 
