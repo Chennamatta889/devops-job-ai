@@ -10,12 +10,13 @@ from app.models import Application, ApplicationArtifact, CandidateProfile, Candi
 from app.services.ai_matcher import analyze_job
 from app.services.application_generator import generate_application
 from app.services.application_pipeline import ExternalJob, queue_and_prepare
+from app.services.application_submitter import submit_application
 from app.services.job_sources.adzuna import search_jobs
 from app.services.matcher import score_job
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="DevOps Job AI", version="0.4.0")
+app = FastAPI(title="DevOps Job AI", version="0.5.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -28,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "message": "DevOps Job AI is running", "version": "0.4.0"}
+    return {"status": "ok", "message": "DevOps Job AI is running", "version": "0.5.0"}
 
 
 class ProfileRequest(BaseModel):
@@ -373,6 +374,42 @@ def approve_application(application_id: int, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(application)
     return application
+
+
+@app.post("/applications/{application_id}/submit")
+def submit_approved_application(application_id: int, db: Session = Depends(get_db)):
+    """Attempt browser submission for an explicitly approved application.
+
+    The worker does not bypass CAPTCHA, MFA, login walls, or bot protections.
+    Those cases become MANUAL_ACTION_REQUIRED instead of being reported as applied.
+    """
+    application = db.query(Application).filter(Application.id == application_id).first()
+    if not application:
+        raise HTTPException(status_code=404, detail="Application not found")
+    if application.status != "APPROVED":
+        raise HTTPException(status_code=400, detail=f"Application must be APPROVED before submission, current status is {application.status}")
+
+    artifact = db.query(ApplicationArtifact).filter(ApplicationArtifact.application_id == application.id).first()
+    if not artifact:
+        raise HTTPException(status_code=400, detail="Application package not generated")
+
+    profile = db.query(CandidateProfile).first()
+    if not profile:
+        raise HTTPException(status_code=400, detail="Candidate profile not found")
+
+    result = submit_application(application, artifact, profile)
+    application.status = result.status
+    application.notes = result.message + (f" Final URL: {result.final_url}" if result.final_url else "")
+    db.commit()
+    db.refresh(application)
+
+    return {
+        "application_id": application.id,
+        "status": application.status,
+        "submitted": result.submitted,
+        "message": result.message,
+        "final_url": result.final_url,
+    }
 
 
 @app.post("/applications/{application_id}/mark-applied")
