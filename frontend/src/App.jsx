@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL
+  import.meta.env.example.VITE_API_BASE_URL
 
 function scoreClass(score) {
   if (score >= 85) return 'score-high'
