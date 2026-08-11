@@ -13,9 +13,6 @@ KNOWN_DEVOPS_SKILLS = [
     "CI/CD", "DevSecOps", "Infrastructure as Code", "REST API", "REST APIs",
 ]
 
-# Titles that are strong enough to be considered genuine DevOps/Cloud/Platform work.
-# Generic IT titles are intentionally excluded so Python/Azure alone cannot make
-# unrelated jobs such as GIS Developer or Application Developer look like matches.
 PRIMARY_ROLE_TERMS = [
     "devops", "dev sec ops", "devsecops", "cloud engineer", "cloud devops",
     "platform engineer", "platform devops", "site reliability", "sre",
@@ -86,29 +83,39 @@ def _job_url(job: Any) -> str:
     return str(getattr(job, "url", "") or getattr(job, "redirect_url", "") or "")
 
 
+def _skill_matches(required_skill: str, candidate_skills: list[str]) -> bool:
+    """Match skill phrases in either direction, including variants such as CI/CD Pipelines."""
+    required = normalize(required_skill).strip()
+    for candidate in candidate_skills:
+        candidate_n = normalize(candidate).strip()
+        if not candidate_n:
+            continue
+        if required == candidate_n or required in candidate_n or candidate_n in required:
+            return True
+    return False
+
+
 def calculate_skill_score(job_text: str, candidate_skills: list[str]):
     job_skills = [skill for skill in KNOWN_DEVOPS_SKILLS if contains_term(job_text, skill)]
     if not job_skills:
-        return 10, [], []
+        return 0, [], []
 
     matched = []
     missing = []
     candidate_skills = candidate_skills or []
 
     for skill in job_skills:
-        if any(
-            contains_term(skill, candidate_skill) or contains_term(candidate_skill, skill)
-            for candidate_skill in candidate_skills
-        ):
+        if _skill_matches(skill, candidate_skills):
             matched.append(skill)
         else:
             missing.append(skill)
 
+    # Skill score is capped at 60. Coverage matters, but one matching skill
+    # cannot create an artificially high score by itself.
     coverage = len(matched) / len(job_skills)
-
-    # Avoid the old problem where one matching skill could produce a 100% score.
-    # A single skill gives useful credit, but strong scores require multiple skills.
-    skill_score = min(40, round((min(len(matched), 3) * 8) + (coverage * 16)))
+    breadth_bonus = min(len(matched), 5) * 5
+    coverage_bonus = round(coverage * 35)
+    skill_score = min(60, breadth_bonus + coverage_bonus)
 
     return skill_score, matched, missing
 
@@ -119,15 +126,14 @@ def calculate_role_score(job_title: str, target_roles: list[str]):
     if any(contains_term(title, term) for term in NON_DEVOPS_ROLE_TERMS):
         return 0
 
-    # A user's explicit target role is strongest evidence.
     if target_roles and any(contains_term(title, role) for role in target_roles):
-        return 30
+        return 20
 
     if any(contains_term(title, term) for term in PRIMARY_ROLE_TERMS):
-        return 30
+        return 20
 
     if any(contains_term(title, term) for term in SECONDARY_ROLE_TERMS):
-        return 20
+        return 15
 
     return 0
 
@@ -139,14 +145,17 @@ def calculate_location_score(job_location: str, preferred_locations: list[str]):
 
 
 def calculate_experience_score(job_text: str, candidate_experience: float):
-    required_years = extract_required_years(job_text)
+    text = str(job_text or "").lower()
+    required_years = extract_required_years(text)
     if required_years is None:
         return 10, None
     if required_years <= candidate_experience:
-        return 20, required_years
-    if required_years <= candidate_experience + 1:
         return 10, required_years
-    if required_years <= candidate_experience + 2:
+    # For a range such as 4-10 years, the lower bound is the real minimum.
+    # A 3.5-year candidate is close enough to receive partial credit, but not full credit.
+    if required_years <= candidate_experience + 0.5:
+        return 7, required_years
+    if required_years <= candidate_experience + 1:
         return 5, required_years
     return 0, required_years
 
@@ -170,11 +179,9 @@ def score_job(job: Any, profile: CandidateProfile):
 
     total_score = min(100, skill_score + role_score + location_score + experience_score)
 
-    # Automatic application requires both a genuinely relevant role and enough
-    # demonstrated skill overlap. This prevents unrelated jobs from being queued.
-    if role_score >= 30 and skill_score >= 24 and total_score >= 85:
+    if role_score >= 20 and skill_score >= 35 and total_score >= 85:
         decision = "APPLY"
-    elif role_score >= 20 and total_score >= 65:
+    elif role_score >= 15 and skill_score >= 20 and total_score >= 70:
         decision = "REVIEW"
     else:
         decision = "SKIP"
