@@ -1,7 +1,11 @@
+```python
 from app.services.matcher import score_job
+
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
+
 from app.services.ai_matcher import analyze_job
 from app.services.job_sources.adzuna import search_jobs
 
@@ -93,7 +97,7 @@ def get_profile(
 
 
 # =========================
-# JOBS
+# LOCAL DATABASE JOBS
 # =========================
 
 @app.post("/jobs")
@@ -130,7 +134,7 @@ def get_jobs(
 
 
 # =========================
-# JOB MATCHES
+# LOCAL DATABASE JOB MATCHES
 # =========================
 
 @app.get("/jobs/matches")
@@ -176,7 +180,7 @@ def get_job_matches(
 
 
 # =========================
-# AI MATCH
+# LOCAL DATABASE AI MATCH
 # =========================
 
 @app.get("/jobs/{job_id}/ai-match")
@@ -218,6 +222,68 @@ def get_ai_match(
 
 
 # =========================
+# EXTERNAL JOB MODEL
+# =========================
+
+class ExternalJob(BaseModel):
+    job_id: str
+    title: str
+    company: str
+    location: str
+    description: str = ""
+    url: str = ""
+
+
+# =========================
+# AI MATCH FOR ADZUNA JOBS
+# =========================
+
+@app.post("/jobs/ai-match")
+def analyze_external_job(
+    job: ExternalJob,
+    db: Session = Depends(get_db)
+):
+    # Get candidate profile
+    profile = db.query(
+        CandidateProfile
+    ).first()
+
+    if not profile:
+        return {
+            "error": "Candidate profile not found"
+        }
+
+    # Create a temporary job object.
+    # We do NOT save the Adzuna job to the database.
+    class JobData:
+        pass
+
+    job_data = JobData()
+
+    job_data.id = job.job_id
+    job_data.title = job.title
+    job_data.company = job.company
+    job_data.location = job.location
+    job_data.description = job.description
+    job_data.url = job.url
+
+    # Send the external job + candidate profile to AI
+    result = analyze_job(
+        job_data,
+        profile
+    )
+
+    return {
+        "job_id": job.job_id,
+        "title": job.title,
+        "company": job.company,
+        "location": job.location,
+        "url": job.url,
+        "ai_analysis": result
+    }
+
+
+# =========================
 # REAL JOB SEARCH - ADZUNA
 # =========================
 
@@ -235,3 +301,4 @@ def search_real_jobs(
         "count": result.get("count", 0),
         "jobs": result.get("results", [])
     }
+```
