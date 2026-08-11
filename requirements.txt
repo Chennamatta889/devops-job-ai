@@ -4,3 +4,5 @@ sqlalchemy
 python-dotenv
 google-genai
 requests
+playwright
+reportlab
