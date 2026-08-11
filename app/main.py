@@ -6,14 +6,15 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
-from app.models import Application, CandidateProfile, Job
+from app.models import Application, ApplicationArtifact, CandidateProfile, CandidateResume, Job
 from app.services.ai_matcher import analyze_job
+from app.services.application_generator import generate_application
 from app.services.job_sources.adzuna import search_jobs
 from app.services.matcher import score_job
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="DevOps Job AI", version="0.2.0")
+app = FastAPI(title="DevOps Job AI", version="0.3.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -57,6 +58,52 @@ def create_or_replace_profile(payload: ProfileRequest, db: Session = Depends(get
 @app.get("/profile")
 def get_profile(db: Session = Depends(get_db)):
     return db.query(CandidateProfile).first()
+
+
+class ResumeRequest(BaseModel):
+    filename: str = "resume.txt"
+    resume_text: str
+
+
+@app.post("/resume")
+def save_resume(payload: ResumeRequest, db: Session = Depends(get_db)):
+    profile = db.query(CandidateProfile).first()
+    if not profile:
+        raise HTTPException(status_code=400, detail="Create /profile before saving the resume")
+
+    resume = db.query(CandidateResume).filter(CandidateResume.profile_id == profile.id).first()
+    if resume:
+        resume.filename = payload.filename
+        resume.resume_text = payload.resume_text
+    else:
+        resume = CandidateResume(
+            profile_id=profile.id,
+            filename=payload.filename,
+            resume_text=payload.resume_text,
+        )
+        db.add(resume)
+
+    db.commit()
+    db.refresh(resume)
+    return {
+        "id": resume.id,
+        "filename": resume.filename,
+        "profile_id": resume.profile_id,
+        "message": "Resume saved successfully",
+    }
+
+
+@app.get("/resume")
+def get_resume(db: Session = Depends(get_db)):
+    profile = db.query(CandidateProfile).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Candidate profile not found")
+
+    resume = db.query(CandidateResume).filter(CandidateResume.profile_id == profile.id).first()
+    if not resume:
+        raise HTTPException(status_code=404, detail="Resume not found")
+
+    return resume
 
 
 @app.post("/jobs")
@@ -243,6 +290,62 @@ def queue_recommended_applications(keyword: str = "DevOps", location: str = "Hyd
     return {"queued": len(queued), "applications": queued}
 
 
+@app.post("/applications/{application_id}/generate-package")
+def generate_application_package(application_id: int, db: Session = Depends(get_db)):
+    profile = db.query(CandidateProfile).first()
+    if not profile:
+        raise HTTPException(status_code=400, detail="Candidate profile not found")
+
+    resume = db.query(CandidateResume).filter(CandidateResume.profile_id == profile.id).first()
+    if not resume:
+        raise HTTPException(status_code=400, detail="Resume not found. Save /resume first.")
+
+    application = db.query(Application).filter(Application.id == application_id).first()
+    if not application:
+        raise HTTPException(status_code=404, detail="Application not found")
+
+    class JobData:
+        pass
+
+    job = JobData()
+    job.id = application.external_job_id
+    job.title = application.title
+    job.company = application.company
+    job.location = application.location
+    job.description = ""
+    job.url = application.apply_url
+
+    package = generate_application(job, profile, resume.resume_text)
+
+    artifact = db.query(ApplicationArtifact).filter(ApplicationArtifact.application_id == application.id).first()
+    if artifact:
+        artifact.tailored_resume = package.get("summary", "")
+        artifact.cover_letter = package.get("cover_letter", "")
+    else:
+        artifact = ApplicationArtifact(
+            application_id=application.id,
+            tailored_resume=package.get("summary", ""),
+            cover_letter=package.get("cover_letter", ""),
+        )
+        db.add(artifact)
+
+    application.status = "READY_FOR_REVIEW"
+    application.notes = "Application package generated. Review before submitting."
+    db.commit()
+    db.refresh(artifact)
+
+    return {
+        "application_id": application.id,
+        "status": application.status,
+        "job": {
+            "title": application.title,
+            "company": application.company,
+            "apply_url": application.apply_url,
+        },
+        "package": package,
+    }
+
+
 @app.get("/applications")
 def list_applications(db: Session = Depends(get_db)):
     return db.query(Application).order_by(Application.match_score.desc()).all()
@@ -254,6 +357,19 @@ def get_application(application_id: int, db: Session = Depends(get_db)):
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
     return application
+
+
+@app.get("/applications/{application_id}/package")
+def get_application_package(application_id: int, db: Session = Depends(get_db)):
+    application = db.query(Application).filter(Application.id == application_id).first()
+    if not application:
+        raise HTTPException(status_code=404, detail="Application not found")
+
+    artifact = db.query(ApplicationArtifact).filter(ApplicationArtifact.application_id == application.id).first()
+    if not artifact:
+        raise HTTPException(status_code=404, detail="Application package not generated")
+
+    return artifact
 
 
 @app.post("/applications/{application_id}/mark-applied")
