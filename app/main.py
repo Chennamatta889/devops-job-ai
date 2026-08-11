@@ -1,5 +1,6 @@
 from app.services.matcher import score_job
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from app.services.ai_matcher import analyze_job
 from app.services.job_sources.adzuna import search_jobs
@@ -8,8 +9,16 @@ from app.database import Base, engine, get_db
 from app.models import CandidateProfile, Job
 
 
+# =========================
+# DATABASE
+# =========================
+
 Base.metadata.create_all(bind=engine)
 
+
+# =========================
+# FASTAPI APP
+# =========================
 
 app = FastAPI(
     title="DevOps Job AI",
@@ -17,9 +26,27 @@ app = FastAPI(
 )
 
 
+# =========================
+# CORS
+# =========================
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://50.17.126.62:8080",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# =========================
+# HEALTH
+# =========================
+
 @app.get("/health")
 def health():
-
     return {
         "status": "ok",
         "message": "DevOps Job AI is running"
@@ -39,7 +66,6 @@ def create_profile(
     preferred_locations: str,
     db: Session = Depends(get_db)
 ):
-
     profile = CandidateProfile(
         name=name,
         years_experience=years_experience,
@@ -59,7 +85,6 @@ def create_profile(
 def get_profile(
     db: Session = Depends(get_db)
 ):
-
     profile = db.query(
         CandidateProfile
     ).first()
@@ -80,7 +105,6 @@ def create_job(
     url: str = "",
     db: Session = Depends(get_db)
 ):
-
     job = Job(
         title=title,
         company=company,
@@ -100,18 +124,19 @@ def create_job(
 def get_jobs(
     db: Session = Depends(get_db)
 ):
-
     jobs = db.query(Job).all()
 
     return jobs
 
 
+# =========================
+# JOB MATCHES
+# =========================
 
 @app.get("/jobs/matches")
 def get_job_matches(
     db: Session = Depends(get_db)
 ):
-
     profile = db.query(
         CandidateProfile
     ).first()
@@ -149,12 +174,16 @@ def get_job_matches(
 
     return results
 
+
+# =========================
+# AI MATCH
+# =========================
+
 @app.get("/jobs/{job_id}/ai-match")
 def get_ai_match(
     job_id: int,
     db: Session = Depends(get_db)
 ):
-
     profile = db.query(
         CandidateProfile
     ).first()
@@ -188,13 +217,15 @@ def get_ai_match(
     }
 
 
+# =========================
+# REAL JOB SEARCH - ADZUNA
+# =========================
 
 @app.get("/jobs/search")
 def search_real_jobs(
     keyword: str = "DevOps",
     location: str = "Hyderabad"
 ):
-
     result = search_jobs(
         keyword=keyword,
         location=location
