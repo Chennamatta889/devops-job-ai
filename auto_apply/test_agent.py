@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock
 from portal import candidate_data, portal_enabled
 from agent import match, key, extract_experience_requirement
 from job_alerts import parse_alert, platform
-from india_sources import india_location, relevant_role
+from india_sources import india_location, relevant_role, technology_category, technology_role
 class AgentTests(unittest.TestCase):
     def setUp(self):
         self.p={"locations":["india"],"skills":["aws","jenkins","docker"],"max_required_years":3}
@@ -46,6 +46,14 @@ class IndiaTests(unittest.TestCase):
         self.assertTrue(relevant_role("Cloud Support Engineer"))
         self.assertTrue(relevant_role("Build Engineer"))
         self.assertFalse(relevant_role("Java Developer"))
+    def test_all_technology_categories(self):
+        self.assertEqual(technology_category("Java Backend Developer"),"Software Engineering")
+        self.assertEqual(technology_category("Machine Learning Engineer"),"Data / AI / ML")
+        self.assertEqual(technology_category("QA Automation Engineer"),"QA / Testing")
+        self.assertEqual(technology_category("Cyber Security Analyst"),"Cybersecurity")
+        self.assertEqual(technology_category("DevOps Engineer"),"Cloud / DevOps / SRE")
+        self.assertTrue(technology_role("Salesforce Developer"))
+        self.assertFalse(technology_role("HR Business Partner"))
 class AlertTests(unittest.TestCase):
     def test_linkedin(self):
         html='<a href="https://www.linkedin.com/jobs/view/devops-engineer-12345?tracking=abc">DevOps Engineer</a>'
