@@ -5,6 +5,9 @@ const FEED_URL =
   'https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/jobs.json'
 
 const AUTO_APPLY_API_URL = (import.meta.env.VITE_AUTO_APPLY_API_URL || '').replace(/\/$/, '')
+const VERIFICATION_STATUS_URL =
+  import.meta.env.VITE_VERIFICATION_STATUS_URL ||
+  'https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/verification-status.json'
 
 function prettySource(value = '') {
   const names = {
@@ -76,6 +79,7 @@ function App() {
   const [experience, setExperience] = useState('all')
   const [category, setCategory] = useState('all')
   const [postedWithin, setPostedWithin] = useState('30')
+  const [verification, setVerification] = useState('all')
   const [visibleCount, setVisibleCount] = useState(40)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -101,11 +105,32 @@ function App() {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch(FEED_URL + '?t=' + Date.now(), { cache: 'no-store' })
+      const stamp = Date.now()
+      const response = await fetch(FEED_URL + '?t=' + stamp, { cache: 'no-store' })
       if (!response.ok) throw new Error('Job feed returned ' + response.status)
       const data = await response.json()
+
+      let verificationJobs = {}
+      try {
+        const verificationResponse = await fetch(VERIFICATION_STATUS_URL + '?t=' + stamp, { cache: 'no-store' })
+        if (verificationResponse.ok) {
+          const verificationData = await verificationResponse.json()
+          verificationJobs = verificationData.jobs || {}
+        }
+      } catch {
+        verificationJobs = {}
+      }
+
+      const jobs = (Array.isArray(data.jobs) ? data.jobs : []).map((job) => {
+        const observation = verificationJobs[String(job.id || '')] || {}
+        return {
+          ...job,
+          verification_status: observation.status || 'unknown',
+          verification_checked_at_utc: observation.checked_at_utc || null
+        }
+      })
       setFeed({
-        jobs: Array.isArray(data.jobs) ? data.jobs : [],
+        jobs,
         count: Number(data.count || 0),
         generated_at_utc: data.generated_at_utc || null
       })
@@ -155,7 +180,7 @@ function App() {
 
   useEffect(() => {
     setVisibleCount(40)
-  }, [query, location, normalizedSource, normalizedSkill, normalizedExperience, normalizedCategory, normalizedPosted])
+  }, [query, location, normalizedSource, normalizedSkill, normalizedExperience, normalizedCategory, normalizedPosted, verification])
 
   const filteredJobs = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -176,10 +201,11 @@ function App() {
       if (normalizedCategory !== 'all' && job.category !== normalizedCategory) return false
       if (normalizedSkill !== 'all' && !skills.includes(normalizedSkill)) return false
       if (!experienceMatches(job, normalizedExperience)) return false
+      if (verification !== 'all' && (job.verification_status || 'unknown') !== verification) return false
       if (daysSince(job.published) > Number(normalizedPosted)) return false
       return true
     })
-  }, [feed.jobs, query, location, normalizedSource, normalizedCategory, normalizedSkill, normalizedExperience, normalizedPosted])
+  }, [feed.jobs, query, location, normalizedSource, normalizedCategory, normalizedSkill, normalizedExperience, normalizedPosted, verification])
 
   const visibleJobs = filteredJobs.slice(0, visibleCount)
 
@@ -263,7 +289,11 @@ function App() {
     return {
       relevant: relevant.length,
       strong: scored.filter(({ score }) => score >= threshold).length,
-      autoEligible: scored.filter(({ job, score }) => job.auto_apply_supported && score >= threshold).length
+      autoEligible: scored.filter(({ job, score }) =>
+        job.auto_apply_supported &&
+        job.verification_status === 'no_verification_detected' &&
+        score >= threshold
+      ).length
     }
   }
 
@@ -480,6 +510,16 @@ function App() {
               <option value="30">Last 30 days</option>
             </select>
           </div>
+
+          <div className="field">
+            <label>Human verification</label>
+            <select value={verification} onChange={(event) => setVerification(event.target.value)}>
+              <option value="all">All statuses</option>
+              <option value="no_verification_detected">No verification detected</option>
+              <option value="verification_detected">Verification detected</option>
+              <option value="unknown">Not checked / unknown</option>
+            </select>
+          </div>
         </section>
 
         <div className="feed-meta">
@@ -487,7 +527,7 @@ function App() {
             <h2>Live job feed</h2>
             <p>Last feed change: {updatedText}</p>
           </div>
-          {(query.trim() || location.trim() || normalizedSource !== 'all' || normalizedCategory !== 'all' || normalizedSkill !== 'all' || normalizedExperience !== 'all' || normalizedPosted !== '30') && (
+          {(query.trim() || location.trim() || normalizedSource !== 'all' || normalizedCategory !== 'all' || normalizedSkill !== 'all' || normalizedExperience !== 'all' || normalizedPosted !== '30' || verification !== 'all') && (
             <button
               className="text-button"
               onClick={() => {
@@ -498,6 +538,7 @@ function App() {
                 setSkill('all')
                 setExperience('all')
                 setPostedWithin('30')
+                setVerification('all')
               }}
             >
               Clear filters
@@ -526,7 +567,15 @@ function App() {
                     {(job.discovered_via || []).map((via) => (
                       <div className="discovery-badge" key={via}>via {prettySource(via)}</div>
                     ))}
-                    {job.auto_apply_supported && <div className="auto-badge">Auto-apply eligible</div>}
+                    {job.auto_apply_supported && job.verification_status === 'no_verification_detected' && (
+                      <div className="auto-badge">No verification detected</div>
+                    )}
+                    {job.auto_apply_supported && job.verification_status === 'verification_detected' && (
+                      <div className="verification-badge">Verification detected</div>
+                    )}
+                    {job.auto_apply_supported && (!job.verification_status || job.verification_status === 'unknown') && (
+                      <div className="verification-unknown-badge">Verification unknown</div>
+                    )}
                     {job.category && <div className="category-badge">{job.category}</div>}
                   </div>
                   <span className="published">{formatDate(job.published)}</span>
