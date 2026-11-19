@@ -8,6 +8,7 @@
   "689d2267bfe44d58abc6db875e5fe51656b95da4c00e4bef363f5bc977e4735f": "portal_uncertain_confirmation",
   "6dcba582cf86b22980d2be501fba0c656cb1ce61d7d88cd304c83482f24bb1da": "portal_uncertain_human_verification_after_submit",
   "743249fe7c4238f8d8af0bcc29007d57c8f8d604375986419009bdbb17757adf": "portal_uncertain_manual_review",
+  "78b8ebd025f2b821eb8a45a930530e178df0ebd21b2205f2c1bd0167371b36cd": "portal_reserved",
   "7acb950295062f9b8d5834d502386e5bf1f31a7f0b635bb74f6bde757b72ea3a": "portal_review_human_verification_v2",
   "7d652a8f43f98b7a5a1e357aeb59ba59b1094134fea61c5d0b7bfcfaa803dd27": "portal_uncertain_human_verification_after_submit",
   "916562f212a436d3a800950b8018112bb0818c76cdbc1af5f5e9a1ae15441570": "portal_review_unsupported_url",
