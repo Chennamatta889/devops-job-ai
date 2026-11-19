@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Float, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, Float, Integer, LargeBinary, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -65,3 +65,41 @@ class ApplicationArtifact(Base):
     tailored_resume: Mapped[str] = mapped_column(Text, default="")
     cover_letter: Mapped[str] = mapped_column(Text, default="")
     generated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class AutoApplyProfile(Base):
+    __tablename__ = "auto_apply_profiles"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_key: Mapped[str] = mapped_column(String(120), unique=True, index=True, default="local")
+    name: Mapped[str] = mapped_column(String(120))
+    email: Mapped[str] = mapped_column(String(255))
+    phone: Mapped[str] = mapped_column(String(60), default="")
+    years_experience: Mapped[float] = mapped_column(Float)
+    target_roles: Mapped[str] = mapped_column(Text)
+    skills: Mapped[str] = mapped_column(Text)
+    preferred_locations: Mapped[str] = mapped_column(Text, default="India")
+    minimum_match_score: Mapped[int] = mapped_column(Integer, default=80)
+    daily_application_limit: Mapped[int] = mapped_column(Integer, default=10)
+    auto_apply_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    consent_version: Mapped[str] = mapped_column(String(40), default="")
+    consented_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class ResumeVariant(Base):
+    __tablename__ = "resume_variants"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_key: Mapped[str] = mapped_column(String(120), index=True, default="local")
+    filename: Mapped[str] = mapped_column(String(255))
+    content_type: Mapped[str] = mapped_column(String(120), default="application/pdf")
+    pdf_bytes: Mapped[bytes] = mapped_column(LargeBinary)
+    resume_text: Mapped[str] = mapped_column(Text, default="")
+    target_roles: Mapped[str] = mapped_column(Text, default="")
+    skills: Mapped[str] = mapped_column(Text, default="")
+    years_experience: Mapped[float] = mapped_column(Float, default=0)
+    active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
