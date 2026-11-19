@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock
 from portal import candidate_data, portal_enabled
 from agent import match, key, extract_experience_requirement, known_direct_apply_url, aggregator_jobs
 from job_alerts import parse_alert, platform
-from india_sources import india_location, relevant_role, technology_category, technology_role
+from india_sources import india_location, relevant_role, technology_category, technology_role, recruitee
 class AgentTests(unittest.TestCase):
     def setUp(self):
         self.p={"locations":["india"],"skills":["aws","jenkins","docker"],"max_required_years":3}
@@ -62,6 +62,23 @@ class IndiaTests(unittest.TestCase):
         self.assertEqual(technology_category("DevOps Engineer"),"Cloud / DevOps / SRE")
         self.assertTrue(technology_role("Salesforce Developer"))
         self.assertFalse(technology_role("HR Business Partner"))
+class RecruiteeTests(unittest.TestCase):
+    @patch("india_sources.read")
+    def test_recruitee_direct_jobs(self,mock_read):
+        mock_read.return_value={"offers":[{
+            "title":"Java Backend Developer",
+            "slug":"java-backend-developer",
+            "locations":[{"city":"Hyderabad","state_name":"Telangana","country":"India"}],
+            "description":"3+ years Java Spring Boot AWS",
+            "published_at":"2026-11-19T10:00:00Z",
+            "careers_url":"https://example.recruitee.com/o/java-backend-developer",
+            "careers_apply_url":"https://example.recruitee.com/o/java-backend-developer/c/new"
+        }]}
+        rows=recruitee("example",all_tech=True)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]["source"],"recruitee")
+        self.assertEqual(rows[0]["apply_url"],"https://example.recruitee.com/o/java-backend-developer/c/new")
+
 class AlertTests(unittest.TestCase):
     def test_linkedin(self):
         html='<a href="https://www.linkedin.com/jobs/view/devops-engineer-12345?tracking=abc">DevOps Engineer</a>'
