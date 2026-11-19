@@ -1,5 +1,5 @@
 """Scheduled job matcher and opt-in email application agent (stdlib only)."""
-import csv, hashlib, json, os, re, smtplib, ssl, subprocess, sys
+import csv, hashlib, json, os, re, smtplib, ssl, subprocess, sys, io
 from datetime import datetime, timezone
 from email.message import EmailMessage
 from pathlib import Path
@@ -100,10 +100,23 @@ def main():
     profile["minimum_match"]=0  # Skill score ranks jobs; never rejects them.
     ledger=json.loads(STATE.read_text()) if STATE.exists() else {}
     auto=os.getenv("AUTO_APPLY","").strip().lower()!="false"
-    raw=os.getenv("RESUME_BASE64","") or (os.getenv("RESUME_PART_1","")+os.getenv("RESUME_PART_2",""))
+    part1=os.getenv("RESUME_PART_1","")
+    part2=os.getenv("RESUME_PART_2","")
+    raw=(part1+part2) if part1 and part2 else os.getenv("RESUME_BASE64","")
     try: resume=base64.b64decode("".join(raw.split()),validate=True)
     except Exception: resume=b""
     print("Resume PDF header valid:", resume.startswith(b"%PDF-"))
+    print("Resume decoded size in bytes:",len(resume))
+    try:
+        from pypdf import PdfReader
+        if not resume.startswith(b"%PDF-") or not resume.rstrip().endswith(b"%%EOF"): raise ValueError("Incomplete PDF")
+        pdf=PdfReader(io.BytesIO(resume))
+        if not pdf.pages: raise ValueError("Empty PDF")
+        for page in pdf.pages: page.extract_text()
+        print("Resume PDF fully validated; pages:",len(pdf.pages))
+    except Exception as exc:
+        print("Resume validation failed:",type(exc).__name__,"Check complete RESUME_BASE64 or both RESUME_PART secrets.")
+        resume=b""
     if auto and (not resume.startswith(b"%PDF-") or not os.getenv("SMTP_USER") or not os.getenv("SMTP_APP_PASSWORD")):
         print("Email auto-apply disabled: missing PDF or SMTP configuration."); auto=False
     jobs=get_jobs()
@@ -128,6 +141,10 @@ def main():
     from portal import portal_apply, portal_enabled
     portal_count=0
     portal_on=portal_enabled(profile,resume)
+    # Only previously recorded pre-submission candidate failures may be retried.
+    # Never retry unknown outcomes or reservations automatically.
+    if portal_on:
+        ledger={k:v for k,v in ledger.items() if v!="portal_review_candidate_error"}
     print("Email enabled:",auto,"Portal enabled:",portal_on)
     print("Filter outcomes:",dict(Counter(reason for (score,matched,missing,reason),j in ranked)))
     confirmed=0
