@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-19T18:54:24.229990+00:00",
+  "generated_at_utc": "2026-11-19T19:02:04.298710+00:00",
   "count": 659,
   "jobs": [
     {
@@ -13,6 +13,9 @@
       "url": "https://jobs.smartrecruiters.com/Nagarro1/744000162584089",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 5,
       "experience_max": null,
@@ -29,6 +32,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278559007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -52,6 +58,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5287171007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "linux"
       ],
@@ -70,6 +79,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5287177007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "aws",
@@ -91,6 +103,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5287169007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "sql",
@@ -120,6 +135,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5291924007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "llm"
@@ -139,6 +157,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5291922007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "llm",
         "kubernetes",
@@ -161,6 +182,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5295956007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "linux",
         "git"
@@ -180,6 +204,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279068007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -204,6 +231,9 @@
       "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8402700",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -227,6 +257,9 @@
       "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8402674",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -243,6 +276,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162546490",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "azure",
@@ -267,6 +303,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8045905?gh_jid=8045905",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "sql",
@@ -294,6 +333,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8102363?gh_jid=8102363",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -318,6 +360,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162532078",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -343,6 +388,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8358102?gh_jid=8358102",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "react",
@@ -367,6 +415,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8306693",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "typescript",
@@ -390,6 +441,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8327524",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "llm"
       ],
@@ -408,6 +462,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162522299",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -437,6 +494,9 @@
       "url": "https://job-boards.greenhouse.io/sureify/jobs/5435996008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "typescript",
         "react",
@@ -462,6 +522,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7845334002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "spark",
@@ -487,6 +550,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8439348002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "databricks",
@@ -507,6 +573,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7648669002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -528,6 +597,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8926498002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -554,6 +626,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7841778002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "databricks",
@@ -574,6 +649,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8593107002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -599,6 +677,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8200692002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "databricks",
@@ -620,6 +701,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8201686002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "databricks",
@@ -641,6 +725,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7601565002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "mysql",
         "databricks",
@@ -661,6 +748,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7601572002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "ci/cd"
@@ -680,6 +770,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8320187002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -706,6 +799,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7654349002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -733,6 +829,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7652016002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "databricks",
@@ -754,6 +853,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8944097002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -774,6 +876,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7958688002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "databricks",
@@ -794,6 +899,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651346002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks"
       ],
@@ -812,6 +920,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8462811002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -834,6 +945,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8476064002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -861,6 +975,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8924868002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -887,6 +1004,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7925560002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -908,6 +1028,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7630152002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks"
       ],
@@ -926,6 +1049,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7955601002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -947,6 +1073,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8679982002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "react",
@@ -971,6 +1100,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8585164002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "genai",
@@ -993,6 +1125,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8593505002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "genai",
@@ -1015,6 +1150,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8438777002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1042,6 +1180,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8637781002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1069,6 +1210,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8657549002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -1092,6 +1236,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8795446002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1120,6 +1267,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7845320002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "spark",
@@ -1145,6 +1295,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8041698002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "spark",
@@ -1170,6 +1323,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8439350002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "databricks",
@@ -1190,6 +1346,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8433583002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -1212,6 +1371,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8421894002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks"
       ],
@@ -1230,6 +1392,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651326002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks"
       ],
@@ -1248,6 +1413,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651345002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks"
       ],
@@ -1266,6 +1434,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8568023002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -1289,6 +1460,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8652984002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1316,6 +1490,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7647353002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1337,6 +1514,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8602402002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "aws",
@@ -1358,6 +1538,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7934782002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1382,6 +1565,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7897431002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1408,6 +1594,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7647294002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1429,6 +1618,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8320183002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1450,6 +1642,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7619810002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1471,6 +1666,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7647369002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "databricks",
@@ -1492,6 +1690,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=6709301002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1513,6 +1714,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8210383002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -1533,6 +1737,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8294304002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -1553,6 +1760,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8679980002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "kubernetes",
@@ -1575,6 +1785,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7845325002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1603,6 +1816,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8407895002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "spark",
@@ -1624,6 +1840,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7495457002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "machine learning"
@@ -1643,6 +1862,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8688851002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "sap"
@@ -1662,6 +1884,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8619213002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "spark",
@@ -1683,6 +1908,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8688875002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "sap"
@@ -1702,6 +1930,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8878946002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "spark",
         "databricks",
@@ -1728,6 +1959,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7439442002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "machine learning"
@@ -1747,6 +1981,9 @@
       "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8290810002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "spark",
@@ -1767,6 +2004,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8951208002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity"
       ],
@@ -1785,6 +2025,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162504729",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -1801,6 +2044,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162499771",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -1827,6 +2073,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162499463",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -1852,6 +2101,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8001002?gh_jid=8001002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "golang",
@@ -1878,6 +2130,9 @@
       "url": "https://job-boards.greenhouse.io/cordance/jobs/5489236008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         ".net",
@@ -1907,6 +2162,9 @@
       "url": "https://job-boards.greenhouse.io/cordance/jobs/5489210008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -1928,6 +2186,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8951153002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -1950,6 +2211,9 @@
       "url": "https://jobs.lever.co/zeta/d7608271-a46f-4783-b5a9-05737398d320",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "postgresql",
@@ -1973,6 +2237,9 @@
       "url": "https://jobs.elastic.co/jobs?gh_jid=7621743&gh_jid=7621743",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -1989,6 +2256,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162478029",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "jenkins",
@@ -2009,6 +2279,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162475047",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "jenkins",
@@ -2029,6 +2302,9 @@
       "url": "https://jobs.ashbyhq.com/uptimeai/2d5e4fe6-2cc0-4203-b534-071645cbc6f8/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "genai",
         "sap"
@@ -2048,6 +2324,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8305310",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -2070,6 +2349,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8124286",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "android",
@@ -2099,6 +2381,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8222493",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ios",
         "jenkins",
@@ -2121,6 +2406,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8111586",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "typescript",
@@ -2144,6 +2432,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8111574",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ios",
         "jenkins",
@@ -2166,6 +2457,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8141272",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "llm"
@@ -2185,6 +2479,9 @@
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8377429",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "llm"
       ],
@@ -2203,6 +2500,9 @@
       "url": "https://jobs.smartrecruiters.com/Nagarro1/744000162472495",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 5,
       "experience_max": null,
@@ -2219,6 +2519,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162467268",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -2240,6 +2543,9 @@
       "url": "https://jobs.ashbyhq.com/sarvam/c4bb3b2c-7608-4d57-8761-650b4222ac13/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql"
       ],
@@ -2258,6 +2564,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7599312?gh_jid=7599312",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "golang",
         "postgresql",
@@ -2285,6 +2594,9 @@
       "url": "https://jobs.lever.co/Sprinto/e93a9b23-2136-4d16-8bf7-7f6a5d474f61",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -2301,6 +2613,9 @@
       "url": "https://job-boards.greenhouse.io/axicorpfinancialservicesptyltd/jobs/5295914007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "azure",
         "cybersecurity",
@@ -2321,6 +2636,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=7791886",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "react",
@@ -2343,6 +2661,9 @@
       "url": "https://job-boards.greenhouse.io/instawork/jobs/4658858006",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "react",
@@ -2365,6 +2686,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5297755007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -2386,6 +2710,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162447298",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "mongodb",
         "azure",
@@ -2412,6 +2739,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162447108",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "mongodb",
@@ -2433,6 +2763,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8011986002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -2457,6 +2790,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162446968",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "mongodb",
@@ -2478,6 +2814,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000162446499",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "c#",
         "python",
@@ -2502,6 +2841,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000162445899",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "c#",
         "python",
@@ -2526,6 +2868,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162445000",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "power bi",
         "splunk"
@@ -2545,6 +2890,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000162445019",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -2571,6 +2919,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162443389",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -2587,6 +2938,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162443126",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -2603,6 +2957,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162443199",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -2619,6 +2976,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162443139",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 6,
       "experience_max": 10,
@@ -2635,6 +2995,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162442999",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -2651,6 +3014,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162442879",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 6,
       "experience_max": 10,
@@ -2667,6 +3033,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162442809",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 7,
       "experience_max": 8,
@@ -2683,6 +3052,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4629413005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "android",
         "ios",
@@ -2710,6 +3082,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8392339",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "sql",
@@ -2733,6 +3108,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162434899",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ci/cd",
         "servicenow"
@@ -2752,6 +3130,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162434719",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "genai",
         "servicenow"
@@ -2771,6 +3152,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162434511",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -2793,6 +3177,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162434189",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -2814,6 +3201,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162434099",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -2836,6 +3226,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4756312005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -2864,6 +3257,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8071508?gh_jid=8071508",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -2886,6 +3282,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162433529",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -2908,6 +3307,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162432498",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sap"
       ],
@@ -2926,6 +3328,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162431489",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "genai",
@@ -2947,6 +3352,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6265124004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -2975,6 +3383,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6263851004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -3003,6 +3414,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6265171004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "llm",
@@ -3032,6 +3446,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162389549",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -3061,6 +3478,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/424048fb-101b-4b40-a6ba-4b538b344415",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -3085,6 +3505,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8730125002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "ci/cd",
@@ -3105,6 +3528,9 @@
       "url": "https://job-boards.greenhouse.io/celonis/jobs/7886054003?gh_jid=7886054003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "aws",
@@ -3126,6 +3552,9 @@
       "url": "https://job-boards.greenhouse.io/celonis/jobs/7991058003?gh_jid=7991058003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -3155,6 +3584,9 @@
       "url": "https://job-boards.greenhouse.io/celonis/jobs/8037525003?gh_jid=8037525003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -3184,6 +3616,9 @@
       "url": "https://job-boards.greenhouse.io/celonis/jobs/7885808003?gh_jid=7885808003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -3213,6 +3648,9 @@
       "url": "https://job-boards.greenhouse.io/celonis/jobs/6647315003?gh_jid=6647315003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -3239,6 +3677,9 @@
       "url": "https://job-boards.greenhouse.io/celonis/jobs/7777102003?gh_jid=7777102003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "databricks",
         "snowflake",
@@ -3259,6 +3700,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8281191",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -3281,6 +3725,9 @@
       "url": "https://job-boards.greenhouse.io/cordance/jobs/5482992008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         ".net",
@@ -3310,6 +3757,9 @@
       "url": "https://job-boards.greenhouse.io/twilio/jobs/8028473",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 3,
       "experience_max": null,
@@ -3326,6 +3776,9 @@
       "url": "https://job-boards.greenhouse.io/twilio/jobs/8258593",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -3349,6 +3802,9 @@
       "url": "https://job-boards.greenhouse.io/twilio/jobs/8258587",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -3372,6 +3828,9 @@
       "url": "https://job-boards.greenhouse.io/twilio/jobs/8213730",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 2,
       "experience_max": null,
@@ -3388,6 +3847,9 @@
       "url": "https://job-boards.greenhouse.io/twilio/jobs/8319434",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -3414,6 +3876,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/695b7c2f-29ca-4541-b025-ec4274a964a1",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "ci/cd"
@@ -3433,6 +3898,9 @@
       "url": "https://www.coinbase.com/careers/positions/7985187?gh_jid=7985187",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -3454,6 +3922,9 @@
       "url": "https://www.coinbase.com/careers/positions/7739592?gh_jid=7739592",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -3475,6 +3946,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162310909",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -3496,6 +3970,9 @@
       "url": "https://job-boards.greenhouse.io/zenoti/jobs/8004584003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "azure"
       ],
@@ -3514,6 +3991,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/182a5430-4f79-426b-b217-13ca2a6d687d",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "azure"
       ],
@@ -3532,6 +4012,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8161278?gh_jid=8161278",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -3558,6 +4041,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/b54f0d60-9226-4292-b0a3-9caec516a2fd",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ci/cd",
         "playwright"
@@ -3577,6 +4063,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8018420",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "mongodb",
         "aws",
@@ -3600,6 +4089,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8122751",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -3626,6 +4118,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8122748",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "mongodb",
         "aws",
@@ -3649,6 +4144,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8008794",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "mongodb",
@@ -3674,6 +4172,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8102369?gh_jid=8102369",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -3703,6 +4204,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/7916306002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -3723,6 +4227,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4731054005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "react",
@@ -3744,6 +4251,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4755671005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -3770,6 +4280,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5270971007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "aws",
@@ -3797,6 +4310,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162247349",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -3817,6 +4333,9 @@
       "url": "https://jobs.smartrecruiters.com/Nagarro1/744000162246364",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sap"
       ],
@@ -3835,6 +4354,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162238119",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "genai",
@@ -3861,6 +4383,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162238059",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -3883,6 +4408,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162237068",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -3912,6 +4440,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162235881",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -3934,6 +4465,9 @@
       "url": "https://job-boards.greenhouse.io/insurityindia/jobs/4371024009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -3957,6 +4491,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8377182?gh_jid=8377182",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "react",
         "node.js",
@@ -3978,6 +4515,9 @@
       "url": "https://jobs.lever.co/brillio-2/56ce18e2-d685-4ec6-8ea1-efb7a29e3570",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 7,
       "experience_max": 10,
@@ -3994,6 +4534,9 @@
       "url": "https://job-boards.greenhouse.io/instawork/jobs/4713739006",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "spark",
@@ -4023,6 +4566,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8398152?gh_jid=8398152",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "bash"
@@ -4042,6 +4588,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162220979",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -4067,6 +4616,9 @@
       "url": "https://job-boards.greenhouse.io/chainguard/jobs/4728275006",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "spark",
         "snowflake",
@@ -4095,6 +4647,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162219989",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sap"
       ],
@@ -4113,6 +4668,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162218105",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sap"
       ],
@@ -4131,6 +4689,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5297253007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python"
       ],
@@ -4149,6 +4710,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162216869",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "power bi"
@@ -4168,6 +4732,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162216780",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "power bi"
@@ -4187,6 +4754,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162216635",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "power bi"
@@ -4206,6 +4776,9 @@
       "url": "https://www.coinbase.com/careers/positions/8054153?gh_jid=8054153",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -4232,6 +4805,9 @@
       "url": "https://job-boards.greenhouse.io/twilio/jobs/8258597",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -4255,6 +4831,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8397051",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity"
       ],
@@ -4273,6 +4852,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8164066?gh_jid=8164066",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "iam"
@@ -4292,6 +4874,9 @@
       "url": "https://job-boards.greenhouse.io/neweratech/jobs/8908562002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "ansible",
@@ -4312,6 +4897,9 @@
       "url": "https://job-boards.greenhouse.io/neweratech/jobs/8870372002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -4335,6 +4923,9 @@
       "url": "https://job-boards.greenhouse.io/neweratech/jobs/8457610002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "ansible",
@@ -4355,6 +4946,9 @@
       "url": "https://job-boards.greenhouse.io/neweratech/jobs/8644025002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "servicenow"
       ],
@@ -4373,6 +4967,9 @@
       "url": "https://job-boards.greenhouse.io/neweratech/jobs/8374826002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ios"
       ],
@@ -4391,6 +4988,9 @@
       "url": "https://jobs.lever.co/brillio-2/3c794f6c-18ac-4de6-b64a-a395d25a8f56",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -4416,6 +5016,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000162128849",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -4443,6 +5046,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000162127583",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -4470,6 +5076,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000162127050",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -4497,6 +5106,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8224590",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -4521,6 +5133,9 @@
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4467210009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -4543,6 +5158,9 @@
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4467205009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -4565,6 +5183,9 @@
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4475901009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -4586,6 +5207,9 @@
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4375638009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "iam"
       ],
@@ -4604,6 +5228,9 @@
       "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8185664",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -4624,6 +5251,9 @@
       "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8303361",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "mysql",
@@ -4653,6 +5283,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8827370002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "tableau",
@@ -4673,6 +5306,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7983023003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -4695,6 +5331,9 @@
       "url": "https://jobs.lever.co/brillio-2/8e613417-a6c1-4e88-85d0-a5c88970395a",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "aws",
@@ -4724,6 +5363,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162062079",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -4753,6 +5395,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162061737",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -4779,6 +5424,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162062508",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sap"
       ],
@@ -4797,6 +5445,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162062348",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity"
       ],
@@ -4815,6 +5466,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8358101",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -4844,6 +5498,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162061415",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -4873,6 +5530,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162061848",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "azure"
       ],
@@ -4891,6 +5551,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8642437002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "scala",
@@ -4914,6 +5577,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8047928002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -4938,6 +5604,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/4808098002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -4960,6 +5629,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/4685999002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -4984,6 +5656,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/4985961002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -5006,6 +5681,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/5090277002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -5030,6 +5708,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8741978002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -5059,6 +5740,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8675459002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "react",
@@ -5087,6 +5771,9 @@
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/5083674002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -5111,6 +5798,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162045929",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -5138,6 +5828,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162034820",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -5167,6 +5860,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162034219",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -5187,6 +5883,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000162026555",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -5211,6 +5910,9 @@
       "url": "https://job-boards.greenhouse.io/addepar1/jobs/8799881002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -5234,6 +5936,9 @@
       "url": "https://jobs.lever.co/gohighlevel/ea8ed99e-59bf-4c23-8cb6-71609f2d9313",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "gcp",
         "kubernetes",
@@ -5257,6 +5962,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000162001619",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -5282,6 +5990,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/6671260?gh_jid=6671260",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "ruby",
@@ -5310,6 +6021,9 @@
       "url": "https://jobs.lever.co/brillio-2/a2dd5a37-46f5-4e80-a2a8-792e05f295b5",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -5334,6 +6048,9 @@
       "url": "https://jobs.lever.co/brillio-2/5da50ae5-c9b2-4d0f-8e66-2ddc598c9405",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -5358,6 +6075,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8928675002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "ci/cd"
@@ -5377,6 +6097,9 @@
       "url": "https://jobs.ashbyhq.com/sarvam/fa96b55d-0c77-423d-8eef-f579c8496adb/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -5403,6 +6126,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000161992749",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -5419,6 +6145,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161990071",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "servicenow"
       ],
@@ -5437,6 +6166,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278549007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -5464,6 +6196,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267167007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity"
       ],
@@ -5482,6 +6217,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8349850?gh_jid=8349850",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -5505,6 +6243,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8349847?gh_jid=8349847",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -5528,6 +6269,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7741663?gh_jid=7741663",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -5554,6 +6298,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8345801?gh_jid=8345801",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -5579,6 +6326,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8345577?gh_jid=8345577",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -5604,6 +6354,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8323977?gh_jid=8323977",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -5633,6 +6386,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8333118?gh_jid=8333118",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "android",
         "machine learning",
@@ -5654,6 +6410,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8242557?gh_jid=8242557",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "llm",
@@ -5676,6 +6435,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8242386?gh_jid=8242386",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "llm",
@@ -5698,6 +6460,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8358096?gh_jid=8358096",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "react",
@@ -5722,6 +6487,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8263916?gh_jid=8263916",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "kafka",
@@ -5746,6 +6514,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8236508?gh_jid=8236508",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -5774,6 +6545,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8236504?gh_jid=8236504",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -5798,6 +6572,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8236530?gh_jid=8236530",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -5827,6 +6604,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8203481?gh_jid=8203481",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -5853,6 +6633,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8220634?gh_jid=8220634",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -5875,6 +6658,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8242227?gh_jid=8242227",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -5899,6 +6685,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8195169?gh_jid=8195169",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -5925,6 +6714,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8255904?gh_jid=8255904",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -5954,6 +6746,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8242984?gh_jid=8242984",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -5983,6 +6778,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8242301?gh_jid=8242301",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "typescript",
         "react",
@@ -6006,6 +6804,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8242317?gh_jid=8242317",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -6027,6 +6828,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8071502?gh_jid=8071502",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -6053,6 +6857,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8039085?gh_jid=8039085",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -6076,6 +6883,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8102892?gh_jid=8102892",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ios",
         "machine learning",
@@ -6097,6 +6907,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7893046?gh_jid=7893046",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -6123,6 +6936,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7831189?gh_jid=7831189",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -6151,6 +6967,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7849955?gh_jid=7849955",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -6179,6 +6998,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8127234?gh_jid=8127234",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -6206,6 +7028,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7727730?gh_jid=7727730",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "machine learning",
@@ -6226,6 +7051,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8132163?gh_jid=8132163",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "databricks",
@@ -6253,6 +7081,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7744555?gh_jid=7744555",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -6282,6 +7113,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8305423?gh_jid=8305423",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -6309,6 +7143,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7703330?gh_jid=7703330",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         ".net",
@@ -6335,6 +7172,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7780488?gh_jid=7780488",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -6361,6 +7201,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7593555?gh_jid=7593555",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -6389,6 +7232,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8081016?gh_jid=8081016",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -6418,6 +7264,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7882676?gh_jid=7882676",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -6442,6 +7291,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7892783?gh_jid=7892783",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -6464,6 +7316,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8229910?gh_jid=8229910",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -6487,6 +7342,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7307866?gh_jid=7307866",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -6516,6 +7374,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7233212?gh_jid=7233212",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -6543,6 +7404,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7963271?gh_jid=7963271",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "golang",
         "sql",
@@ -6569,6 +7433,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8263823?gh_jid=8263823",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -6595,6 +7462,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8263825?gh_jid=8263825",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -6624,6 +7494,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7781674?gh_jid=7781674",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -6650,6 +7523,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7765038?gh_jid=7765038",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -6679,6 +7555,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7529446?gh_jid=7529446",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -6701,6 +7580,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/6839581?gh_jid=6839581",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -6730,6 +7612,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8317731?gh_jid=8317731",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -6757,6 +7642,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8154916?gh_jid=8154916",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "sql",
@@ -6779,6 +7667,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7770733?gh_jid=7770733",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "node.js",
@@ -6801,6 +7692,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8223817?gh_jid=8223817",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -6826,6 +7720,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8113501?gh_jid=8113501",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -6851,6 +7748,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7471202?gh_jid=7471202",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -6876,6 +7776,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8258803?gh_jid=8258803",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -6905,6 +7808,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8358353?gh_jid=8358353",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -6930,6 +7836,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8168822?gh_jid=8168822",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "iam"
@@ -6949,6 +7858,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8260950?gh_jid=8260950",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -6978,6 +7890,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8325962?gh_jid=8325962",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "node.js",
@@ -7005,6 +7920,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/7247309?gh_jid=7247309",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "machine learning",
@@ -7031,6 +7949,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8110864?gh_jid=8110864",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -7055,6 +7976,9 @@
       "url": "https://job-boards.greenhouse.io/pointwild/jobs/5474748008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -7084,6 +8008,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8007091?gh_jid=8007091",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -7106,6 +8033,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8242975?gh_jid=8242975",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -7135,6 +8065,9 @@
       "url": "https://www.okta.com/company/careers/opportunity/8007078?gh_jid=8007078",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ios",
         "machine learning",
@@ -7156,6 +8089,9 @@
       "url": "https://job-boards.greenhouse.io/truveta/jobs/6114473004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         ".net",
@@ -7181,6 +8117,9 @@
       "url": "https://job-boards.greenhouse.io/truveta/jobs/6114475004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         ".net",
@@ -7206,6 +8145,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278551007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -7231,6 +8173,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000161832700",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -7257,6 +8202,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000161832649",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -7283,6 +8231,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000161830041",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -7309,6 +8260,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8127772",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -7337,6 +8291,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8221290",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -7363,6 +8320,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8239047",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -7389,6 +8349,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8083366",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -7415,6 +8378,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8208074",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -7444,6 +8410,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8055422",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -7472,6 +8441,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8107301",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -7500,6 +8472,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8106099",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -7526,6 +8501,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8323897",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -7555,6 +8533,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8071475",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "mongodb",
         "aws",
@@ -7583,6 +8564,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8264766",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "mongodb",
         "llm",
@@ -7605,6 +8589,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8328780",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -7629,6 +8616,9 @@
       "url": "https://www.mongodb.com/careers/job/?gh_jid=8184637",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -7656,6 +8646,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161804448",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -7685,6 +8678,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240412004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "typescript",
@@ -7710,6 +8706,9 @@
       "url": "https://jobs.smartrecruiters.com/BoschGroup/744000161790378",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "azure"
       ],
@@ -7728,6 +8727,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161782709",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "kubernetes",
@@ -7753,6 +8755,9 @@
       "url": "https://jobs.lever.co/lingarogroup/0e96ae73-e8ad-4866-a53d-0011bdfae680",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -7778,6 +8783,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161772132",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -7800,6 +8808,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5210019007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -7822,6 +8833,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000161750975",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python"
       ],
@@ -7840,6 +8854,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.7715043?gh_jid=7715043",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -7867,6 +8884,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8318044?gh_jid=8318044",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "snowflake",
@@ -7888,6 +8908,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8273717?gh_jid=8273717",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -7917,6 +8940,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8273808?gh_jid=8273808",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -7946,6 +8972,9 @@
       "url": "https://job-boards.greenhouse.io/tide/jobs/7817071003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -7972,6 +9001,9 @@
       "url": "https://job-boards.greenhouse.io/cordance/jobs/5482952008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -7994,6 +9026,9 @@
       "url": "https://job-boards.greenhouse.io/addepar1/jobs/8516188002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -8020,6 +9055,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000161734344",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 7,
       "experience_max": null,
@@ -8036,6 +9074,9 @@
       "url": "https://jobs.lever.co/shyftlabs/75e1eb51-c562-4f01-a029-1a8823a16b4a",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "databricks",
@@ -8065,6 +9106,9 @@
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4464885009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 8,
       "experience_max": null,
@@ -8081,6 +9125,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000161732359",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -8108,6 +9155,9 @@
       "url": "https://jobs.smartrecruiters.com/Nagarro1/744000161731199",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sap"
       ],
@@ -8126,6 +9176,9 @@
       "url": "https://www.druva.com/why-druva/explore/careers/jobs/8814695002/?gh_jid=8814695002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "linux"
@@ -8145,6 +9198,9 @@
       "url": "https://jobs.smartrecruiters.com/Nagarro1/744000161730649",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "servicenow",
         "sap"
@@ -8164,6 +9220,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/ea7609d0-fbe7-443e-ae95-5e92f5d1939f",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "kubernetes",
@@ -8189,6 +9248,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000161728829",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -8213,6 +9275,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279066007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "golang",
@@ -8238,6 +9303,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5174334007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "postgresql",
@@ -8258,6 +9326,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240502004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -8286,6 +9357,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4473693009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -8310,6 +9384,9 @@
       "url": "https://jobs.ashbyhq.com/buspatrol/ecf9c172-daf7-4ca9-8843-237acb500010/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -8337,6 +9414,9 @@
       "url": "https://jobs.lever.co/brillio-2/2fb0b0bc-1e48-4a94-80c4-2c6ad54ce51f",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -8362,6 +9442,9 @@
       "url": "https://jobs.lever.co/brillio-2/d36f119a-9835-4e84-bb76-11caed33f4c3",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -8385,6 +9468,9 @@
       "url": "https://jobs.lever.co/brillio-2/f73dd26c-a7d3-45cb-aa0f-1191d9c90adc",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "spark",
@@ -8405,6 +9491,9 @@
       "url": "https://jobs.lever.co/brillio-2/69ac7e42-00cd-4f5b-9e4a-865aba71c4ac",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "spark",
         "azure"
@@ -8424,6 +9513,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8184675",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "react",
@@ -8444,6 +9536,9 @@
       "url": "https://jobs.ashbyhq.com/encord/4028d589-6973-42ab-919d-4b8e625b4913/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -8473,6 +9568,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000161449395",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "spark",
@@ -8499,6 +9597,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/ad9a0b91-6990-4987-9a9c-b0f568ad4a0f",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "aws",
@@ -8525,6 +9626,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5271579007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "aws",
@@ -8546,6 +9650,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8359179?gh_jid=8359179",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 8,
       "experience_max": null,
@@ -8562,6 +9669,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5271582007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "linux",
         "git"
@@ -8581,6 +9691,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5242482007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -8608,6 +9721,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279060007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -8632,6 +9748,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5271592007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -8655,6 +9774,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279075007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -8678,6 +9800,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267221007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -8702,6 +9827,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5253933007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kubernetes",
         "linux",
@@ -8722,6 +9850,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5253935007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -8745,6 +9876,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161370789",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "typescript",
         "postgresql",
@@ -8765,6 +9899,9 @@
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8030164003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -8794,6 +9931,9 @@
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8030074003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "gcp",
@@ -8823,6 +9963,9 @@
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8030484003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -8845,6 +9988,9 @@
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8009079003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "android"
@@ -8864,6 +10010,9 @@
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8004215003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -8885,6 +10034,9 @@
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8099105003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -8906,6 +10058,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8377184?gh_jid=8377184",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -8935,6 +10090,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8383017",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -8962,6 +10120,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8138814",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "react",
@@ -8985,6 +10146,9 @@
       "url": "https://jobs.lever.co/zimperium/864b1992-bc3c-472a-b11e-b84418d5c49f",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "android",
@@ -9008,6 +10172,9 @@
       "url": "https://jobs.elastic.co/jobs?gh_jid=8226083&gh_jid=8226083",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -9028,6 +10195,9 @@
       "url": "https://jobs.smartrecruiters.com/Sia/744000161263264",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 2,
       "experience_max": null,
@@ -9044,6 +10214,9 @@
       "url": "https://jobs.smartrecruiters.com/Sia/744000161263039",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -9073,6 +10246,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5177389007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -9099,6 +10275,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161260689",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -9120,6 +10299,9 @@
       "url": "https://jobs.lever.co/drivetrain/c34d9b57-56ac-41e0-986c-ccdb88ea6a85",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -9136,6 +10318,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161237189",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -9164,6 +10349,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000161226649",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "linux",
@@ -9184,6 +10372,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161223484",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -9209,6 +10400,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161222109",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -9231,6 +10425,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8327940?gh_jid=8327940",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -9256,6 +10453,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161215340",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "power bi",
         "tableau",
@@ -9276,6 +10476,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161215404",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "llm"
       ],
@@ -9294,6 +10497,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=7455101",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "sql",
@@ -9318,6 +10524,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161073830",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 10,
       "experience_max": null,
@@ -9334,6 +10543,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161073759",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -9362,6 +10574,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161072217",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -9391,6 +10606,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161072169",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 5,
       "experience_max": null,
@@ -9407,6 +10625,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161071070",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -9431,6 +10652,9 @@
       "url": "https://jobs.ashbyhq.com/sarvam/98a3eeee-68b8-4555-bdc6-3dd683980343/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -9457,6 +10681,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8632446002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "postgresql"
@@ -9476,6 +10703,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161059610",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "genai"
@@ -9495,6 +10725,9 @@
       "url": "https://jobs.lever.co/keyloop/5c55d646-7f28-4fde-ac9d-72ff3e6d49ad",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -9522,6 +10755,9 @@
       "url": "https://jobs.lever.co/keyloop/8f05e886-46d9-4ce0-a9e7-1c32f70c187a",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ansible",
         "prometheus",
@@ -9542,6 +10778,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8172579",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "scala",
@@ -9563,6 +10802,9 @@
       "url": "https://job-boards.greenhouse.io/zenoti/jobs/8004525003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -9589,6 +10831,9 @@
       "url": "https://jobs.ashbyhq.com/uptimeai/29a206e1-146e-4348-8b73-3fe7f9fcdca2/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -9618,6 +10863,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8317320",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -9647,6 +10895,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161036601",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -9671,6 +10922,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7695996003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -9694,6 +10948,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.7976001?gh_jid=7976001",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity",
         "iam"
@@ -9713,6 +10970,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278563007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "llm",
@@ -9742,6 +11002,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000161025319",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 8,
       "experience_max": null,
@@ -9758,6 +11021,9 @@
       "url": "https://job-boards.greenhouse.io/rhythmx-ai/jobs/5478899008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "postgresql",
         "etl",
@@ -9780,6 +11046,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8370650?gh_jid=8370650",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 5,
       "experience_max": null,
@@ -9796,6 +11065,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8930224002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby"
       ],
@@ -9814,6 +11086,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5271588007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "llm",
@@ -9834,6 +11109,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000160928607",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "azure",
         "gcp",
@@ -9854,6 +11132,9 @@
       "url": "https://job-boards.greenhouse.io/axicorpfinancialservicesptyltd/jobs/5103319007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 8,
       "experience_max": null,
@@ -9870,6 +11151,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4749341005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "salesforce"
@@ -9889,6 +11173,9 @@
       "url": "https://jobs.lever.co/pditechnologies/b4defc79-cdab-4117-adff-410fc4961811",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -9914,6 +11201,9 @@
       "url": "https://jobs.lever.co/shyftlabs/9cb29ad5-f4db-4404-877c-1e420e80374e",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -9939,6 +11229,9 @@
       "url": "https://jobs.lever.co/shyftlabs/54431330-e0f8-4993-9cb6-97e219e1120b",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -9966,6 +11259,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4751768005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "salesforce"
@@ -9985,6 +11281,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000160787594",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "postgresql",
@@ -10009,6 +11308,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4749335005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "salesforce"
       ],
@@ -10027,6 +11329,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4749337005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "salesforce"
@@ -10046,6 +11351,9 @@
       "url": "https://job-boards.greenhouse.io/starrez/jobs/5181891008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "snowflake",
@@ -10070,6 +11378,9 @@
       "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8026437",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "selenium"
       ],
@@ -10088,6 +11399,9 @@
       "url": "https://jobs.lever.co/ttecdigital/6a0c5b4c-2b1e-4072-9800-ac52285d2a87",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "gcp",
         "splunk",
@@ -10108,6 +11422,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7741414003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -10132,6 +11449,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8219877",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -10155,6 +11475,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8829837002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ci/cd"
       ],
@@ -10173,6 +11496,9 @@
       "url": "https://jobs.elastic.co/jobs?gh_jid=8362973&gh_jid=8362973",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -10200,6 +11526,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8781299002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "postgresql",
@@ -10220,6 +11549,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8800489002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "aws",
@@ -10247,6 +11579,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8615268002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "ruby",
@@ -10270,6 +11605,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8775136002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "postgresql",
@@ -10290,6 +11628,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8916232002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "ci/cd"
@@ -10309,6 +11650,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8692874002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "kubernetes",
@@ -10331,6 +11675,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8731996002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ci/cd"
       ],
@@ -10349,6 +11696,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8878486002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "iam"
@@ -10368,6 +11718,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8905040002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "etl"
       ],
@@ -10386,6 +11739,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8716143002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "postgresql",
         "kubernetes"
@@ -10405,6 +11761,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8918853002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "kubernetes",
@@ -10427,6 +11786,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8775507002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "postgresql",
@@ -10450,6 +11812,9 @@
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8890971002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ruby",
         "llm",
@@ -10471,6 +11836,9 @@
       "url": "https://jobs.ashbyhq.com/buspatrol/d0f0ef6d-5f50-4fb1-9e28-8567fe4952af/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -10499,6 +11867,9 @@
       "url": "https://jobs.ashbyhq.com/buspatrol/26b3f63e-f6a5-42ee-a0fb-e7b1c7e190ae/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "linux"
@@ -10518,6 +11889,9 @@
       "url": "https://jobs.ashbyhq.com/buspatrol/5b3daebc-0910-44c3-a92e-ec979fd8c328/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning"
       ],
@@ -10536,6 +11910,9 @@
       "url": "https://jobs.ashbyhq.com/sophos/6b42a0ac-2500-4559-a813-2bfa43eb2ea6/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -10561,6 +11938,9 @@
       "url": "https://job-boards.greenhouse.io/tide/jobs/8197416003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "react",
         "android",
@@ -10584,6 +11964,9 @@
       "url": "https://jobs.lever.co/brillio-2/ee0017c9-7caf-4fea-98e3-dffaaae6830f",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "snowflake",
         "etl",
@@ -10608,6 +11991,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000160138669",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -10633,6 +12019,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279071007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -10656,6 +12045,9 @@
       "url": "https://jobs.smartrecruiters.com/Xplor/744000160126179",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "servicenow"
       ],
@@ -10674,6 +12066,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8345739",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "llm",
@@ -10694,6 +12089,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000160121839",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -10720,6 +12118,9 @@
       "url": "https://job-boards.greenhouse.io/rhythmx-ai/jobs/5475165008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "postgresql",
@@ -10749,6 +12150,9 @@
       "url": "https://www.coinbase.com/careers/positions/8165441?gh_jid=8165441",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "golang"
@@ -10768,6 +12172,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/6d1c3e24-068c-4209-bbd6-bfe13d44987b",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "typescript",
         "react",
@@ -10790,6 +12197,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159878404",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -10813,6 +12223,9 @@
       "url": "https://jobs.ashbyhq.com/sophos/46929d7f-2677-4837-a033-134d9fde79fe/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "postgresql",
@@ -10842,6 +12255,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240416004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -10871,6 +12287,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6241859004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -10897,6 +12316,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4476215009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -10925,6 +12347,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4473702009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -10954,6 +12379,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4473700009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -10983,6 +12411,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4464880009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "android",
         "ios",
@@ -11004,6 +12435,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4479172009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kubernetes"
       ],
@@ -11022,6 +12456,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4470427009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11045,6 +12482,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4464856009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11067,6 +12507,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4464869009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11092,6 +12535,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4473695009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11113,6 +12559,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4479149009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -11135,6 +12584,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4476249009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "spark",
@@ -11155,6 +12607,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4727236005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "salesforce"
@@ -11174,6 +12629,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4470435009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11197,6 +12655,9 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4470436009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11219,6 +12680,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6241728004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -11248,6 +12712,9 @@
       "url": "https://www.druva.com/why-druva/explore/careers/jobs/8598308002/?gh_jid=8598308002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         ".net",
@@ -11272,6 +12739,9 @@
       "url": "https://www.druva.com/why-druva/explore/careers/jobs/8720275002/?gh_jid=8720275002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11296,6 +12766,9 @@
       "url": "https://www.druva.com/why-druva/explore/careers/jobs/8207141002/?gh_jid=8207141002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11319,6 +12792,9 @@
       "url": "https://www.druva.com/why-druva/explore/careers/jobs/8192672002/?gh_jid=8192672002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -11340,6 +12816,9 @@
       "url": "https://www.druva.com/why-druva/explore/careers/jobs/7892681002/?gh_jid=7892681002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11363,6 +12842,9 @@
       "url": "https://www.druva.com/why-druva/explore/careers/jobs/8564138002/?gh_jid=8564138002",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -11392,6 +12874,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/8037633003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11421,6 +12906,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7980595003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 5,
       "experience_max": 7,
@@ -11437,6 +12925,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7805761003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "typescript",
         "aws",
@@ -11460,6 +12951,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7813430003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -11488,6 +12982,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7797493003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11510,6 +13007,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7804368003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "etl",
         "aws",
@@ -11535,6 +13035,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7763561003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "ci/cd"
       ],
@@ -11553,6 +13056,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7735261003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -11577,6 +13083,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7741530003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "etl",
@@ -11599,6 +13108,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7693376003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11622,6 +13134,9 @@
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7611463003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11650,6 +13165,9 @@
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4451141009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11672,6 +13190,9 @@
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4451145009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11694,6 +13215,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000159661877",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "snowflake",
@@ -11723,6 +13247,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279058007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -11746,6 +13273,9 @@
       "url": "https://jobs.lever.co/gohighlevel/ed7034a9-cd72-4994-b07a-04edf80bc4aa",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 7,
       "experience_max": 9,
@@ -11762,6 +13292,9 @@
       "url": "https://jobs.ashbyhq.com/sarvam/4c7378a7-6736-4038-b584-f2dc242d756c/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "typescript",
@@ -11791,6 +13324,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000159594199",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11813,6 +13349,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159548670",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -11836,6 +13375,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159549159",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -11859,6 +13401,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159549089",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -11882,6 +13427,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159549029",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -11905,6 +13453,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159548999",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -11928,6 +13479,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000159547819",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -11949,6 +13503,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8121360",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity"
       ],
@@ -11967,6 +13524,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8273699?gh_jid=8273699",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -11996,6 +13556,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8166537?gh_jid=8166537",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -12016,6 +13579,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.8161018?gh_jid=8161018",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "postgresql",
@@ -12042,6 +13608,9 @@
       "url": "https://www.rubrik.com/company/careers/departments/job.7956918?gh_jid=7956918",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -12065,6 +13634,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8192438",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "linux",
         "cybersecurity"
@@ -12084,6 +13656,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000159384010",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -12105,6 +13680,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5237915007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "kafka",
         "kubernetes",
@@ -12125,6 +13703,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159345089",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "azure",
@@ -12148,6 +13729,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159339610",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "azure",
@@ -12171,6 +13755,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159342751",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "azure",
@@ -12194,6 +13781,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159344599",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "azure",
@@ -12217,6 +13807,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000159311369",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -12239,6 +13832,9 @@
       "url": "https://jobs.lever.co/gohighlevel/ec11cca8-6c38-4ab0-bf5d-7f1d20e3caee",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -12268,6 +13864,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6239191004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -12291,6 +13890,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240408004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -12320,6 +13922,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240438004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -12349,6 +13954,9 @@
       "url": "https://jobs.ashbyhq.com/sophos/91c7637a-548c-4b45-b6eb-4583d9710707/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "linux"
@@ -12368,6 +13976,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5232603007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure"
@@ -12387,6 +13998,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8282577",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "gcp",
@@ -12410,6 +14024,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8068949",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "machine learning",
@@ -12438,6 +14055,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267225007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -12463,6 +14083,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267726007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript"
@@ -12482,6 +14105,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159135070",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "power bi",
@@ -12503,6 +14129,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159134379",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -12529,6 +14158,9 @@
       "url": "https://job-boards.greenhouse.io/singlestore/jobs/7573638",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -12558,6 +14190,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000159115439",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -12574,6 +14209,9 @@
       "url": "https://jobs.lever.co/smart-working-solutions/d3ffbb13-01ad-4a06-8029-db5d911e71c4",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "sql",
@@ -12596,6 +14234,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5253923007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -12625,6 +14266,9 @@
       "url": "https://jobs.lever.co/lingarogroup/b4aa26da-1f29-42d0-818a-93577800bc6b",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": null,
       "experience_max": null,
@@ -12641,6 +14285,9 @@
       "url": "https://job-boards.greenhouse.io/truveta/jobs/6240382004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -12666,6 +14313,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000159052719",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "aws",
@@ -12688,6 +14338,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000159051399",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -12710,6 +14363,9 @@
       "url": "https://jobs.lever.co/brillio-2/f71a0306-cdba-490e-9588-d10effbef165",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "node.js",
@@ -12731,6 +14387,9 @@
       "url": "https://jobs.lever.co/brillio-2/692fbb2a-d691-4648-bd65-6ee2e3397892",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "node.js",
         "aws",
@@ -12756,6 +14415,9 @@
       "url": "https://jobs.lever.co/brillio-2/97afbaaa-5c9a-4cf9-8c0d-f31ff3e9f2a0",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "snowflake",
@@ -12779,6 +14441,9 @@
       "url": "https://www.coinbase.com/careers/positions/8325213?gh_jid=8325213",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -12802,6 +14467,9 @@
       "url": "https://www.coinbase.com/careers/positions/8167571?gh_jid=8167571",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "golang"
@@ -12821,6 +14489,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8242553",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "ruby",
@@ -12843,6 +14514,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/5636891004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -12872,6 +14546,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/5688687004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -12901,6 +14578,9 @@
       "url": "https://jobs.ashbyhq.com/plane/0076054c-1df5-4f73-88b0-2af635e20f51/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "redis",
@@ -12930,6 +14610,9 @@
       "url": "https://jobs.lever.co/brillio-2/4c88f951-cea1-4659-aa09-1b6761019726",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -12954,6 +14637,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000158665491",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -12978,6 +14664,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5242480007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13005,6 +14694,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5173177007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 2,
       "experience_max": 3,
@@ -13021,6 +14713,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5209653007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13047,6 +14742,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5224804007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "linux",
         "cybersecurity"
@@ -13066,6 +14764,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5255850007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13095,6 +14796,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5177393007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13122,6 +14826,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5253927007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "golang",
@@ -13145,6 +14852,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5253921007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -13174,6 +14884,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5261571007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13201,6 +14914,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5210725007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 8,
       "experience_max": null,
@@ -13217,6 +14933,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5189381007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "aws",
@@ -13242,6 +14961,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/4946624007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "redis",
         "kafka",
@@ -13262,6 +14984,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5263567007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "linux"
@@ -13281,6 +15006,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/4989978007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "linux",
         "ci/cd"
@@ -13300,6 +15028,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5043560007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "linux",
         "ci/cd"
@@ -13319,6 +15050,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5233066007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "llm",
         "aws",
@@ -13341,6 +15075,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5269094007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -13363,6 +15100,9 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5081527007",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "react",
@@ -13391,6 +15131,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158538600",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "sql",
@@ -13411,6 +15154,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158538669",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "sql",
@@ -13431,6 +15177,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158536104",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "sql",
@@ -13451,6 +15200,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158514830",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "c#",
         "sql"
@@ -13470,6 +15222,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158514819",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "c#",
         "sql"
@@ -13489,6 +15244,9 @@
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/5987259004",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -13514,6 +15272,9 @@
       "url": "https://jobs.smartrecruiters.com/Xplor/744000158498160",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "javascript",
@@ -13541,6 +15302,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000158494199",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -13563,6 +15327,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000158457389",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -13585,6 +15352,9 @@
       "url": "https://jobs.smartrecruiters.com/Experian/744000158443990",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "aws",
@@ -13608,6 +15378,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4729533005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "salesforce"
       ],
@@ -13626,6 +15399,9 @@
       "url": "https://jobs.ashbyhq.com/sophos/81ba8375-15d3-44c1-b979-7dcbe90f8948/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity"
       ],
@@ -13644,6 +15420,9 @@
       "url": "https://job-boards.greenhouse.io/singlestore/jobs/8237241",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13669,6 +15448,9 @@
       "url": "https://job-boards.greenhouse.io/crashplan/jobs/4471144009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13695,6 +15477,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000158343951",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "redis",
         "kafka",
@@ -13721,6 +15506,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000158343154",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "redis",
         "kafka",
@@ -13747,6 +15535,9 @@
       "url": "https://jobs.smartrecruiters.com/Sia/744000158263499",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "azure",
@@ -13767,6 +15558,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158215429",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -13790,6 +15584,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158215329",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -13813,6 +15610,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158215159",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -13836,6 +15636,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158214474",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "spring boot",
@@ -13863,6 +15666,9 @@
       "url": "https://jobs.ashbyhq.com/sophos/0b9af89e-23ae-4e34-a206-8db40e2c10f4/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -13892,6 +15698,9 @@
       "url": "https://job-boards.greenhouse.io/crashplan/jobs/4327555009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -13921,6 +15730,9 @@
       "url": "https://job-boards.greenhouse.io/insurityindia/jobs/4456447009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 5,
       "experience_max": null,
@@ -13937,6 +15749,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158095531",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -13960,6 +15775,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158097939",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -13983,6 +15801,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158095951",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14006,6 +15827,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158097519",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14029,6 +15853,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8188239",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "postgresql",
@@ -14057,6 +15884,9 @@
       "url": "https://job-boards.greenhouse.io/rhythmx-ai/jobs/5464521008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "postgresql",
@@ -14084,6 +15914,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158023170",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -14108,6 +15941,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158021915",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -14132,6 +15968,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158022869",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -14156,6 +15995,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000158022589",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "c#",
@@ -14180,6 +16022,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000158005519",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -14201,6 +16046,9 @@
       "url": "https://jobs.smartrecruiters.com/ifs1/744000157968090",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "power bi",
@@ -14224,6 +16072,9 @@
       "url": "https://jobs.lever.co/acceldata/c1d6cc81-a14e-4663-aac3-2ac21e8d2172",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "jenkins",
@@ -14245,6 +16096,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000157961499",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -14272,6 +16126,9 @@
       "url": "https://jobs.lever.co/gohighlevel/6311f25e-fb4c-4700-b3ee-3ba813b05231",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "typescript",
         "node.js",
@@ -14295,6 +16152,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000157958339",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -14322,6 +16182,9 @@
       "url": "https://jobs.lever.co/gohighlevel/b5070476-0bfd-45c8-b0f6-b7aad6d8e68e",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -14346,6 +16209,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8281068",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "cybersecurity"
       ],
@@ -14364,6 +16230,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8281072",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "cybersecurity"
@@ -14383,6 +16252,9 @@
       "url": "https://jobs.lever.co/zeta/095cff54-0a10-40b2-baa7-199c5e03d092",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "postgresql",
@@ -14406,6 +16278,9 @@
       "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000157850657",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -14434,6 +16309,9 @@
       "url": "https://jobs.ashbyhq.com/ema/5224df3c-9bef-406d-8b0c-381f2055c6c4/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "llm",
@@ -14454,6 +16332,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000157805820",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "azure",
         "linux",
@@ -14475,6 +16356,9 @@
       "url": "https://job-boards.greenhouse.io/mfsgtechnologiesindia/jobs/5430989008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -14503,6 +16387,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4746465005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -14532,6 +16419,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4667640005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -14561,6 +16451,9 @@
       "url": "https://jobs.ashbyhq.com/sarvam/1dd07b8b-0c0b-422a-8ff4-c99bdc5add68/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "aws",
@@ -14588,6 +16481,9 @@
       "url": "https://jobs.lever.co/brillio-2/c824a787-9a42-4ba0-b963-4985dfbfb4a5",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "etl",
@@ -14613,6 +16509,9 @@
       "url": "https://job-boards.greenhouse.io/rhythmx-ai/jobs/5451933008",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -14636,6 +16535,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000157672109",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14659,6 +16561,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000157672059",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14682,6 +16587,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000157672029",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14705,6 +16613,9 @@
       "url": "https://jobs.smartrecruiters.com/Eurofins/744000157671939",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14728,6 +16639,9 @@
       "url": "https://jobs.lever.co/gohighlevel/c7972450-4798-49a4-8389-cf74d5b7d7a5",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "python",
@@ -14757,6 +16671,9 @@
       "url": "https://www.mastercontrol.com/careers/job-listings/role/?role=4743355005&gh_jid=4743355005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "sql"
@@ -14776,6 +16693,9 @@
       "url": "https://jobs.lever.co/gohighlevel/01aa8ff3-d250-40a1-89e2-5341f66f1a36",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "postman"
@@ -14795,6 +16715,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000157456780",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -14818,6 +16741,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4746973005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14844,6 +16770,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4746439005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         ".net",
         "c#",
@@ -14870,6 +16799,9 @@
       "url": "https://job-boards.greenhouse.io/zenoti/jobs/7729931003",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 8,
       "experience_max": null,
@@ -14886,6 +16818,9 @@
       "url": "https://jobs.ashbyhq.com/sarvam/db89b576-2456-4cc4-ab0b-c45f8c6c27f0/application",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "postgresql",
         "llm"
@@ -14905,6 +16840,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000157376639",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "servicenow"
       ],
@@ -14923,6 +16861,9 @@
       "url": "https://jobs.elastic.co/jobs?gh_jid=8111756&gh_jid=8111756",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 10,
       "experience_max": null,
@@ -14939,6 +16880,9 @@
       "url": "https://job-boards.greenhouse.io/crashplan/jobs/4463963009",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "javascript",
         "typescript",
@@ -14965,6 +16909,9 @@
       "url": "https://careers.toasttab.com/jobs?gh_jid=8045807",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "java",
         "javascript",
@@ -14990,6 +16937,9 @@
       "url": "https://jobs.lever.co/gohighlevel/de899a79-e7e0-4650-8356-08a5d95b4198",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [],
       "experience_min": 7,
       "experience_max": null,
@@ -15006,6 +16956,9 @@
       "url": "https://jobs.lever.co/brillio-2/9da22b02-27c9-4f02-b6b5-bb1eada8f4d1",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "azure",
@@ -15026,6 +16979,9 @@
       "url": "https://jobs.lever.co/brillio-2/ac1e0159-67c3-46fc-b779-1a3f4e60642e",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -15051,6 +17007,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4746468005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -15080,6 +17039,9 @@
       "url": "https://job-boards.greenhouse.io/techholding/jobs/4746467005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "python",
         "sql",
@@ -15109,6 +17071,9 @@
       "url": "https://jobs.lever.co/lingarogroup/329b3b9b-a47e-4cd4-8540-ba7a51a14fbf",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "machine learning",
         "llm",
@@ -15130,6 +17095,9 @@
       "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8306131",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "golang",
         "mongodb",
@@ -15156,6 +17124,9 @@
       "url": "https://jobs.smartrecruiters.com/ServiceNow/744000156762623",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "aws",
         "azure",
@@ -15180,6 +17151,9 @@
       "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4736585005",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "salesforce"
@@ -15199,6 +17173,9 @@
       "url": "https://jobs.smartrecruiters.com/Sia/744000156710249",
       "listing_url": "",
       "direct_apply": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
       "skills": [
         "sql",
         "etl",
