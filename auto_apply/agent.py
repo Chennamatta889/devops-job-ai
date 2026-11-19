@@ -5,6 +5,7 @@ from pathlib import Path
 from urllib.request import urlopen
 from urllib.parse import quote, urlparse
 from html import unescape
+from concurrent.futures import ThreadPoolExecutor
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / "ledger.json"
@@ -32,14 +33,31 @@ def match(job, profile):
 def get_jobs():
     jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
     if not isinstance(jobs,list): raise ValueError("JOB_FEED_JSON must be an array")
-    for board in os.getenv("GREENHOUSE_BOARDS","").split(","):
-        if not re.fullmatch(r"[a-zA-Z0-9_-]+",board.strip()): continue
+    defaults = {"greenhouse": "crashplan,razorpaysoftwareprivatelimited,singlestore,toradex,conviva,pointwild,neweratech,machinify-india,merqube,axicorpfinancialservicesptyltd,insurityindia,backbase", "lever": "smart-working-solutions,pditechnologies,ttecdigital,zeta,brightedge,keyloop,hevodata,brillio-2"}
+    sources = []
+    for kind in defaults:
+        value = os.getenv(kind.upper()+"_BOARDS","").strip() or defaults[kind]
+        sources.extend((kind,b.strip()) for b in value.split(",") if re.fullmatch(r"[a-zA-Z0-9_-]+",b.strip()))
+    def fetch(source):
+        kind, board = source
         try:
-            with urlopen("https://boards-api.greenhouse.io/v1/boards/"+quote(board.strip())+"/jobs?content=true",timeout=25) as r:
+            url = ("https://boards-api.greenhouse.io/v1/boards/"+quote(board)+"/jobs?content=true" if kind=="greenhouse" else "https://api.lever.co/v0/postings/"+quote(board)+"?mode=json")
+            with urlopen(url,timeout=25) as r:
                 data=json.load(r)
-            for j in data["jobs"]:
-                jobs.append(dict(id=str(j["id"]),company=board,title=j["title"],description=j.get("content",""),location=j.get("location",{}).get("name",""),url=j.get("absolute_url",""),source="greenhouse"))
-        except Exception as e: print("Board unavailable:",board,type(e).__name__,file=sys.stderr)
+            found=[]
+            for j in (data["jobs"] if kind=="greenhouse" else data):
+                if kind=="greenhouse":
+                    found.append(dict(id=str(j["id"]),company=board,title=j["title"],description=j.get("content",""),location=j.get("location",{}).get("name",""),url=j.get("absolute_url",""),source=kind))
+                else:
+                    found.append(dict(id=str(j["id"]),company=board,title=j.get("text",""),description=j.get("descriptionPlain","")+" "+ " ".join(x.get("text","")+" "+x.get("content","") for x in j.get("lists",[])),location=j.get("categories",{}).get("location",""),url=j.get("hostedUrl",""),source=kind))
+            print("Source:",kind,board,"jobs:",len(found))
+            return found
+        except Exception as e:
+            print("Board unavailable:",kind,board,type(e).__name__,file=sys.stderr)
+            return []
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        for found in pool.map(fetch,sources):
+            jobs.extend(found)
     if not jobs: print("No jobs discovered. Configure GREENHOUSE_BOARDS or JOB_FEED_JSON.")
     return jobs
 def key(j):
@@ -81,7 +99,7 @@ def main():
         seen.add(k)
         if score<profile.get("minimum_match",80): continue
         status=ledger.get(k,"review_portal")
-        eligible=reason=="matched" and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source")!="greenhouse"
+        eligible=reason=="matched" and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever")
         if k not in ledger and eligible:
             status="ready_email"
             if auto and count<min(int(profile.get("max_per_run",5)),10):
