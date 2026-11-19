@@ -238,6 +238,20 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 # Never persist request bodies, response bodies, cookies, query parameters or applicant values.
                 responses.append(entry)
             page.on("response",capture)
+            sync_ops={"ApiSetFormValue","ApiSetFormValueToFile","ApiCreateFileUploadHandle"}
+            def submit_responses():
+                return [x for x in responses if x.get("operation") in ASHBY_SUBMIT_OPS]
+            def wait_form_quiet():
+                if u.hostname!="jobs.ashbyhq.com": return True
+                last=-1; stable=0
+                for _ in range(40):
+                    current=sum(1 for x in responses if x.get("operation") in sync_ops)
+                    if current==last: stable+=1
+                    else: last=current; stable=0
+                    if stable>=6: return True
+                    if verification_required(page): return False
+                    page.wait_for_timeout(250)
+                return False
             stage="resume_upload"
             files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":pdf})
             if u.hostname=="jobs.ashbyhq.com":
@@ -255,6 +269,9 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 if buttons.is_enabled(): break
                 page.wait_for_timeout(500)
             if not buttons.is_enabled(): return "portal_review_submit_disabled"
+            if not wait_form_quiet():
+                if verification_required(page): return "portal_review_human_verification_v2"
+                return "portal_review_form_sync_busy"
             stage="submit"
             success=page.get_by_text(re.compile(r"^(?:thank you for applying|thanks for applying|(?:your )?application (?:has been )?(?:successfully )?(?:submitted|received))[.!]?$",re.I))
             def visible_success():
@@ -264,7 +281,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             submitted=True
             buttons.click(timeout=10000)
             stage="confirmation"
-            for _ in range(30):
+            retried_click=False
+            for tick in range(38):
                 if "success" in ashby_signals:
                     diagnostic["confirmation"]="ashby_form_submit_success"
                     return "portal_confirmed"
@@ -277,7 +295,14 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 if not already_visible and visible_success():
                     diagnostic["confirmation"]="new_visible_success_message"
                     return "portal_confirmed"
-                if verification_required(page): return "portal_uncertain_human_verification_after_submit"
+                if verification_required(page):
+                    return "portal_uncertain_human_verification_after_submit" if submit_responses() else "portal_review_human_verification_v2"
+                if u.hostname=="jobs.ashbyhq.com" and tick==7 and not submit_responses() and not retried_click:
+                    invalid_now=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
+                    if invalid_now.count()==0 and wait_form_quiet() and buttons.is_enabled() and not verification_required(page):
+                        diagnostic["second_click_after_no_submit"]=True
+                        buttons.click(timeout=10000)
+                        retried_click=True
                 page.wait_for_timeout(1000)
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             diagnostic["invalid_field_count"]=invalid.count()
@@ -305,7 +330,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 return "portal_review_server_validation"
             if invalid.count():
                 return "portal_review_validation_failed"
-            if u.hostname=="jobs.ashbyhq.com" and not submit_responses:
+            if u.hostname=="jobs.ashbyhq.com" and not final_submit_responses:
                 return "portal_review_no_submit_operation"
             if any(x==409 for x in codes):
                 return "portal_review_duplicate_possible"
