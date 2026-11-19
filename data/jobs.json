@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-19T17:32:37.993543+00:00",
+  "generated_at_utc": "2026-11-19T18:15:08.603861+00:00",
   "count": 119,
   "jobs": [
     {
@@ -15,7 +15,10 @@
         "docker",
         "ci/cd",
         "git"
-      ]
+      ],
+      "experience_min": 7,
+      "experience_max": null,
+      "experience_label": "7+ years"
     },
     {
       "id": "44a7f9dc0e52e986",
@@ -38,7 +41,10 @@
         "gcp",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "c17a0616e3360782",
@@ -57,7 +63,10 @@
         "grafana",
         "helm",
         "github actions"
-      ]
+      ],
+      "experience_min": 14,
+      "experience_max": 15,
+      "experience_label": "14-15 years"
     },
     {
       "id": "39eca93bdc296632",
@@ -76,7 +85,10 @@
         "ci/cd",
         "datadog",
         "github actions"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "a67b1bf051b7050b",
@@ -95,7 +107,10 @@
         "prometheus",
         "grafana",
         "gcp"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "33356fd47c94b80b",
@@ -118,7 +133,10 @@
         "datadog",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "3081c93e8ad67f31",
@@ -139,7 +157,10 @@
         "grafana",
         "helm",
         "bash"
-      ]
+      ],
+      "experience_min": 6,
+      "experience_max": 8,
+      "experience_label": "6-8 years"
     },
     {
       "id": "30fed96287e74102",
@@ -161,7 +182,10 @@
         "prometheus",
         "grafana",
         "gcp"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "a64fc5d6583dba11",
@@ -182,7 +206,10 @@
         "datadog",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 2,
+      "experience_max": 4,
+      "experience_label": "2-4 years"
     },
     {
       "id": "378a65b46939acc2",
@@ -203,7 +230,10 @@
         "gcp",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "69f307b4b66ae997",
@@ -226,7 +256,10 @@
         "argocd",
         "gcp",
         "datadog"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "c6e4a3a966aa082b",
@@ -239,7 +272,10 @@
       "skills": [
         "azure",
         "python"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 5,
+      "experience_label": "3-5 years"
     },
     {
       "id": "5fa6d702ea04e58b",
@@ -262,7 +298,10 @@
         "grafana",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 5,
+      "experience_label": "3-5 years"
     },
     {
       "id": "7464594872787609",
@@ -283,7 +322,10 @@
         "ci/cd",
         "ansible",
         "gcp"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "a8f0009ad99d31a2",
@@ -303,7 +345,10 @@
         "ci/cd",
         "argocd",
         "gcp"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": 9,
+      "experience_label": "5-9 years"
     },
     {
       "id": "94d9ea0c5936ba2d",
@@ -322,7 +367,10 @@
         "grafana",
         "datadog",
         "github actions"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "b2106b12ef50fc04",
@@ -343,7 +391,10 @@
         "grafana",
         "gcp",
         "datadog"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "4a445237170a31a8",
@@ -364,7 +415,10 @@
         "helm",
         "argocd",
         "bash"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 5,
+      "experience_label": "3-5 years"
     },
     {
       "id": "f0df9d19d71f5526",
@@ -383,7 +437,10 @@
         "python",
         "ci/cd",
         "gcp"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "4d0dfc5768c54bbd",
@@ -406,7 +463,10 @@
         "helm",
         "argocd",
         "datadog"
-      ]
+      ],
+      "experience_min": 10,
+      "experience_max": null,
+      "experience_label": "10+ years"
     },
     {
       "id": "ef897fa2826d897b",
@@ -429,7 +489,10 @@
         "helm",
         "gcp",
         "github actions"
-      ]
+      ],
+      "experience_min": 7,
+      "experience_max": null,
+      "experience_label": "7+ years"
     },
     {
       "id": "f6c4547997eda097",
@@ -448,7 +511,10 @@
         "ci/cd",
         "gcp",
         "github actions"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "9f9057273d68ef42",
@@ -466,7 +532,10 @@
         "prometheus",
         "gcp",
         "datadog"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "128cb143706794d2",
@@ -489,7 +558,10 @@
         "helm",
         "gcp",
         "bash"
-      ]
+      ],
+      "experience_min": 1,
+      "experience_max": null,
+      "experience_label": "1+ years"
     },
     {
       "id": "fc4f93e65369c14f",
@@ -503,7 +575,10 @@
         "kubernetes",
         "terraform",
         "python"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "1507adb89cce645d",
@@ -516,7 +591,10 @@
       "skills": [
         "kubernetes",
         "python"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "a8624e2e2d9fdff6",
@@ -533,7 +611,10 @@
         "python",
         "ci/cd",
         "gcp"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "d11d7c52596979be",
@@ -556,7 +637,10 @@
         "helm",
         "argocd",
         "gcp"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "b8ccabc26b42c4b8",
@@ -579,7 +663,10 @@
         "helm",
         "argocd",
         "gcp"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "3e8f09505ebb6709",
@@ -602,7 +689,10 @@
         "prometheus",
         "grafana",
         "gcp"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 5,
+      "experience_label": "3-5 years"
     },
     {
       "id": "00b0809247ff8cb5",
@@ -617,7 +707,10 @@
         "linux",
         "python",
         "ci/cd"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 6,
+      "experience_label": "3-6 years"
     },
     {
       "id": "1af3e69d60cafce0",
@@ -632,7 +725,10 @@
         "docker",
         "terraform",
         "python"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": 8,
+      "experience_label": "4-8 years"
     },
     {
       "id": "7f42fd902e037344",
@@ -642,7 +738,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-25T17:11:48.947Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999909342116",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "fc5fb40f0b4a8b5f",
@@ -652,7 +751,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-18T16:54:42.733Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999908042592",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "89673d0da1da0fc0",
@@ -662,7 +764,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-16T16:44:50.841Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999907675953",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "c13fa32da0b5eece",
@@ -672,7 +777,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-15T18:04:47.489Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999907462703",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "5c649a80ef40c030",
@@ -682,7 +790,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-15T17:59:58.630Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999907459667",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "e2bdfc3caf9b777c",
@@ -692,7 +803,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-10T16:37:59.946Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999906501803",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "cc3d16c49837328f",
@@ -702,7 +816,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-07T12:19:21.479Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999905647613",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "b66cd32add1dee3d",
@@ -712,7 +829,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-07T07:18:32.188Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999905440323",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "c7b2f33bc09ba9d6",
@@ -722,7 +842,10 @@
       "source": "smartrecruiters",
       "published": "2023-05-07T05:59:13.989Z",
       "url": "https://jobs.smartrecruiters.com/Nagarro1/743999905386187",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "3dfff9d06aee822d",
@@ -742,7 +865,10 @@
         "git",
         "splunk",
         "ansible"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "3cc240eff86dcb38",
@@ -764,7 +890,10 @@
         "prometheus",
         "grafana",
         "helm"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "9a92b53b6790f1ec",
@@ -783,7 +912,10 @@
         "ci/cd",
         "splunk",
         "gcp"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "f6b96b82332865ff",
@@ -802,7 +934,10 @@
         "grafana",
         "helm",
         "gcp"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "b2e079d76eaba0a9",
@@ -816,7 +951,10 @@
         "python",
         "prometheus",
         "grafana"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "189bb93af6f54237",
@@ -839,7 +977,10 @@
         "helm",
         "argocd",
         "gcp"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 5,
+      "experience_label": "3-5 years"
     },
     {
       "id": "ba746912d7cb8e7a",
@@ -858,7 +999,10 @@
         "ci/cd",
         "ansible",
         "grafana"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "125465456d355e0a",
@@ -880,7 +1024,10 @@
         "argocd",
         "gcp",
         "datadog"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "9101a09f59871036",
@@ -902,7 +1049,10 @@
         "argocd",
         "gcp",
         "github actions"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "3cbc3809e256079a",
@@ -919,7 +1069,10 @@
         "argocd",
         "datadog",
         "github actions"
-      ]
+      ],
+      "experience_min": 10,
+      "experience_max": null,
+      "experience_label": "10+ years"
     },
     {
       "id": "30f9a536e49a62c1",
@@ -940,7 +1093,10 @@
         "grafana",
         "gcp",
         "bash"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "6b655ee73c8857c7",
@@ -952,7 +1108,10 @@
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5212053007",
       "skills": [
         "gcp"
-      ]
+      ],
+      "experience_min": 10,
+      "experience_max": null,
+      "experience_label": "10+ years"
     },
     {
       "id": "2686999005ba2f27",
@@ -974,7 +1133,10 @@
         "grafana",
         "gcp",
         "github actions"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "4f0818fcdf3f19e0",
@@ -994,7 +1156,10 @@
         "grafana",
         "helm",
         "gcp"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "ecb96c98723032fb",
@@ -1011,7 +1176,10 @@
         "python",
         "ci/cd",
         "ansible"
-      ]
+      ],
+      "experience_min": 10,
+      "experience_max": null,
+      "experience_label": "10+ years"
     },
     {
       "id": "6160a3dfa8dbef22",
@@ -1033,7 +1201,10 @@
         "ansible",
         "helm",
         "github actions"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "c906825e15ff7de9",
@@ -1049,7 +1220,10 @@
         "linux",
         "python",
         "ci/cd"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "ff0f1c2caba76a7b",
@@ -1062,7 +1236,10 @@
       "skills": [
         "python",
         "gcp"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "9b9adead6a125f7a",
@@ -1083,7 +1260,10 @@
         "git",
         "ansible",
         "bash"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": 7,
+      "experience_label": "5-7 years"
     },
     {
       "id": "40f21341aceb325a",
@@ -1104,7 +1284,10 @@
         "git",
         "splunk",
         "ansible"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": 7,
+      "experience_label": "4-7 years"
     },
     {
       "id": "5c2a8a0e29e93c67",
@@ -1116,7 +1299,10 @@
       "url": "https://www.okta.com/company/careers/opportunity/8263916?gh_jid=8263916",
       "skills": [
         "kubernetes"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "8b6fa8bbd16a33e0",
@@ -1139,7 +1325,10 @@
         "helm",
         "argocd",
         "gcp"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 5,
+      "experience_label": "3-5 years"
     },
     {
       "id": "2ffbab0e35bb4701",
@@ -1156,7 +1345,10 @@
         "docker",
         "terraform",
         "datadog"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": null,
+      "experience_label": "3+ years"
     },
     {
       "id": "609016c2bcf12e48",
@@ -1174,7 +1366,10 @@
         "ci/cd",
         "helm",
         "gcp"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "197ced237fe4e1e7",
@@ -1196,7 +1391,10 @@
         "argocd",
         "gcp",
         "github actions"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "42b56d8b6b7a9a00",
@@ -1216,7 +1414,10 @@
         "grafana",
         "argocd",
         "gcp"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": 6,
+      "experience_label": "4-6 years"
     },
     {
       "id": "e8b95ed37ef3fe10",
@@ -1239,7 +1440,10 @@
         "prometheus",
         "grafana",
         "helm"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "d71a624a8c1d79eb",
@@ -1260,7 +1464,10 @@
         "grafana",
         "helm",
         "gcp"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "b03af7431ca629a1",
@@ -1279,7 +1486,10 @@
         "ansible",
         "prometheus",
         "grafana"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "eccfe496b3f386d5",
@@ -1298,7 +1508,10 @@
         "linux",
         "python",
         "ci/cd"
-      ]
+      ],
+      "experience_min": 9,
+      "experience_max": null,
+      "experience_label": "9+ years"
     },
     {
       "id": "c9b3175cc77176b6",
@@ -1310,7 +1523,10 @@
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4479172009",
       "skills": [
         "kubernetes"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "3436d329e70e132f",
@@ -1328,7 +1544,10 @@
         "linux",
         "ci/cd",
         "helm"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "d584366dac5a5857",
@@ -1351,7 +1570,10 @@
         "prometheus",
         "grafana",
         "argocd"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "5723c88dafb45c28",
@@ -1368,7 +1590,10 @@
         "ci/cd",
         "git",
         "gcp"
-      ]
+      ],
+      "experience_min": 7,
+      "experience_max": null,
+      "experience_label": "7+ years"
     },
     {
       "id": "12c8cc7681f20506",
@@ -1391,7 +1616,10 @@
         "grafana",
         "argocd",
         "bash"
-      ]
+      ],
+      "experience_min": 6,
+      "experience_max": null,
+      "experience_label": "6+ years"
     },
     {
       "id": "d24c4b74f3d79d0c",
@@ -1404,7 +1632,10 @@
       "skills": [
         "aws",
         "azure"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": 8,
+      "experience_label": "4-8 years"
     },
     {
       "id": "fe69fa7dafdcad60",
@@ -1423,7 +1654,10 @@
         "ci/cd",
         "grafana",
         "github actions"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 3,
+      "experience_label": "3 years"
     },
     {
       "id": "8b7665d83082e1a1",
@@ -1444,7 +1678,10 @@
         "helm",
         "argocd",
         "bash"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "48c7bdb840c8bb14",
@@ -1462,7 +1699,10 @@
         "ci/cd",
         "git",
         "gcp"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "c0905fa294fcad6d",
@@ -1475,7 +1715,10 @@
       "skills": [
         "python",
         "ci/cd"
-      ]
+      ],
+      "experience_min": 7,
+      "experience_max": null,
+      "experience_label": "7+ years"
     },
     {
       "id": "cfd90ed8978c567b",
@@ -1491,7 +1734,10 @@
         "python",
         "prometheus",
         "grafana"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "6d1d374de445a35b",
@@ -1505,7 +1751,10 @@
         "aws",
         "python",
         "grafana"
-      ]
+      ],
+      "experience_min": 1,
+      "experience_max": 3,
+      "experience_label": "1-3 years"
     },
     {
       "id": "e89c48023de57c9b",
@@ -1521,7 +1770,10 @@
         "linux",
         "python",
         "gcp"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "d32fd04893c34ac0",
@@ -1540,7 +1792,10 @@
         "ci/cd",
         "ansible",
         "bash"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "e05664b4078a0235",
@@ -1556,7 +1811,10 @@
         "linux",
         "python",
         "gcp"
-      ]
+      ],
+      "experience_min": 6,
+      "experience_max": 8,
+      "experience_label": "6-8 years"
     },
     {
       "id": "d0f5cb39c0156f54",
@@ -1573,7 +1831,10 @@
         "terraform",
         "ci/cd",
         "argocd"
-      ]
+      ],
+      "experience_min": 7,
+      "experience_max": 10,
+      "experience_label": "7-10 years"
     },
     {
       "id": "e077cc0996d743dc",
@@ -1591,7 +1852,10 @@
         "ci/cd",
         "git",
         "gcp"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "b2405d85b9c380b1",
@@ -1608,7 +1872,10 @@
         "linux",
         "ci/cd",
         "gcp"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "d3fa28f5eae22792",
@@ -1631,7 +1898,10 @@
         "prometheus",
         "grafana",
         "gcp"
-      ]
+      ],
+      "experience_min": 10,
+      "experience_max": 15,
+      "experience_label": "10-15 years"
     },
     {
       "id": "65a14278626b24e4",
@@ -1651,7 +1921,10 @@
         "grafana",
         "datadog",
         "bash"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "a22fe0b8cdf0a9fe",
@@ -1664,7 +1937,10 @@
       "skills": [
         "kubernetes",
         "linux"
-      ]
+      ],
+      "experience_min": 6,
+      "experience_max": 10,
+      "experience_label": "6-10 years"
     },
     {
       "id": "252a11d4797cdb89",
@@ -1682,7 +1958,10 @@
         "helm",
         "argocd",
         "github actions"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "4d90c232daff10d4",
@@ -1694,7 +1973,10 @@
       "url": "https://job-boards.greenhouse.io/celonis/jobs/7815061003?gh_jid=7815061003",
       "skills": [
         "python"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "b91a1cef56592056",
@@ -1707,7 +1989,10 @@
       "skills": [
         "kubernetes",
         "prometheus"
-      ]
+      ],
+      "experience_min": 12,
+      "experience_max": null,
+      "experience_label": "12+ years"
     },
     {
       "id": "5b63cdc0c08f734c",
@@ -1730,7 +2015,10 @@
         "gcp",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 3,
+      "experience_max": 6,
+      "experience_label": "3-6 years"
     },
     {
       "id": "8afdbb3a2c6a0cc5",
@@ -1750,7 +2038,10 @@
         "ansible",
         "gcp",
         "bash"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "24a40ca637e2c9e8",
@@ -1770,7 +2061,10 @@
         "git",
         "ansible",
         "bash"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "54c59cfd172c3242",
@@ -1793,7 +2087,10 @@
         "grafana",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "10a3e5eefe945a23",
@@ -1816,7 +2113,10 @@
         "gcp",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "db796d856aa7f01b",
@@ -1839,7 +2139,10 @@
         "git",
         "prometheus",
         "grafana"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "ad809e5eaa30dcdd",
@@ -1857,7 +2160,10 @@
         "python",
         "ci/cd",
         "git"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "84cab8987191f66d",
@@ -1879,7 +2185,10 @@
         "ansible",
         "gcp",
         "bash"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "3e83aa30eebddf0f",
@@ -1900,7 +2209,10 @@
         "datadog",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "562e1c4791a1a402",
@@ -1915,7 +2227,10 @@
         "docker",
         "python",
         "ci/cd"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": 8,
+      "experience_label": "5-8 years"
     },
     {
       "id": "8f0685f903e76f01",
@@ -1932,7 +2247,10 @@
         "prometheus",
         "grafana",
         "gcp"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "cd6f8539c48f72bd",
@@ -1955,7 +2273,10 @@
         "grafana",
         "helm",
         "argocd"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "f6146b684d468dff",
@@ -1968,7 +2289,10 @@
       "skills": [
         "aws",
         "azure"
-      ]
+      ],
+      "experience_min": 1,
+      "experience_max": 4,
+      "experience_label": "1-4 years"
     },
     {
       "id": "56c6aba6065ffa3c",
@@ -1986,7 +2310,10 @@
         "python",
         "splunk",
         "gcp"
-      ]
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
     },
     {
       "id": "543313e87f35f74e",
@@ -1996,7 +2323,10 @@
       "source": "greenhouse",
       "published": "",
       "url": "https://job-boards.greenhouse.io/insurityindia/jobs/4327961009",
-      "skills": []
+      "skills": [],
+      "experience_min": 2,
+      "experience_max": null,
+      "experience_label": "2+ years"
     },
     {
       "id": "971e258bb566883e",
@@ -2015,7 +2345,10 @@
         "git",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "599c166d79b1677d",
@@ -2035,7 +2368,10 @@
         "ci/cd",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 6,
+      "experience_max": null,
+      "experience_label": "6+ years"
     },
     {
       "id": "6ff6c4d40b05fb48",
@@ -2045,7 +2381,10 @@
       "source": "lever",
       "published": "",
       "url": "https://jobs.lever.co/lingarogroup/b4aa26da-1f29-42d0-818a-93577800bc6b",
-      "skills": []
+      "skills": [],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     },
     {
       "id": "3f7fc55aef41009e",
@@ -2066,7 +2405,10 @@
         "gcp",
         "bash",
         "github actions"
-      ]
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "bc614842a12069ec",
@@ -2088,7 +2430,10 @@
         "git",
         "ansible",
         "gcp"
-      ]
+      ],
+      "experience_min": 6,
+      "experience_max": null,
+      "experience_label": "6+ years"
     },
     {
       "id": "85b5befaacadd433",
@@ -2110,7 +2455,10 @@
         "ansible",
         "grafana",
         "gcp"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "b7d8becf644b9dad",
@@ -2132,7 +2480,10 @@
         "ansible",
         "grafana",
         "gcp"
-      ]
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "96e2f6bfa43511d1",
@@ -2153,7 +2504,10 @@
         "ansible",
         "grafana",
         "bash"
-      ]
+      ],
+      "experience_min": 2,
+      "experience_max": null,
+      "experience_label": "2+ years"
     },
     {
       "id": "83079019f9164df0",
@@ -2175,7 +2529,10 @@
         "git",
         "helm",
         "gcp"
-      ]
+      ],
+      "experience_min": null,
+      "experience_max": null,
+      "experience_label": "Not specified"
     }
   ]
 }
