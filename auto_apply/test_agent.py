@@ -176,6 +176,7 @@ class AshbySubmitTests(unittest.TestCase):
     def test_ashby_submit_signals(self):
         from portal import ashby_submit_signal
         self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormSubmitSuccess","_":True},"messages":{}}}}),"success")
+        self.assertEqual(ashby_submit_signal({"data":{"submitApplicationFormAction":{"applicationFormResult":{"__typename":"FormSubmitSuccess","_":True},"messages":{}}}}),"success")
         self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormRender","id":"form"},"messages":{}}}}),"validation")
         self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormSubmitSuccess","_":True},"messages":{"blockMessageForCandidateHtml":"blocked"}}}}),"blocked")
         self.assertEqual(ashby_submit_signal({"errors":[{"message":"x"}]}),"")
