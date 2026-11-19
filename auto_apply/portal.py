@@ -125,16 +125,36 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if verification_required(page): return "portal_review_human_verification_v2"
             if not buttons.is_enabled(): return "portal_review_submit_disabled"
             stage="submit"
+            responses=[]
+            def capture(response):
+                u=urlparse(response.url)
+                if response.request.method!="POST" or u.hostname not in HOSTS|{"api.ashbyhq.com","api.lever.co","boards-api.greenhouse.io"}: return
+                # No payloads, query parameters, cookies, or applicant data in reports.
+                responses.append({"host":u.hostname,"status":response.status})
+            page.on("response",capture)
+            success=page.get_by_text(re.compile(r"^(?:thank you for applying|thanks for applying|(?:your )?application (?:has been )?(?:successfully )?(?:submitted|received))[.!]?$",re.I))
+            def visible_success():
+                return any(success.nth(i).is_visible() for i in range(min(success.count(),10)))
+            already_visible=visible_success()
+            diagnostic["attempted_at_utc"]=__import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
             submitted=True
             buttons.click(timeout=10000)
-            try:
-                page.get_by_text(re.compile(r"thank you for applying|application (?:has been )?(?:submitted|received)|thanks for applying",re.I)).first.wait_for(timeout=12000)
-                return "portal_confirmed"
-            except Exception:
+            stage="confirmation"
+            for _ in range(30):
+                if not already_visible and visible_success():
+                    diagnostic["confirmation"]="new_visible_success_message"
+                    return "portal_confirmed"
                 if verification_required(page): return "portal_uncertain_human_verification_after_submit"
-                return "portal_uncertain_confirmation"
+                page.wait_for_timeout(1000)
+            invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
+            diagnostic["invalid_field_count"]=invalid.count()
+            diagnostic["visible_alert_count"]=page.get_by_role("alert").count()
+            if any(x["status"]>=400 for x in responses):
+                return "portal_uncertain_http_error"
+            return "portal_uncertain_confirmation"
     except Exception as exc:
         print("Portal diagnostic:",stage,type(exc).__name__)
         return "portal_uncertain_"+stage if submitted else "portal_review_"+stage+"_error"
     finally:
         diagnostic["stage"]=stage
+        if "responses" in locals(): diagnostic["post_responses"]=responses[:20]
