@@ -1,5 +1,2181 @@
 {
-  "generated_at_utc": null,
-  "count": 0,
-  "jobs": []
+  "generated_at_utc": "2026-11-19T17:32:37.993543+00:00",
+  "count": 119,
+  "jobs": [
+    {
+      "id": "6a60f9e0aafd17f4",
+      "title": "Senior Full-stack Developer – Java / JavaScript / DevOps",
+      "company": "Bosch Group",
+      "location": "coimbatore |  | India",
+      "source": "smartrecruiters",
+      "published": "2026-11-19T14:45:35.220Z",
+      "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162532078",
+      "skills": [
+        "kubernetes",
+        "docker",
+        "ci/cd",
+        "git"
+      ]
+    },
+    {
+      "id": "44a7f9dc0e52e986",
+      "title": "Senior Site Reliability Engineer",
+      "company": "NielsenIQ",
+      "location": "Chennai | TN | India",
+      "source": "smartrecruiters",
+      "published": "2026-11-19T14:44:23.275Z",
+      "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000162527536",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "gcp",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "c17a0616e3360782",
+      "title": "Sr. Product Owner – DevOps and Software Delivery",
+      "company": "Bosch Group",
+      "location": "bangalore |  | India",
+      "source": "smartrecruiters",
+      "published": "2026-11-19T07:06:52.224Z",
+      "url": "https://jobs.smartrecruiters.com/BoschGroup/744000162447298",
+      "skills": [
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "grafana",
+        "helm",
+        "github actions"
+      ]
+    },
+    {
+      "id": "39eca93bdc296632",
+      "title": "DevOps Engineer",
+      "company": "buspatrol",
+      "location": "India - Hyderabad",
+      "source": "ashby",
+      "published": "2026-11-13T14:55:16.918+00:00",
+      "url": "https://jobs.ashbyhq.com/buspatrol/ecf9c172-daf7-4ca9-8843-237acb500010",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "datadog",
+        "github actions"
+      ]
+    },
+    {
+      "id": "a67b1bf051b7050b",
+      "title": "DevOps Engineer",
+      "company": "encord",
+      "location": "India",
+      "source": "ashby",
+      "published": "2026-11-13T10:49:47.826+00:00",
+      "url": "https://jobs.ashbyhq.com/encord/4028d589-6973-42ab-919d-4b8e625b4913",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "gcp"
+      ]
+    },
+    {
+      "id": "33356fd47c94b80b",
+      "title": "DevOps Engineer",
+      "company": "uptimeai",
+      "location": "Bangalore (India) | India",
+      "source": "ashby",
+      "published": "2026-11-11T08:15:27.326+00:00",
+      "url": "https://jobs.ashbyhq.com/uptimeai/29a206e1-146e-4348-8b73-3fe7f9fcdca2",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "datadog",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "3081c93e8ad67f31",
+      "title": "Senior Azure DevOps Engineer_ECF3",
+      "company": "Bosch Group",
+      "location": "bengaluru |  | India",
+      "source": "smartrecruiters",
+      "published": "2026-11-10T09:44:55.770Z",
+      "url": "https://jobs.smartrecruiters.com/BoschGroup/744000160832169",
+      "skills": [
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "helm",
+        "bash"
+      ]
+    },
+    {
+      "id": "30fed96287e74102",
+      "title": "DevOps/MLOps Specialist",
+      "company": "Bosch Group",
+      "location": "bengaluru |  | India",
+      "source": "smartrecruiters",
+      "published": "2026-11-10T04:57:55.382Z",
+      "url": "https://jobs.smartrecruiters.com/BoschGroup/744000160793069",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "gcp"
+      ]
+    },
+    {
+      "id": "a64fc5d6583dba11",
+      "title": "Site Reliability Engineer /Cloud",
+      "company": "sophos",
+      "location": "India | India",
+      "source": "ashby",
+      "published": "2026-11-05T14:16:09.370+00:00",
+      "url": "https://jobs.ashbyhq.com/sophos/46929d7f-2677-4837-a033-134d9fde79fe",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "datadog",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "378a65b46939acc2",
+      "title": "Senior Site Reliability Engineer (Azure Cloud)",
+      "company": "NielsenIQ",
+      "location": "Pune | MH | India",
+      "source": "smartrecruiters",
+      "published": "2026-11-04T15:21:01.217Z",
+      "url": "https://jobs.smartrecruiters.com/NielsenIQ/744000159661877",
+      "skills": [
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "gcp",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "69f307b4b66ae997",
+      "title": "Software Engineer, DevOps",
+      "company": "plane",
+      "location": "India",
+      "source": "ashby",
+      "published": "2026-10-30T12:12:43.774+00:00",
+      "url": "https://jobs.ashbyhq.com/plane/0076054c-1df5-4f73-88b0-2af635e20f51",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "argocd",
+        "gcp",
+        "datadog"
+      ]
+    },
+    {
+      "id": "c6e4a3a966aa082b",
+      "title": "IT Infrastructure Engineer",
+      "company": "Sia",
+      "location": "Mumbai | Maharashtra | India",
+      "source": "smartrecruiters",
+      "published": "2026-10-28T11:03:16.019Z",
+      "url": "https://jobs.smartrecruiters.com/Sia/744000158263499",
+      "skills": [
+        "azure",
+        "python"
+      ]
+    },
+    {
+      "id": "5fa6d702ea04e58b",
+      "title": "Site Reliability Engineer",
+      "company": "sophos",
+      "location": "India | India",
+      "source": "ashby",
+      "published": "2026-10-28T06:44:18.989+00:00",
+      "url": "https://jobs.ashbyhq.com/sophos/0b9af89e-23ae-4e34-a206-8db40e2c10f4",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "7464594872787609",
+      "title": "IT Infrastructure Cloud Engineer",
+      "company": "Eurofins",
+      "location": "Bengaluru | KA | India",
+      "source": "smartrecruiters",
+      "published": "2026-10-27T04:51:48.592Z",
+      "url": "https://jobs.smartrecruiters.com/Eurofins/744000157958339",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "ci/cd",
+        "ansible",
+        "gcp"
+      ]
+    },
+    {
+      "id": "a8f0009ad99d31a2",
+      "title": "SDE3, Infrastructure Security Engineer (DevSecOps)",
+      "company": "sarvam",
+      "location": "Bengaluru | India",
+      "source": "ashby",
+      "published": "2026-10-26T06:33:29.694+00:00",
+      "url": "https://jobs.ashbyhq.com/sarvam/1dd07b8b-0c0b-422a-8ff4-c99bdc5add68",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "argocd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "94d9ea0c5936ba2d",
+      "title": "Senior DevOps Engineer - Embedded Payments",
+      "company": "Xplor",
+      "location": "Pune | MH | India",
+      "source": "smartrecruiters",
+      "published": "2026-10-14T09:16:08.595Z",
+      "url": "https://jobs.smartrecruiters.com/Xplor/744000155454339",
+      "skills": [
+        "aws",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "datadog",
+        "github actions"
+      ]
+    },
+    {
+      "id": "b2106b12ef50fc04",
+      "title": "Staff SRE Engineer - Voice Core Platform",
+      "company": "ServiceNow",
+      "location": "Hyderabad | Telangana | India",
+      "source": "smartrecruiters",
+      "published": "2026-10-12T12:38:28.058Z",
+      "url": "https://jobs.smartrecruiters.com/ServiceNow/744000155007399",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "gcp",
+        "datadog"
+      ]
+    },
+    {
+      "id": "4a445237170a31a8",
+      "title": "Senior Software Engineer, DevOps - Moveworks (DevSecOps)",
+      "company": "ServiceNow",
+      "location": "Bangalore | Karnataka | India",
+      "source": "smartrecruiters",
+      "published": "2026-09-29T12:03:08.632Z",
+      "url": "https://jobs.smartrecruiters.com/ServiceNow/744000152399499",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "helm",
+        "argocd",
+        "bash"
+      ]
+    },
+    {
+      "id": "f0df9d19d71f5526",
+      "title": "DevOps Engineer",
+      "company": "Sia",
+      "location": "Mumbai | Maharashtra | India",
+      "source": "smartrecruiters",
+      "published": "2026-09-11T08:26:02.178Z",
+      "url": "https://jobs.smartrecruiters.com/Sia/744000148951852",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "4d0dfc5768c54bbd",
+      "title": "Principal Engineer, DevOps",
+      "company": "plane",
+      "location": "India",
+      "source": "ashby",
+      "published": "2026-09-07T15:18:02.723+00:00",
+      "url": "https://jobs.ashbyhq.com/plane/674d263d-08a5-4d9e-bcc8-8cf41b6aefc0",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd",
+        "datadog"
+      ]
+    },
+    {
+      "id": "ef897fa2826d897b",
+      "title": "Devops Engineer",
+      "company": "ema",
+      "location": "Bengaluru office | India",
+      "source": "ashby",
+      "published": "2026-07-31T06:38:22.672+00:00",
+      "url": "https://jobs.ashbyhq.com/ema/4524951e-f795-49d8-b147-8bcbc46ef534",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm",
+        "gcp",
+        "github actions"
+      ]
+    },
+    {
+      "id": "f6c4547997eda097",
+      "title": "DevOps Engineer",
+      "company": "outmarket",
+      "location": "Remote India | India",
+      "source": "ashby",
+      "published": "2026-07-29T09:12:54.129+00:00",
+      "url": "https://jobs.ashbyhq.com/outmarket/d9eab5ed-5911-4c3a-abcf-1a224fdb703d",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "gcp",
+        "github actions"
+      ]
+    },
+    {
+      "id": "9f9057273d68ef42",
+      "title": "DevOps Engineer - AI Runtime Services",
+      "company": "demandbase",
+      "location": "Hyderabad | India",
+      "source": "ashby",
+      "published": "2026-07-24T10:55:53.958+00:00",
+      "url": "https://jobs.ashbyhq.com/demandbase/0cdcc3bc-843f-41d8-a6cc-fcc97f96c5ad",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "python",
+        "prometheus",
+        "gcp",
+        "datadog"
+      ]
+    },
+    {
+      "id": "128cb143706794d2",
+      "title": "Site Reliability Engineer",
+      "company": "triomics",
+      "location": "India Office | India",
+      "source": "ashby",
+      "published": "2026-07-13T09:15:45.111+00:00",
+      "url": "https://jobs.ashbyhq.com/triomics/66c284da-173a-4c62-918a-40e37ffee26d",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "helm",
+        "gcp",
+        "bash"
+      ]
+    },
+    {
+      "id": "fc4f93e65369c14f",
+      "title": "Platform Engineer - AI Infrastructure",
+      "company": "sarvam",
+      "location": "Bengaluru | Chennai | India",
+      "source": "ashby",
+      "published": "2026-06-29T08:51:22.501+00:00",
+      "url": "https://jobs.ashbyhq.com/sarvam/fcb15601-6440-41f7-aa79-b9992057a4b2",
+      "skills": [
+        "kubernetes",
+        "terraform",
+        "python"
+      ]
+    },
+    {
+      "id": "1507adb89cce645d",
+      "title": "Infrastructure SRE - HPC",
+      "company": "sarvam",
+      "location": "Bengaluru | Chennai | India",
+      "source": "ashby",
+      "published": "2026-06-26T09:18:02.474+00:00",
+      "url": "https://jobs.ashbyhq.com/sarvam/e1dd678f-6e25-48b4-82d8-a1a7d10a78d6",
+      "skills": [
+        "kubernetes",
+        "python"
+      ]
+    },
+    {
+      "id": "a8624e2e2d9fdff6",
+      "title": "Platform Engineer",
+      "company": "outmarket",
+      "location": "Remote US | Remote India",
+      "source": "ashby",
+      "published": "2026-06-20T05:43:48.084+00:00",
+      "url": "https://jobs.ashbyhq.com/outmarket/ab2be675-76ac-44b3-98ed-d59f5285b4f9",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "d11d7c52596979be",
+      "title": "Senior Infrastructure Engineer",
+      "company": "ema",
+      "location": "India - Bengaluru | India",
+      "source": "ashby",
+      "published": "2026-06-19T07:42:42.933+00:00",
+      "url": "https://jobs.ashbyhq.com/ema/cde6e40f-d9b4-4f8f-848a-8d85b171d578",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "b8ccabc26b42c4b8",
+      "title": "Platform Engineer",
+      "company": "ema",
+      "location": "India - Bengaluru | India",
+      "source": "ashby",
+      "published": "2026-06-19T07:33:23.771+00:00",
+      "url": "https://jobs.ashbyhq.com/ema/748c829c-cb1d-48cf-90da-780593e89bea",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "3e8f09505ebb6709",
+      "title": "Site Reliability Engineer",
+      "company": "ema",
+      "location": "India - Bengaluru | India",
+      "source": "ashby",
+      "published": "2026-06-10T09:57:53.674+00:00",
+      "url": "https://jobs.ashbyhq.com/ema/6d5f59a2-68c0-49ea-b575-478f0ae3b75c",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "splunk",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "gcp"
+      ]
+    },
+    {
+      "id": "00b0809247ff8cb5",
+      "title": "Strategic Deployment Engineer, Chanakya",
+      "company": "sarvam",
+      "location": "Delhi | India",
+      "source": "ashby",
+      "published": "2026-04-17T20:02:28.261+00:00",
+      "url": "https://jobs.ashbyhq.com/sarvam/87d5a5af-ea7d-4b94-a0fa-81dc64e54907",
+      "skills": [
+        "docker",
+        "linux",
+        "python",
+        "ci/cd"
+      ]
+    },
+    {
+      "id": "1af3e69d60cafce0",
+      "title": "Embedded Infrastructure Engineer, Chanakya",
+      "company": "sarvam",
+      "location": "Delhi | India",
+      "source": "ashby",
+      "published": "2026-04-17T12:01:22.644+00:00",
+      "url": "https://jobs.ashbyhq.com/sarvam/b2201b5e-1e96-497a-962c-bca1768f75fd",
+      "skills": [
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python"
+      ]
+    },
+    {
+      "id": "7f42fd902e037344",
+      "title": "Senior Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Bengaluru |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-25T17:11:48.947Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999909342116",
+      "skills": []
+    },
+    {
+      "id": "fc5fb40f0b4a8b5f",
+      "title": "Senior Staff Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Remote |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-18T16:54:42.733Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999908042592",
+      "skills": []
+    },
+    {
+      "id": "89673d0da1da0fc0",
+      "title": "Senior Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Mumbai |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-16T16:44:50.841Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999907675953",
+      "skills": []
+    },
+    {
+      "id": "c13fa32da0b5eece",
+      "title": "Senior Staff Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Remote |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-15T18:04:47.489Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999907462703",
+      "skills": []
+    },
+    {
+      "id": "5c649a80ef40c030",
+      "title": "Senior Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Remote |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-15T17:59:58.630Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999907459667",
+      "skills": []
+    },
+    {
+      "id": "e2bdfc3caf9b777c",
+      "title": "Senior Staff Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Remote |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-10T16:37:59.946Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999906501803",
+      "skills": []
+    },
+    {
+      "id": "cc3d16c49837328f",
+      "title": "Senior Staff Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Hyderabad |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-07T12:19:21.479Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999905647613",
+      "skills": []
+    },
+    {
+      "id": "b66cd32add1dee3d",
+      "title": "Senior Staff Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Remote |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-07T07:18:32.188Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999905440323",
+      "skills": []
+    },
+    {
+      "id": "c7b2f33bc09ba9d6",
+      "title": "Senior Engineer, DevOps",
+      "company": "Nagarro",
+      "location": "Mumbai |  | India",
+      "source": "smartrecruiters",
+      "published": "2023-05-07T05:59:13.989Z",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/743999905386187",
+      "skills": []
+    },
+    {
+      "id": "3dfff9d06aee822d",
+      "title": "Tech Specialist, DevOps - R01571826",
+      "company": "brillio-2",
+      "location": "Bangalore, Karnataka, India",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/brillio-2/a11bcd0d-c116-4e59-bf61-44b36093fcec",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "git",
+        "splunk",
+        "ansible"
+      ]
+    },
+    {
+      "id": "3cc240eff86dcb38",
+      "title": "Staff SRE for K8s Platform Team (AWS, Kubernetes, Platform Creation, Helm, Karpenter, Istio)",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/8102369?gh_jid=8102369",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm"
+      ]
+    },
+    {
+      "id": "9a92b53b6790f1ec",
+      "title": "Staff Site Reliability Engineer, Security- GCP",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/6671260?gh_jid=6671260",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "splunk",
+        "gcp"
+      ]
+    },
+    {
+      "id": "f6b96b82332865ff",
+      "title": "Staff Site Reliability Engineer, Environment Automation",
+      "company": "gitlab",
+      "location": "Bangalore, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/gitlab/jobs/8800489002",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm",
+        "gcp"
+      ]
+    },
+    {
+      "id": "b2e079d76eaba0a9",
+      "title": "Staff Site Reliability Engineer - Monitoring and Anomaly Detection (Monetization)",
+      "company": "gitlab",
+      "location": "Bangalore, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/gitlab/jobs/8615268002",
+      "skills": [
+        "python",
+        "prometheus",
+        "grafana"
+      ]
+    },
+    {
+      "id": "189bb93af6f54237",
+      "title": "Staff Site Reliability Engineer - (Kubernetes, Terraform, AWS & Python)",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/7307866?gh_jid=7307866",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "ba746912d7cb8e7a",
+      "title": "Staff Site Reliability Engineer (Linux/Network troubleshooting/Scripting)",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5177389007",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "ansible",
+        "grafana"
+      ]
+    },
+    {
+      "id": "125465456d355e0a",
+      "title": "Staff Site Reliability Engineer",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/8242975?gh_jid=8242975",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "splunk",
+        "helm",
+        "argocd",
+        "gcp",
+        "datadog"
+      ]
+    },
+    {
+      "id": "9101a09f59871036",
+      "title": "Staff Site Reliability Engineer",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/8323977?gh_jid=8323977",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "splunk",
+        "grafana",
+        "argocd",
+        "gcp",
+        "github actions"
+      ]
+    },
+    {
+      "id": "3cbc3809e256079a",
+      "title": "Staff Platform Engineer",
+      "company": "coherehealth",
+      "location": "Hyderabad, Telangana, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7804368003",
+      "skills": [
+        "aws",
+        "terraform",
+        "ci/cd",
+        "argocd",
+        "datadog",
+        "github actions"
+      ]
+    },
+    {
+      "id": "30f9a536e49a62c1",
+      "title": "Staff Platform Engineer",
+      "company": "hevodata",
+      "location": "Bangalore, India",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/hevodata/272ae17d-2b06-4b62-b596-e3687b0f744d",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "ansible",
+        "grafana",
+        "gcp",
+        "bash"
+      ]
+    },
+    {
+      "id": "6b655ee73c8857c7",
+      "title": "Staff Information Systems Engineer",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5212053007",
+      "skills": [
+        "gcp"
+      ]
+    },
+    {
+      "id": "2686999005ba2f27",
+      "title": "Staff DevOps Engineer",
+      "company": "conviva",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/conviva/jobs/8030074003",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "gcp",
+        "github actions"
+      ]
+    },
+    {
+      "id": "4f0818fcdf3f19e0",
+      "title": "Staff DevOps Engineer",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5270971007",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm",
+        "gcp"
+      ]
+    },
+    {
+      "id": "ecb96c98723032fb",
+      "title": "Sr. Staff Software Development Engineer - Cloud Devops",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279058007",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "ansible"
+      ]
+    },
+    {
+      "id": "6160a3dfa8dbef22",
+      "title": "Sr DevOps Engineer",
+      "company": "keyloop",
+      "location": "India (Hyderabad)",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/keyloop/22631cd9-b9e9-40d7-8072-44f478f67de1",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "jfrog",
+        "ansible",
+        "helm",
+        "github actions"
+      ]
+    },
+    {
+      "id": "c906825e15ff7de9",
+      "title": "Site Reliability Engineer - Bangalore, India (Hybrid)",
+      "company": "zimperium",
+      "location": "India (Remote)",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/zimperium/29aff3bb-b00f-457c-9ebb-70f3804c3fa6",
+      "skills": [
+        "kubernetes",
+        "docker",
+        "linux",
+        "python",
+        "ci/cd"
+      ]
+    },
+    {
+      "id": "ff0f1c2caba76a7b",
+      "title": "Site Reliability Engineer (SRE)",
+      "company": "ttecdigital",
+      "location": "Hyderabad",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/ttecdigital/996e5241-b43b-42f6-9c25-142ea4ff5681",
+      "skills": [
+        "python",
+        "gcp"
+      ]
+    },
+    {
+      "id": "9b9adead6a125f7a",
+      "title": "Site Reliability Engineer",
+      "company": "mfsgtechnologiesindia",
+      "location": "Hyderabad (Remote)",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/mfsgtechnologiesindia/jobs/5430989008",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "ansible",
+        "bash"
+      ]
+    },
+    {
+      "id": "40f21341aceb325a",
+      "title": "Senior Tech Specialist, DevOps - R01573840",
+      "company": "brillio-2",
+      "location": "Bangalore, Karnataka, India",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/brillio-2/8e613417-a6c1-4e88-85d0-a5c88970395a",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "git",
+        "splunk",
+        "ansible"
+      ]
+    },
+    {
+      "id": "5c2a8a0e29e93c67",
+      "title": "Senior Software Engineer - SRE",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/8263916?gh_jid=8263916",
+      "skills": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "8b6fa8bbd16a33e0",
+      "title": "Senior Site Reliability Engineer (K8s, Terraform, Python)",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/8255904?gh_jid=8255904",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "2ffbab0e35bb4701",
+      "title": "Senior Site Reliability Engineer",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/7963271?gh_jid=7963271",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "datadog"
+      ]
+    },
+    {
+      "id": "609016c2bcf12e48",
+      "title": "Senior Site Reliability Engineer",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/8242984?gh_jid=8242984",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "helm",
+        "gcp"
+      ]
+    },
+    {
+      "id": "197ced237fe4e1e7",
+      "title": "Senior Site Reliability Engineer",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/8260950?gh_jid=8260950",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "splunk",
+        "grafana",
+        "argocd",
+        "gcp",
+        "github actions"
+      ]
+    },
+    {
+      "id": "42b56d8b6b7a9a00",
+      "title": "Senior Site Reliability Engineer",
+      "company": "zeta",
+      "location": "Hyderabad",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/zeta/6c5a8ebc-94b9-41f7-9a49-1659956343eb",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "linux",
+        "python",
+        "prometheus",
+        "grafana",
+        "argocd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "e8b95ed37ef3fe10",
+      "title": "Senior Platform Engineer",
+      "company": "workatbackbase",
+      "location": "Hyderabad",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8124286",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "helm"
+      ]
+    },
+    {
+      "id": "d71a624a8c1d79eb",
+      "title": "Senior Platform Engineer",
+      "company": "mongodb",
+      "location": "Gurugram",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8071475",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "helm",
+        "gcp"
+      ]
+    },
+    {
+      "id": "b03af7431ca629a1",
+      "title": "Senior DevSecOps Engineer (Remote, Full-Time) [AS355]",
+      "company": "smart-working-solutions",
+      "location": "Delhi",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/smart-working-solutions/ea7609d0-fbe7-443e-ae95-5e92f5d1939f",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana"
+      ]
+    },
+    {
+      "id": "eccfe496b3f386d5",
+      "title": "Senior DevOps Engineer",
+      "company": "crashplan",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/crashplan/jobs/4471144009",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd"
+      ]
+    },
+    {
+      "id": "c9b3175cc77176b6",
+      "title": "Senior DevOps Engineer",
+      "company": "machinify-india",
+      "location": "Bangalore",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4479172009",
+      "skills": [
+        "kubernetes"
+      ]
+    },
+    {
+      "id": "3436d329e70e132f",
+      "title": "Senior DevOps Engineer",
+      "company": "merqube",
+      "location": "Bengaluru",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/merqube/jobs/4713539006",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "ci/cd",
+        "helm"
+      ]
+    },
+    {
+      "id": "d584366dac5a5857",
+      "title": "Senior DevOps Engineer",
+      "company": "mastercontrol",
+      "location": "India (Hybrid)",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.mastercontrol.com/careers/job-listings/role/?role=4740911005&gh_jid=4740911005",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "argocd"
+      ]
+    },
+    {
+      "id": "5723c88dafb45c28",
+      "title": "Senior DevOps Engineer",
+      "company": "ttecdigital",
+      "location": "Hyderabad",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/ttecdigital/96c35615-56a8-4dba-ab2f-c0484eb44369",
+      "skills": [
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "gcp"
+      ]
+    },
+    {
+      "id": "12c8cc7681f20506",
+      "title": "Senior DevOps / Release Engineer",
+      "company": "insurityindia",
+      "location": "Noida",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/insurityindia/jobs/4336110009",
+      "skills": [
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "argocd",
+        "bash"
+      ]
+    },
+    {
+      "id": "d24c4b74f3d79d0c",
+      "title": "Senior CloudOps Infrastructure Administrator",
+      "company": "insurityindia",
+      "location": "Noida",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/insurityindia/jobs/4315596009",
+      "skills": [
+        "aws",
+        "azure"
+      ]
+    },
+    {
+      "id": "fe69fa7dafdcad60",
+      "title": "Senior Cloud Engineer (Java & AWS) (Remote, Full-Time) [AS314]",
+      "company": "smart-working-solutions",
+      "location": "India",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/smart-working-solutions/ad9a0b91-6990-4987-9a9c-b0f568ad4a0f",
+      "skills": [
+        "aws",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "grafana",
+        "github actions"
+      ]
+    },
+    {
+      "id": "8b7665d83082e1a1",
+      "title": "Senior AI Platform Engineer",
+      "company": "zscaler",
+      "location": "Pune, IND",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278563007",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd",
+        "bash"
+      ]
+    },
+    {
+      "id": "48c7bdb840c8bb14",
+      "title": "Senior AI API Platform Engineer",
+      "company": "rubrik",
+      "location": "Bangalore, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.rubrik.com/company/careers/departments/job.8273808?gh_jid=8273808",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "python",
+        "ci/cd",
+        "git",
+        "gcp"
+      ]
+    },
+    {
+      "id": "c0905fa294fcad6d",
+      "title": "Release Engineer, Salesforce",
+      "company": "gitlab",
+      "location": "Bangalore, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/gitlab/jobs/8730125002",
+      "skills": [
+        "python",
+        "ci/cd"
+      ]
+    },
+    {
+      "id": "cfd90ed8978c567b",
+      "title": "Production Support Engineer II",
+      "company": "machinify-india",
+      "location": "Bangalore",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4473693009",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "python",
+        "prometheus",
+        "grafana"
+      ]
+    },
+    {
+      "id": "6d1d374de445a35b",
+      "title": "Production Support Engineer I",
+      "company": "machinify-india",
+      "location": "Bangalore",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4473695009",
+      "skills": [
+        "aws",
+        "python",
+        "grafana"
+      ]
+    },
+    {
+      "id": "e89c48023de57c9b",
+      "title": "Principal Platform Engineer- GCP and Kubernetes is a must",
+      "company": "sonicwall",
+      "location": "Pune, Maharashtra, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8248950",
+      "skills": [
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "gcp"
+      ]
+    },
+    {
+      "id": "d32fd04893c34ac0",
+      "title": "Principal Linux Platform Engineer",
+      "company": "keyloop",
+      "location": "India (Hyderabad)",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/keyloop/fba5b3ae-3033-4386-9e47-849afcfb80c9",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "ansible",
+        "bash"
+      ]
+    },
+    {
+      "id": "e05664b4078a0235",
+      "title": "Platform Engineer- GCP and Kubernetes experience is a must",
+      "company": "sonicwall",
+      "location": "Pune, Maharashtra, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8282577",
+      "skills": [
+        "kubernetes",
+        "terraform",
+        "linux",
+        "python",
+        "gcp"
+      ]
+    },
+    {
+      "id": "d0f5cb39c0156f54",
+      "title": "Platform Engineer",
+      "company": "axicorpfinancialservicesptyltd",
+      "location": "Bangalore, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/axicorpfinancialservicesptyltd/jobs/5103300007",
+      "skills": [
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "ci/cd",
+        "argocd"
+      ]
+    },
+    {
+      "id": "e077cc0996d743dc",
+      "title": "People Systems Engineer",
+      "company": "gitlab",
+      "location": "Bangalore, India; Remote, Poland",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/gitlab/jobs/8861748002",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "docker",
+        "python",
+        "ci/cd",
+        "git",
+        "gcp"
+      ]
+    },
+    {
+      "id": "b2405d85b9c380b1",
+      "title": "Manager, Site Reliability Engineer",
+      "company": "okta",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.okta.com/company/careers/opportunity/7247309?gh_jid=7247309",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "ci/cd",
+        "gcp"
+      ]
+    },
+    {
+      "id": "d3fa28f5eae22792",
+      "title": "Manager Site Reliability Engineer",
+      "company": "zeta",
+      "location": "Hyderabad",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/zeta/cac1b9e2-b9fd-4450-8d20-16d3c4f37a10",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "gcp"
+      ]
+    },
+    {
+      "id": "65a14278626b24e4",
+      "title": "Linux Engineer (24*7 Operations)",
+      "company": "keyloop",
+      "location": "India (Hyderabad)",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/keyloop/45673700-3e2c-4cd2-ae3e-c7aa29a3592a",
+      "skills": [
+        "aws",
+        "linux",
+        "python",
+        "git",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "datadog",
+        "bash"
+      ]
+    },
+    {
+      "id": "a22fe0b8cdf0a9fe",
+      "title": "Lead Site Reliability Engineer",
+      "company": "zeta",
+      "location": "Hyderabad/Bangalore",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/zeta/803792f5-0e9c-45bc-82ce-c0a552ce0cf8",
+      "skills": [
+        "kubernetes",
+        "linux"
+      ]
+    },
+    {
+      "id": "252a11d4797cdb89",
+      "title": "Lead DevOps Engineer (AI & GPU)",
+      "company": "zimperium",
+      "location": "Bangalore, India",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/zimperium/f77ac05f-b87a-43ab-93d3-c2293b5400ef",
+      "skills": [
+        "ci/cd",
+        "jfrog",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd",
+        "github actions"
+      ]
+    },
+    {
+      "id": "4d90c232daff10d4",
+      "title": "Lead Deployment Engineer",
+      "company": "celonis",
+      "location": "Bangalore, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/celonis/jobs/7815061003?gh_jid=7815061003",
+      "skills": [
+        "python"
+      ]
+    },
+    {
+      "id": "b91a1cef56592056",
+      "title": "Director, Site Reliability Engineering (Production Engineering)",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5237915007",
+      "skills": [
+        "kubernetes",
+        "prometheus"
+      ]
+    },
+    {
+      "id": "5b63cdc0c08f734c",
+      "title": "DevSecOps Engineer II",
+      "company": "zeta",
+      "location": "Hyderabad",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/zeta/a83bd184-4c9b-42b8-a6d4-7be310774a6a",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "argocd",
+        "gcp",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "8afdbb3a2c6a0cc5",
+      "title": "DevOps Engineer (GCP)",
+      "company": "particle41llc",
+      "location": "India - Remote",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/particle41llc/jobs/4499242008",
+      "skills": [
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "ansible",
+        "gcp",
+        "bash"
+      ]
+    },
+    {
+      "id": "24a40ca637e2c9e8",
+      "title": "Devops Engineer (AWS)",
+      "company": "particle41llc",
+      "location": "India - Hybrid; Pune, Maharashtra, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/particle41llc/jobs/4677708008",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "ansible",
+        "bash"
+      ]
+    },
+    {
+      "id": "54c59cfd172c3242",
+      "title": "DevOps Engineer",
+      "company": "crashplan",
+      "location": "Bengaluru, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/crashplan/jobs/4327555009",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "10a3e5eefe945a23",
+      "title": "DevOps Engineer",
+      "company": "pointwild",
+      "location": "Remote India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/pointwild/jobs/5474748008",
+      "skills": [
+        "jenkins",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "ansible",
+        "grafana",
+        "helm",
+        "argocd",
+        "gcp",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "db796d856aa7f01b",
+      "title": "DevOps Engineer",
+      "company": "rhythmx-ai",
+      "location": "Bengaluru, Karnataka, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/rhythmx-ai/jobs/5475165008",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "git",
+        "prometheus",
+        "grafana"
+      ]
+    },
+    {
+      "id": "ad809e5eaa30dcdd",
+      "title": "DevOps Engineer",
+      "company": "sonicwall",
+      "location": "Bengaluru, Karnataka, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8188239",
+      "skills": [
+        "aws",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git"
+      ]
+    },
+    {
+      "id": "84cab8987191f66d",
+      "title": "DevOps Engineer",
+      "company": "particle41llc",
+      "location": "India - Remote",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/particle41llc/jobs/5018960008",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "ansible",
+        "gcp",
+        "bash"
+      ]
+    },
+    {
+      "id": "3e83aa30eebddf0f",
+      "title": "DevOps Engineer",
+      "company": "coherehealth",
+      "location": "Hyderabad, Telangana, India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/coherehealth/jobs/8037633003",
+      "skills": [
+        "aws",
+        "jenkins",
+        "terraform",
+        "python",
+        "ci/cd",
+        "prometheus",
+        "grafana",
+        "datadog",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "562e1c4791a1a402",
+      "title": "Deputy Manager, AI & Platform Engineer",
+      "company": "zscaler",
+      "location": "Mohali, IND",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5081527007",
+      "skills": [
+        "aws",
+        "docker",
+        "python",
+        "ci/cd"
+      ]
+    },
+    {
+      "id": "8f0685f903e76f01",
+      "title": "Database Reliability Engineer/Database Engineer (Rubrik Security Cloud Platform)",
+      "company": "rubrik",
+      "location": "Bengaluru",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.rubrik.com/company/careers/departments/job.8161018?gh_jid=8161018",
+      "skills": [
+        "terraform",
+        "linux",
+        "python",
+        "prometheus",
+        "grafana",
+        "gcp"
+      ]
+    },
+    {
+      "id": "cd6f8539c48f72bd",
+      "title": "Cloud Platform Engineer",
+      "company": "singlestore",
+      "location": "India",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/singlestore/jobs/7573638",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "ansible",
+        "prometheus",
+        "grafana",
+        "helm",
+        "argocd"
+      ]
+    },
+    {
+      "id": "f6146b684d468dff",
+      "title": "Cloud Operations Infrastructure Administrator",
+      "company": "insurityindia",
+      "location": "Noida",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/insurityindia/jobs/4315615009",
+      "skills": [
+        "aws",
+        "azure"
+      ]
+    },
+    {
+      "id": "56c6aba6065ffa3c",
+      "title": "Cloud Operations Engineer",
+      "company": "mongodb",
+      "location": "Bengaluru",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8184637",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "linux",
+        "python",
+        "splunk",
+        "gcp"
+      ]
+    },
+    {
+      "id": "543313e87f35f74e",
+      "title": "Cloud Operations Analyst",
+      "company": "insurityindia",
+      "location": "Noida",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/insurityindia/jobs/4327961009",
+      "skills": []
+    },
+    {
+      "id": "971e258bb566883e",
+      "title": "Cloud Engineer",
+      "company": "mfsgtechnologiesindia",
+      "location": "Hyderabad (Hybrid)",
+      "source": "greenhouse",
+      "published": "",
+      "url": "https://job-boards.greenhouse.io/mfsgtechnologiesindia/jobs/5435160008",
+      "skills": [
+        "aws",
+        "azure",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "599c166d79b1677d",
+      "title": "Cloud Engineer",
+      "company": "keyloop",
+      "location": "India (Hyderabad)",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/keyloop/5c55d646-7f28-4fde-ac9d-72ff3e6d49ad",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "python",
+        "ci/cd",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "6ff6c4d40b05fb48",
+      "title": "Cloud DevOps Engineer",
+      "company": "lingarogroup",
+      "location": "India",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/lingarogroup/b4aa26da-1f29-42d0-818a-93577800bc6b",
+      "skills": []
+    },
+    {
+      "id": "3f7fc55aef41009e",
+      "title": "Azure Devops Engineer",
+      "company": "shyftlabs",
+      "location": "Noida, Uttar Pradesh",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/shyftlabs/75e1eb51-c562-4f01-a029-1a8823a16b4a",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "terraform",
+        "python",
+        "ci/cd",
+        "git",
+        "gcp",
+        "bash",
+        "github actions"
+      ]
+    },
+    {
+      "id": "bc614842a12069ec",
+      "title": "AWS DevOps Engineer (Senior) - Migration Project (VMware to AWS)",
+      "company": "mactores",
+      "location": "Mumbai, MH",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/mactores/95223fca-1d38-44f3-98dd-310a820205ad",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "ci/cd",
+        "git",
+        "ansible",
+        "gcp"
+      ]
+    },
+    {
+      "id": "85b5befaacadd433",
+      "title": "AWS DevOps Engineer (Senior)",
+      "company": "mactores",
+      "location": "Mumbai, MH",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/mactores/853c0359-3b02-4b50-b128-726dfc422a6c",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "git",
+        "ansible",
+        "grafana",
+        "gcp"
+      ]
+    },
+    {
+      "id": "b7d8becf644b9dad",
+      "title": "AWS DevOps Engineer (Freelancer)",
+      "company": "mactores",
+      "location": "Mumbai, MH",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/mactores/493d201b-77a2-4f87-8c15-e92a3517e502",
+      "skills": [
+        "aws",
+        "azure",
+        "jenkins",
+        "kubernetes",
+        "terraform",
+        "linux",
+        "ci/cd",
+        "git",
+        "ansible",
+        "grafana",
+        "gcp"
+      ]
+    },
+    {
+      "id": "96e2f6bfa43511d1",
+      "title": "AWS DevOps Engineer (Associate)",
+      "company": "mactores",
+      "location": "Mumbai, MH",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/mactores/35e29122-3a7a-4851-a1f2-09e06457641d",
+      "skills": [
+        "aws",
+        "jenkins",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "git",
+        "ansible",
+        "grafana",
+        "bash"
+      ]
+    },
+    {
+      "id": "83079019f9164df0",
+      "title": "AI Software Engineer (DevOps) - Bangalore, India",
+      "company": "zimperium",
+      "location": "India (Remote)",
+      "source": "lever",
+      "published": "",
+      "url": "https://jobs.lever.co/zimperium/5b35759a-d445-4fcb-b255-d719330af055",
+      "skills": [
+        "aws",
+        "azure",
+        "kubernetes",
+        "docker",
+        "terraform",
+        "linux",
+        "python",
+        "ci/cd",
+        "git",
+        "helm",
+        "gcp"
+      ]
+    }
+  ]
 }
