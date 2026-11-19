@@ -148,4 +148,14 @@ class LiveLeverQuestionTests(unittest.TestCase):
     def test_visa_not_inferred(self):
         from screening import answer_for
         self.assertIsNone(answer_for("Will you now or in the future require sponsorship for employment visa status to work legally in the United States?",{"country":"India"}))
+class TargetingAndOptionTests(unittest.TestCase):
+    def test_test_automation_not_target(self):
+        from india_sources import relevant_role
+        self.assertFalse(relevant_role("Test Automation Engineer II"))
+        self.assertTrue(relevant_role("Infrastructure Automation Engineer"))
+    def test_location_option_prefix(self):
+        from screening import option_match
+        self.assertTrue(option_match("Current location","Hyderabad","Hyderabad, Telangana, India"))
+        self.assertFalse(option_match("Current location","Hyderabad","Hyderabad, Sindh, Pakistan"))
+        self.assertFalse(option_match("Expected CTC","11","11 LPA"))
 if __name__=="__main__": unittest.main()
