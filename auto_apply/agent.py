@@ -1,5 +1,6 @@
 """Scheduled job matcher and opt-in email application agent (stdlib only)."""
 import csv, hashlib, json, os, re, smtplib, ssl, subprocess, sys
+from datetime import datetime, timezone
 from email.message import EmailMessage
 from pathlib import Path
 from urllib.request import urlopen
@@ -33,7 +34,8 @@ def match(job, profile):
     own.update(s for s, terms in aliases.items() if any(t in own for t in terms))
     matched = [s for s in required if s in own]
     missing = [s for s in required if s not in own]
-    score = round(100*len(matched)/len(required)) if len(required)>=3 else 0
+    weights={"aws":3,"azure":3,"kubernetes":3,"openshift":3,"jenkins":3,"ci/cd":3,"terraform":3,"docker":2,"linux":2,"python":2,"gcp":3,"ansible":2,"prometheus":2,"grafana":2}
+    score = round(100*sum(weights.get(s,1) for s in matched)/sum(weights.get(s,1) for s in required)) if len(required)>=3 else 0
     return score, matched, missing, "matched" if years else "experience unclear"
 def get_jobs():
     jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
@@ -118,7 +120,10 @@ def main():
             if loc.startswith(("=","+","-","@","\t","\r")): loc="'"+loc
             w.writerow([j["source"],title,loc,"review_full_job_description_and_apply",j["url"]])
     print("Unique platform alert links for review:",len(seen_alerts))
-    ranked=sorted(((match(j,profile),j) for j in jobs),key=lambda x:x[0][0],reverse=True)
+    def priority(item):
+        (score,matched,missing,reason),j=item
+        return (score, j.get("published") or "")
+    ranked=sorted(((match(j,profile),j) for j in jobs),key=priority,reverse=True)
     count=0; rows=[]; seen=set()
     from portal import portal_apply, portal_enabled
     portal_count=0
@@ -127,11 +132,16 @@ def main():
     print("Filter outcomes:",dict(Counter(reason for (score,matched,missing,reason),j in ranked)))
     confirmed=0
     email_sent=0
+    audit=[]
+    def audit_row(j,score,matched,missing,reason,status):
+        audit.append([j.get("source",""),j.get("company",""),j.get("title",""),j.get("location",""),score,", ".join(matched),", ".join(missing),reason,status,j.get("published",""),j.get("url","")])
     for (score,matched,missing,reason),j in ranked:
         k=key(j)
-        if k in seen: continue
+        if k in seen:
+            audit_row(j,score,matched,missing,reason,"duplicate_in_run"); continue
         seen.add(k)
-        if score<profile.get("minimum_match",65): continue
+        if score<profile.get("minimum_match",65):
+            audit_row(j,score,matched,missing,reason,"below_threshold" if score else "filtered_"+reason.replace(" ","_")); continue
         real_profile=dict(profile,max_required_years=actual_years)
         if match(j,real_profile)[0]==0 and reason=="matched": reason="stretch experience - review only"
         status=ledger.get(k,"review_portal")
@@ -139,7 +149,8 @@ def main():
             if reason!="matched": status="review_"+reason.replace(" ","_")
             elif j.get("source")=="smartrecruiters": status="review_smartrecruiters_form"
             elif not portal_on and not auto: status="review_application_disabled"
-            else: status="review_pending_channel"
+            elif j.get("source") in ("greenhouse","lever","ashby") and portal_on: status="portal_eligible_waiting_limit"
+            else: status="review_no_supported_application_channel"
         eligible=reason=="matched" and score>=65 and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever","ashby","smartrecruiters")
         if k not in ledger and eligible:
             status="ready_email"
@@ -151,14 +162,23 @@ def main():
                 except Exception:
                     ledger[k]="uncertain_manual_review"; status=ledger[k]
                 persist(ledger)
-        if k not in ledger and portal_on and reason=="matched" and score>=80 and j.get("source") in ("greenhouse","lever","ashby") and portal_count<3:
+        if k not in ledger and portal_on and reason=="matched" and score>=profile["minimum_match"] and j.get("source") in ("greenhouse","lever","ashby") and portal_count<3:
             ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
             status=portal_apply(j,profile,resume)
             if status=="portal_confirmed": confirmed+=1
             print("Portal outcome:",status)
             ledger[k]=status; persist(ledger)
+        audit_row(j,score,matched,missing,reason,status)
         rows.append([j.get("company"),j.get("title"),j.get("location"),score,", ".join(matched),", ".join(missing),reason,status,j.get("url")])
+    def cell(value):
+        if isinstance(value,str) and value.lstrip().startswith(("=","+","-","@")): return "\x27"+value
+        return value
+    with (ROOT/"job-decisions.csv").open("w",newline="",encoding="utf-8") as f:
+        w=csv.writer(f); w.writerow(["source","company","title","location","skill_match","matched","missing","experience","decision","published","url"]); w.writerows([cell(v) for v in row] for row in audit)
     with (ROOT/"matches.csv").open("w",newline="",encoding="utf-8") as f:
-        w=csv.writer(f); w.writerow(["company","title","location","skill_match","matched","missing","experience","status","url"]); w.writerows(rows)
+        w=csv.writer(f); w.writerow(["company","title","location","skill_match","matched","missing","experience","status","url"]); w.writerows([cell(v) for v in row] for row in rows)
+    summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),"target_jobs":len(jobs),"matches":len(rows),"email_attempts":count,"portal_attempts":portal_count,"email_accepted":email_sent,"portal_confirmed":confirmed,"alert_links":len(seen_alerts),"decisions":dict(Counter(row[8] for row in audit)),"sources":dict(Counter(j.get("source","feed") for j in jobs))}
+    (ROOT/"run-summary.json").write_text(json.dumps(summary,indent=2))
+    print("Decision outcomes:",summary["decisions"])
     print(f"Scanned {len(jobs)} jobs; {len(rows)} matches; {count} attempted email applications; {portal_count} portal attempts; {email_sent} emails accepted by SMTP; {confirmed} portal confirmations.")
 if __name__=="__main__": main()
