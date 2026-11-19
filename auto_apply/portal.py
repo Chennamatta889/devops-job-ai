@@ -64,6 +64,8 @@ def candidate_data(profile, pdf):
     data=dict(profile)
     if os.getenv("PORTAL_PROFILE_JSON","").strip():
         data.update(json.loads(os.environ["PORTAL_PROFILE_JSON"]))
+    if os.getenv("SCREENING_FACTS_JSON","").strip():
+        data.update(json.loads(os.environ["SCREENING_FACTS_JSON"]))
     name=str(data.get("name","")).strip()
     if name:
         data.setdefault("first_name",name.split()[0])
