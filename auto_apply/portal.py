@@ -22,6 +22,25 @@ def candidate_data(profile, pdf):
         normalized={"+91"+m[-10:] for m in matches}
         if len(normalized)==1: data["phone"]=normalized.pop()
     return data
+def verification_required(page):
+    """Detect an active human challenge without interacting with verification widgets."""
+    frames=page.locator('iframe[src*="captcha" i], iframe[src*="challenge" i], iframe[src*="turnstile" i], iframe[title*="captcha" i], iframe[title*="challenge" i]')
+    for i in range(frames.count()):
+        frame=frames.nth(i)
+        if not frame.is_visible(): continue
+        bounds=frame.bounding_box()
+        if not bounds or bounds["width"]<2 or bounds["height"]<2: continue
+        title=(frame.get_attribute("title") or "").lower()
+        src=(frame.get_attribute("src") or "").lower()
+        # A small reCAPTCHA informational badge is not an interactive challenge.
+        if ("recaptcha" in src or "recaptcha" in title) and bounds["width"]<=100 and bounds["height"]<=100 and "/bframe" not in src and "challenge" not in title:
+            continue
+        return True
+    selectors=page.get_by_text(re.compile(r"^(verify (?:that )?you are (?:a )?human|complete the (?:captcha|security check)|please (?:complete|solve) the captcha|checking your browser|security verification|i am not a robot|i'm not a robot)[.!]?$",re.I))
+    for i in range(min(selectors.count(),20)):
+        if selectors.nth(i).is_visible(): return True
+    return False
+
 def portal_apply(job, profile, pdf):
     stage="candidate"
     submitted=False
@@ -47,7 +66,7 @@ def portal_apply(job, profile, pdf):
                 if link.count()==1 and link.is_visible(): link.click(timeout=10000)
             if urlparse(page.url).hostname not in HOSTS: return "portal_review_redirect"
             page.wait_for_timeout(2000)
-            if page.locator('iframe[src*="captcha"], iframe[src*="challenge"]').count(): return "portal_review_human_verification"
+            if verification_required(page): return "portal_review_human_verification_v2"
             stage="contact_fields"
             fields={"first_name":data.get("first_name"),"last_name":data.get("last_name"),"name":data.get("name"),"email":data.get("email"),"phone":data.get("phone"),"org":data.get("current_company"),"urls[LinkedIn]":data.get("linkedin"),"urls[GitHub]":data.get("github")}
             for key,val in fields.items():
@@ -76,15 +95,19 @@ def portal_apply(job, profile, pdf):
             if not all(data.get(x) for x in ("email","phone")): return "portal_review_contact"
             buttons=page.get_by_role("button",name=re.compile(r"^(submit application|submit|apply for this job)$",re.I))
             if buttons.count()!=1: return "portal_review_submit_button"
+            if verification_required(page): return "portal_review_human_verification_v2"
             stage="resume_upload"
             files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":pdf})
+            if verification_required(page): return "portal_review_human_verification_v2"
             stage="submit"
             submitted=True
             buttons.click(timeout=10000)
             try:
                 page.get_by_text(re.compile(r"thank you for applying|application (?:has been )?(?:submitted|received)|thanks for applying",re.I)).first.wait_for(timeout=12000)
                 return "portal_confirmed"
-            except Exception: return "portal_uncertain_confirmation"
+            except Exception:
+                if verification_required(page): return "portal_uncertain_human_verification_after_submit"
+                return "portal_uncertain_confirmation"
     except Exception as exc:
         print("Portal diagnostic:",stage,type(exc).__name__)
         return "portal_uncertain_"+stage if submitted else "portal_review_"+stage+"_error"
