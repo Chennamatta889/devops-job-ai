@@ -141,10 +141,10 @@ def main():
     from portal import portal_apply, portal_enabled
     portal_count=0
     portal_on=portal_enabled(profile,resume)
-    # Only previously recorded pre-submission candidate failures may be retried.
+    # Retry legacy pre-submission failures once using the improved checks.
     # Never retry unknown outcomes or reservations automatically.
     if portal_on:
-        ledger={k:v for k,v in ledger.items() if v!="portal_review_candidate_error"}
+        ledger={k:v for k,v in ledger.items() if v not in ("portal_review_candidate_error","portal_review_human_verification")}
     print("Email enabled:",auto,"Portal enabled:",portal_on)
     print("Filter outcomes:",dict(Counter(reason for (score,matched,missing,reason),j in ranked)))
     confirmed=0
