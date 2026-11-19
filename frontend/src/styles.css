@@ -59,17 +59,28 @@ a { color: inherit; }
 .brand strong { font-size: 15px; letter-spacing: .01em; }
 .brand span { margin-top: 2px; color: #98a2b3; font-size: 12px; }
 
-.ghost-button, .text-button, .primary-button, .secondary-button {
+.ghost-button, .ghost-link, .text-button, .primary-button, .secondary-button {
   border-radius: 10px;
   font-weight: 750;
   transition: transform .15s ease, border-color .15s ease, background .15s ease;
 }
 
-.ghost-button {
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ghost-button,
+.ghost-link {
   border: 1px solid rgba(255,255,255,.22);
   background: rgba(255,255,255,.08);
   color: #fff;
   padding: 10px 14px;
+}
+
+.ghost-link {
+  text-decoration: none;
 }
 
 .ghost-button:hover, .primary-button:hover, .secondary-button:hover { transform: translateY(-1px); }
@@ -220,7 +231,8 @@ a { color: inherit; }
 
 .source-badge,
 .category-badge,
-.discovery-badge {
+.discovery-badge,
+.auto-badge {
   border-radius: 999px;
   padding: 6px 9px;
   font-size: 11px;
@@ -240,6 +252,11 @@ a { color: inherit; }
 .discovery-badge {
   background: #fff7ed;
   color: #c2410c;
+}
+
+.auto-badge {
+  background: #eff8ff;
+  color: #175cd3;
 }
 
 .published { color: #98a2b3; font-size: 11px; }
@@ -346,6 +363,111 @@ a { color: inherit; }
   min-width: 260px;
 }
 
+.upgrade-card {
+  margin-top: 48px;
+  padding: 30px;
+  border: 1px solid #e4e7ec;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 35px rgba(16,24,40,.06);
+}
+
+.upgrade-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.upgrade-heading h2 {
+  margin: 0;
+  max-width: 760px;
+  font-size: 30px;
+  letter-spacing: -.03em;
+}
+
+.upgrade-heading p {
+  max-width: 820px;
+  margin: 12px 0 0;
+  color: #667085;
+  line-height: 1.65;
+}
+
+.backend-status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #fff4ed;
+  color: #b93815;
+  padding: 8px 11px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.backend-status.ready {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.upgrade-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.upgrade-form small {
+  display: block;
+  margin-top: 7px;
+  color: #667085;
+  line-height: 1.5;
+}
+
+.consent-row {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 15px;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  background: #f9fafb;
+  color: #475467;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.consent-row input {
+  margin-top: 3px;
+}
+
+.upgrade-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.upgrade-actions .primary-button {
+  flex: 0 0 auto;
+  min-width: 180px;
+}
+
+.upgrade-note {
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.upgrade-message {
+  grid-column: 1 / -1;
+  border-radius: 12px;
+  background: #f2f4f7;
+  color: #344054;
+  padding: 12px 14px;
+  font-size: 13px;
+}
+
 .trust-card {
   display: grid;
   grid-template-columns: .9fr 1.1fr;
@@ -375,6 +497,7 @@ footer strong { color: #344054; }
 
 @media (max-width: 1100px) {
   .filter-card { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .upgrade-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .field-wide { grid-column: span 2; }
 }
 
@@ -396,6 +519,12 @@ footer strong { color: #344054; }
   .feed-meta { align-items: flex-start; }
   .job-card { min-height: 0; }
   .job-actions { flex-direction: column; }
+  .nav { align-items: flex-start; }
+  .nav-actions { flex-direction: column; align-items: stretch; }
+  .upgrade-card { padding: 20px; }
+  .upgrade-heading { flex-direction: column; }
+  .upgrade-form { grid-template-columns: 1fr; }
+  .upgrade-form .field-wide, .consent-row, .upgrade-actions, .upgrade-message { grid-column: auto; }
   .trust-card { grid-template-columns: 1fr; gap: 18px; padding: 25px; }
   footer { display: block; text-align: center; }
   footer span { display: block; margin-top: 5px; }
