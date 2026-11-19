@@ -15,12 +15,28 @@ def candidate_data(profile, pdf):
         data.setdefault("first_name",name.split()[0])
         data.setdefault("last_name"," ".join(name.split()[1:]))
     data.setdefault("email",os.getenv("SMTP_USER",""))
-    if not data.get("phone"):
-        from pypdf import PdfReader
+    from pypdf import PdfReader
+    if not data.get("phone") or not data.get("linkedin") or not data.get("current_company"):
+        # Parse only unambiguous, explicitly identifiable resume facts.
         text="\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(pdf)).pages[:2])
         matches=set(re.sub(r"[^0-9+]","",m) for m in re.findall(r"(?<!\d)(?:\+91[\s-]*)?[6-9]\d{4}[\s-]?\d{5}(?!\d)",text))
         normalized={"+91"+m[-10:] for m in matches}
-        if len(normalized)==1: data["phone"]=normalized.pop()
+        if len(normalized)==1 and not data.get("phone"): data["phone"]=normalized.pop()
+        urls=set(re.findall(r"(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+",text,re.I))
+        if len(urls)==1 and not data.get("linkedin"):
+            link=urls.pop().rstrip(".")
+            data["linkedin"]=link if link.startswith("http") else "https://"+link
+        companies=set(m.strip() for m in re.findall(r"(?im)^\s*current\s+(?:company|employer)\s*:\s*([^\n]{2,100})",text))
+        if len(companies)==1 and not data.get("current_company"): data["current_company"]=companies.pop()
+    for target,aliases in {"current_location":("city","location"),"education":("qualification","highest_qualification"),"notice_period_days":("notice_days",),"experience_years":("total_experience_years",),"current_company":("employer",),"preferred_location":("preferred_city",)}.items():
+        if not data.get(target):
+            for alias in aliases:
+                if data.get(alias) is not None and isinstance(data[alias],(str,int,float)):
+                    data[target]=data[alias]; break
+    for key in ("current","expected"):
+        amount=data.get(key+"_ctc_inr")
+        if isinstance(amount,(int,float)) and amount>0: data.setdefault(key+"_ctc_lpa",amount/100000)
+    data.setdefault("interest_statement","I am interested in this opportunity because it aligns with my goal of growing in cloud infrastructure, automation and reliable software delivery. I would welcome the opportunity to contribute to the team and develop my technical expertise.")
     return data
 def verification_required(page):
     """Detect an active human challenge without interacting with verification widgets."""
@@ -75,7 +91,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 locator=page.locator('input[name="'+key+'"],input[id="'+key+'"]')
                 if locator.count()==1 and locator.is_visible(): locator.fill(str(val))
             if u.hostname in HOSTS:
-                for label,value in [(r"^full name",data.get("name")),(r"^first name",data.get("first_name")),(r"^last name",data.get("last_name")),(r"^email",data.get("email")),(r"^phone",data.get("phone"))]:
+                for label,value in [(r"^(?:full |legal |your )?name\s*\*?$",data.get("name")),(r"^first name",data.get("first_name")),(r"^last name",data.get("last_name")),(r"^email",data.get("email")),(r"^phone",data.get("phone"))]:
                     field=page.get_by_label(re.compile(label,re.I))
                     if value and field.count()==1 and field.is_visible(): field.fill(str(value))
             stage="resume_field"
@@ -99,11 +115,11 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if not all(data.get(x) for x in ("email","phone")): return "portal_review_contact"
             buttons=page.get_by_role("button",name=re.compile(r"^(submit application|submit|apply for this job)$",re.I))
             if buttons.count()!=1: return "portal_review_submit_button"
-            if not buttons.is_enabled(): return "portal_review_submit_disabled"
             if verification_required(page): return "portal_review_human_verification_v2"
             stage="resume_upload"
             files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":pdf})
             if verification_required(page): return "portal_review_human_verification_v2"
+            if not buttons.is_enabled(): return "portal_review_submit_disabled"
             stage="submit"
             submitted=True
             buttons.click(timeout=10000)
