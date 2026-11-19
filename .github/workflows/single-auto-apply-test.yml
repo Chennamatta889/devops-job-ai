@@ -1,0 +1,53 @@
+name: Single auto-apply test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/single-auto-apply-test.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test-one-application:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install browser dependencies
+        run: |
+          pip install pypdf playwright==1.51.0
+          python -m playwright install chromium
+
+      - name: Attempt one supported ATS application
+        env:
+          PROFILE_JSON: ${{ secrets.PROFILE_JSON }}
+          PORTAL_PROFILE_JSON: ${{ secrets.PORTAL_PROFILE_JSON }}
+          SCREENING_FACTS_JSON: ${{ secrets.SCREENING_FACTS_JSON }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          RESUME_PART_1: ${{ secrets.RESUME_PART_1 }}
+          RESUME_PART_2: ${{ secrets.RESUME_PART_2 }}
+          RESUME_BASE64: ${{ secrets.RESUME_BASE64 }}
+          ALLOW_PRIVATE_MAIL_LOOKUP: 'false'
+          TARGET_COMPANY: Sophos
+          TARGET_TITLE: Site Reliability Engineer /Cloud
+          TARGET_LOCATION: India
+          TARGET_URL: https://jobs.ashbyhq.com/sophos/46929d7f-2677-4837-a033-134d9fde79fe/application
+        run: python auto_apply/single_portal_test.py
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: single-auto-apply-test
+          path: auto_apply/single-portal-test.json
+          if-no-files-found: ignore
+          retention-days: 1
