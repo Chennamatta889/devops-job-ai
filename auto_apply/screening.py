@@ -81,11 +81,15 @@ def answer_for(question, profile):
 def as_text(value):
     if isinstance(value,bool): return "Yes" if value else "No"
     return str(value)
-def option_match(question, value, label):
+def option_match(question, value, label, profile=None):
     q=normalize(question); v=normalize(value); l=normalize(label)
     if not v or not l: return False
     if l==v: return True
-    return bool(re.search(r"\b(?:location|city)\b",q)) and l.startswith(v+" ")
+    if not (re.search(r"\b(?:location|city)\b",q) and l.startswith(v+" ")): return False
+    country=normalize((profile or {}).get("country"))
+    if country and len(l.split())>=3 and country not in l:
+        return False
+    return True
 def field_question(field):
     return field.evaluate("""el => {
         const labels=Array.from(el.labels||[]).map(l=>l.innerText);
@@ -113,7 +117,7 @@ def fill_screening(page,profile):
         if field.get_attribute("type")=="date" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}",value): continue
         if tag=="select":
             options=field.locator("option").evaluate_all("els => els.map(e => ({label:e.textContent.trim(), value:e.value, disabled:e.disabled}))")
-            choices=[o for o in options if not o["disabled"] and o["value"] and option_match(question,value,o["label"])]
+            choices=[o for o in options if not o["disabled"] and o["value"] and option_match(question,value,o["label"],profile)]
             if len(choices)!=1: continue
             field.select_option(value=choices[0]["value"])
         else:
@@ -162,7 +166,7 @@ def fill_screening(page,profile):
         matches=[]
         for j in range(options.count()):
             opt=options.nth(j)
-            if opt.is_visible() and opt.is_enabled() and option_match(question,answer,opt.inner_text()):
+            if opt.is_visible() and opt.is_enabled() and option_match(question,answer,opt.inner_text(),profile):
                 matches.append(opt)
         if len(matches)==1:
             matches[0].click()
