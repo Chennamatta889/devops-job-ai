@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from portal import candidate_data, portal_enabled
 from agent import match, key
 from job_alerts import parse_alert, platform
@@ -60,4 +60,27 @@ class ScreeningTests(unittest.TestCase):
         self.assertIsNone(answer_for("Total years of experience",{"max_required_years":4}))
         self.assertIsNone(answer_for("Are you authorized to work in the US?",{}))
         self.assertEqual(answer_for("Willing to relocate?",{"screening_answers":{"Willing to relocate?":False}}),False)
+class VerificationTests(unittest.TestCase):
+    def page_with_frame(self, visible, width=300, height=80, src="https://example.test/captcha", title="CAPTCHA"):
+        p=Mock()
+        p.locator.return_value.count.return_value=1
+        f=p.locator.return_value.nth.return_value
+        f.is_visible.return_value=visible
+        f.bounding_box.return_value={"width":width,"height":height}
+        f.get_attribute.side_effect=lambda k: {"src":src,"title":title}.get(k)
+        p.get_by_text.return_value.count.return_value=0
+        return p
+    def test_hidden_widget(self):
+        from portal import verification_required
+        self.assertFalse(verification_required(self.page_with_frame(False)))
+    def test_active_widget(self):
+        from portal import verification_required
+        self.assertTrue(verification_required(self.page_with_frame(True)))
+    def test_badge_and_visible_prompt(self):
+        from portal import verification_required
+        p=self.page_with_frame(True,70,60,"https://www.google.com/recaptcha/api2/anchor","reCAPTCHA")
+        self.assertFalse(verification_required(p))
+        p.get_by_text.return_value.count.return_value=1
+        p.get_by_text.return_value.nth.return_value.is_visible.return_value=True
+        self.assertTrue(verification_required(p))
 if __name__=="__main__": unittest.main()
