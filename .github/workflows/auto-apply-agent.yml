@@ -54,6 +54,7 @@ jobs:
           LEVER_BOARDS: ${{ secrets.LEVER_BOARDS }}
           MINIMUM_MATCH: ${{ vars.MINIMUM_MATCH }}
           PORTAL_PROFILE_JSON: ${{ secrets.PORTAL_PROFILE_JSON }}
+          SCREENING_FACTS_JSON: ${{ secrets.SCREENING_FACTS_JSON }}
           PORTAL_AUTO_APPLY: ${{ steps.browser.outcome == 'success' && vars.PORTAL_AUTO_APPLY != 'false' && 'true' || 'false' }}
           AUTO_APPLY: ${{ vars.AUTO_APPLY }}
         run: python auto_apply/agent.py
