@@ -285,7 +285,7 @@ def aggregator_jobs():
 def get_jobs():
     jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
     if not isinstance(jobs,list): raise ValueError("JOB_FEED_JSON must be an array")
-    defaults = {"greenhouse":"crashplan,pointwild,conviva,toradex,razorpaysoftwareprivatelimited,singlestore,machinify-india,neweratech,workatbackbase,axicorpfinancialservicesptyltd,insurityindia,merqube,mfsgtechnologiesindia,rhythmx-ai,sonicwall,zscaler,cloudflare,grafanalabs,databricks,canonical,elastic,gitlab,mongodb,twilio,okta,mastercontrol,acquia,datadog,remote,toast,affirm,coinbase,asana,reddit,webflow,netlify,vercel,rubrik,druva,thoughtworks,branch,workato,celonis,pagerduty,cockroachlabs,chainguard,particle41llc,coherehealth","lever":"pditechnologies,smart-working-solutions,brightedge,zeta,ttecdigital,keyloop,hevodata,spotify,wealthsimple,contentsquare,brillio-2,shyftlabs,lingarogroup,mactores,zimperium"}
+    defaults = {"greenhouse":"crashplan,pointwild,conviva,toradex,razorpaysoftwareprivatelimited,singlestore,machinify-india,neweratech,workatbackbase,axicorpfinancialservicesptyltd,insurityindia,merqube,mfsgtechnologiesindia,rhythmx-ai,sonicwall,zscaler,cloudflare,grafanalabs,databricks,canonical,elastic,gitlab,mongodb,twilio,okta,mastercontrol,acquia,datadog,remote,toast,affirm,coinbase,asana,reddit,webflow,netlify,vercel,rubrik,druva,thoughtworks,branch,workato,celonis,pagerduty,cockroachlabs,chainguard,particle41llc,coherehealth,sigmoid,skildai-careers,deepintent,cordance,zenoti,truveta,instawork,tide,accordionindia,sureify,redwoodsoftware,starrez,addepar1,techholding,netbrain,saucelabs","lever":"pditechnologies,smart-working-solutions,brightedge,zeta,ttecdigital,keyloop,hevodata,spotify,wealthsimple,contentsquare,brillio-2,shyftlabs,lingarogroup,mactores,zimperium,drivetrain,gohighlevel,acceldata,safe,Sprinto"}
     sources = []
     for kind in defaults:
         value = os.getenv(kind.upper()+"_BOARDS","").strip() or defaults[kind]
@@ -367,7 +367,7 @@ def publish_public_feed(jobs):
             if any(has(body,t) for t in [skill]+aliases.get(skill,[])):
                 skills.append(skill)
         source=str(j.get("source","career_site")).strip() or "career_site"
-        direct_apply=bool(direct_apply_url) or source in {"greenhouse","lever","ashby","smartrecruiters"}
+        direct_apply=bool(direct_apply_url) or source in {"greenhouse","lever","ashby","smartrecruiters","recruitee"}
         public.append({
             "id":hashlib.sha256("|".join(identity).encode()).hexdigest()[:16],
             "title":title,
