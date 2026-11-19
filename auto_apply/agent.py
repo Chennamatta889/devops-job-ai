@@ -110,6 +110,7 @@ def publish_public_feed(jobs):
             continue
         seen.add(identity)
         body=clean(j.get("description",""))
+        experience=extract_experience_requirement(j.get("description",""))
         skills=[]
         for skill in SKILLS:
             if any(has(body,t) for t in [skill]+aliases.get(skill,[])):
@@ -123,6 +124,9 @@ def publish_public_feed(jobs):
             "published":str(j.get("published") or j.get("publishedAt") or j.get("created_at") or "").strip(),
             "url":url,
             "skills":skills[:12],
+            "experience_min":experience["min"],
+            "experience_max":experience["max"],
+            "experience_label":experience["label"],
         })
     public.sort(key=lambda x:(x.get("published",""),x["title"].lower()),reverse=True)
     target=ROOT.parent/"data"/"jobs.json"
