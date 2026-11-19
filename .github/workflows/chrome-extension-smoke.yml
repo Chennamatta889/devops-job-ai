@@ -1,0 +1,33 @@
+name: Chrome extension smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'chrome-extension/**'
+      - '.github/workflows/chrome-extension-smoke.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Manifest V3 package
+        run: |
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('chrome-extension/manifest.json','utf8'));if(m.manifest_version!==3)throw new Error('Manifest must be v3');for(const f of ['popup.html','popup.css','popup.js','content.js'])if(!fs.existsSync('chrome-extension/'+f))throw new Error('Missing '+f);console.log('Manifest package valid')"
+          node --check chrome-extension/popup.js
+          node --check chrome-extension/content.js
+      - name: Package extension
+        run: |
+          cd chrome-extension
+          zip -r ../draftflowai-assisted-apply.zip manifest.json popup.html popup.css popup.js content.js README.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: draftflowai-assisted-apply
+          path: draftflowai-assisted-apply.zip
+          retention-days: 7
