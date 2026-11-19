@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 from portal import candidate_data, portal_enabled
-from agent import match, key, extract_experience_requirement
+from agent import match, key, extract_experience_requirement, known_direct_apply_url
 from job_alerts import parse_alert, platform
 from india_sources import india_location, relevant_role, technology_category, technology_role
 class AgentTests(unittest.TestCase):
@@ -66,6 +66,11 @@ class AlertTests(unittest.TestCase):
         self.assertEqual(len(parse_alert(html,"Jobs","naukri_alert")),1)
     def test_reject_lookalike(self):
         self.assertEqual(platform("https://linkedin.com.evil.example/jobs/view/123"),"")
+    def test_foundit(self):
+        html='<a href="https://www.foundit.in/search/java-developer-jobs-in-hyderabad">Java Developer Hyderabad</a>'
+        rows=parse_alert(html,"Technology jobs","foundit_alert","2026-11-19T10:00:00+00:00")
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]["source"],"foundit_alert")
 class ScreeningTests(unittest.TestCase):
     def test_explicit_facts(self):
         from screening import answer_for
@@ -73,6 +78,19 @@ class ScreeningTests(unittest.TestCase):
         self.assertIsNone(answer_for("Total years of experience",{"max_required_years":4}))
         self.assertIsNone(answer_for("Are you authorized to work in the US?",{}))
         self.assertEqual(answer_for("Willing to relocate?",{"screening_answers":{"Willing to relocate?":False}}),False)
+class DirectApplyTests(unittest.TestCase):
+    def test_known_ats_domains(self):
+        self.assertEqual(
+            known_direct_apply_url("https://jobs.ashbyhq.com/example/123"),
+            "https://jobs.ashbyhq.com/example/123",
+        )
+        self.assertEqual(
+            known_direct_apply_url("https://company.wd5.myworkdayjobs.com/en-US/Careers/job/123"),
+            "https://company.wd5.myworkdayjobs.com/en-US/Careers/job/123",
+        )
+        self.assertEqual(known_direct_apply_url("https://www.linkedin.com/jobs/view/123"),"")
+        self.assertEqual(known_direct_apply_url("http://jobs.ashbyhq.com/example/123"),"")
+
 class VerificationTests(unittest.TestCase):
     def page_with_frame(self, visible, width=300, height=80, src="https://example.test/captcha", title="CAPTCHA"):
         p=Mock()
