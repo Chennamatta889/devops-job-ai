@@ -157,7 +157,12 @@ def fill_screening(page,profile):
         if answer is None or not field.is_enabled(): continue
         # Select only an unambiguous exact visible option from the linked listbox.
         controls=field.get_attribute("aria-controls")
-        if not controls: continue
+        if not controls:
+            if re.search(r"\b(?:location|city)\b",normalize(question)):
+                field.fill(as_text(answer))
+                field.press("Tab")
+                filled+=1
+            continue
         field.click()
         scope=page.locator('[role=listbox]:visible')
         if scope.count()!=1 or scope.get_attribute("id")!=controls:
