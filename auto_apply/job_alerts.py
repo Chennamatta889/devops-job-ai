@@ -3,7 +3,7 @@ import os, re, imaplib, email, ssl
 from email import policy
 from email.utils import parseaddr
 from html.parser import HTMLParser
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit, parse_qs, unquote
 from datetime import datetime, timedelta, timezone
 from india_sources import relevant_role, india_location
 
@@ -37,11 +37,21 @@ def parse_alert(content, subject, origin):
     p.feed(content)
     jobs=[]; seen=set()
     for url,label in p.rows:
-        try: src=platform(url)
+        try:
+            u=urlsplit(url)
+            if u.scheme=="https" and any(domain_matches(u.hostname or "",d) for d in DOMAINS):
+                for k in ("url","redirectUrl","redirect","target","destination"):
+                    nested=parse_qs(u.query).get(k,[])
+                    if len(nested)==1 and platform(nested[0])==origin:
+                        url=nested[0]; break
+            src=platform(url)
         except ValueError: continue
         if src!=origin: continue
         title=" ".join(label.split())
-        if not relevant_role(title): continue
+        if not relevant_role(title):
+            slug=urlsplit(url).path.rsplit("/",1)[-1].replace("-"," ")
+            if not relevant_role(slug): continue
+            title=slug[:180]
         if len(title)>200: continue
         u=urlsplit(url); canonical=urlunsplit((u.scheme,u.netloc,u.path,"",""))
         if canonical in seen: continue
@@ -63,7 +73,9 @@ def discover_alerts():
             for domain,origin in [("linkedin.com","linkedin_alert"),("naukri.com","naukri_alert")]:
                 typ,ids=box.uid("search",None,"SINCE",since,"FROM",'"'+domain+'"')
                 if typ!="OK": continue
-                for uid in (ids[0] or b"").split()[-40:]:
+                selected=(ids[0] or b"").split()[-40:]
+                print("Alert messages found:",origin,len(selected))
+                for uid in selected:
                     typ,data=box.uid("fetch",uid,"(BODY.PEEK[])")
                     if typ!="OK": continue
                     for item in data:
