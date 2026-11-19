@@ -21,10 +21,15 @@ jobs:
       - run: |
           git config user.name "job-agent[bot]"
           git config user.email "job-agent@users.noreply.github.com"
+      - uses: actions/cache@v4
+        if: ${{ vars.PORTAL_AUTO_APPLY != 'false' }}
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-1.51.0
       - name: Install browser for optional portal submissions
         if: ${{ vars.PORTAL_AUTO_APPLY != 'false' }}
         run: |
-          pip install playwright pypdf
+          pip install playwright==1.51.0 pypdf
           python -m playwright install --with-deps chromium
       - name: Discover and match
         if: ${{ env.PROFILE_JSON != '' }}
@@ -49,5 +54,7 @@ jobs:
           path: |
             auto_apply/matches.csv
             auto_apply/platform-alerts.csv
+            auto_apply/job-decisions.csv
+            auto_apply/run-summary.json
           if-no-files-found: ignore
           retention-days: 3
