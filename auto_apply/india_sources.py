@@ -5,6 +5,17 @@ from urllib.parse import quote, urlencode
 from concurrent.futures import ThreadPoolExecutor
 INDIA = re.compile(r"\b(india|hyderabad|secunderabad|bengaluru|bangalore|pune|mumbai|navi mumbai|chennai|gurgaon|gurugram|noida|delhi|kolkata|ahmedabad|kochi|cochin|trivandrum|thiruvananthapuram|coimbatore|mysore|mysuru|indore|jaipur|chandigarh|mohali|bhubaneswar|visakhapatnam|vizag|vadodara|nagpur|lucknow|surat|greater noida|telangana|karnataka|maharashtra|tamil nadu|kerala|gujarat|haryana|uttar pradesh|west bengal|andhra pradesh)\b",re.I)
 ROLE = re.compile(r"\b(dev[- ]?ops|devsecops|site reliability|sre|cloud[- ]?ops|cloud (?:engineer|platform|infrastructure|operations|support|administrator)|platform (?:engineer|operations)|(?:it |cloud )?infrastructure (?:engineer|specialist|analyst)|(?:build|release|deployment|production support|production|systems|linux|observability|kubernetes) engineer|(?:devops|cloud|infrastructure) automation engineer|ci/cd engineer)\b",re.I)
+TECH_CATEGORIES = (
+    ("Cloud / DevOps / SRE", re.compile(r"\b(dev[- ]?ops|devsecops|site reliability|sre|cloud|platform engineer|infrastructure|kubernetes|release engineer|build engineer|observability)\b", re.I)),
+    ("Data / AI / ML", re.compile(r"\b(data engineer|data scientist|data analyst|analytics engineer|machine learning|ml engineer|artificial intelligence|ai engineer|genai|generative ai|llm|nlp|computer vision|big data|etl|spark|databricks|snowflake)\b", re.I)),
+    ("QA / Testing", re.compile(r"\b(qa|quality assurance|test engineer|testing|sdet|automation tester|software tester|performance test|manual tester)\b", re.I)),
+    ("Cybersecurity", re.compile(r"\b(cyber|security engineer|security analyst|application security|appsec|soc analyst|penetration|pentest|iam engineer|identity engineer|information security|infosec)\b", re.I)),
+    ("Enterprise Apps", re.compile(r"\b(sap|salesforce|servicenow|workday|oracle ebs|oracle fusion|dynamics 365|power platform|mulesoft|pega)\b", re.I)),
+    ("IT / Support / Network", re.compile(r"\b(it support|technical support|support engineer|systems? administrator|network engineer|network administrator|database administrator|dba|desktop support|helpdesk|help desk|noc engineer|operations engineer)\b", re.I)),
+    ("Product / Technical", re.compile(r"\b(product engineer|technical product|product manager|solutions? architect|solutions? engineer|technical architect|technical consultant)\b", re.I)),
+    ("Software Engineering", re.compile(r"\b(software|developer|programmer|backend|back[- ]end|frontend|front[- ]end|full[- ]?stack|mobile|android|ios|java|\.net|dotnet|c#|python|golang|go developer|node(?:\.js)?|react|angular|php|ruby|scala)\b", re.I)),
+)
+
 def india_location(value):
     return bool(INDIA.search(str(value or "")))
 def relevant_role(value):
