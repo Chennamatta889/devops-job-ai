@@ -1,570 +1,291 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-const API_BASE_URL = 'http://50.17.126.62'
+const FEED_URL =
+  import.meta.env.VITE_JOB_FEED_URL ||
+  'https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/jobs.json'
 
-function scoreClass(score) {
-  if (score >= 85) return 'score-high'
-  if (score >= 70) return 'score-medium'
-  return 'score-low'
+function prettySource(value = '') {
+  const names = {
+    greenhouse: 'Greenhouse',
+    lever: 'Lever',
+    ashby: 'Ashby',
+    smartrecruiters: 'SmartRecruiters',
+    linkedin_alert: 'LinkedIn',
+    naukri_alert: 'Naukri',
+    indeed_alert: 'Indeed'
+  }
+  return names[value] || value.replaceAll('_', ' ') || 'Career site'
+}
+
+function prettyCompany(value = '') {
+  return value
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase())
+}
+
+function formatDate(value) {
+  if (!value) return 'Recently discovered'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'Recently discovered'
+  return new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  }).format(date)
 }
 
 function App() {
-  const [keyword, setKeyword] = useState('DevOps')
-  const [location, setLocation] = useState('Hyderabad')
-  const [jobs, setJobs] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [feed, setFeed] = useState({ jobs: [], count: 0, generated_at_utc: null })
+  const [query, setQuery] = useState('')
+  const [location, setLocation] = useState('')
+  const [source, setSource] = useState('all')
+  const [skill, setSkill] = useState('all')
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [selectedJob, setSelectedJob] = useState(null)
+  const [copiedId, setCopiedId] = useState('')
 
-  async function searchJobs() {
+  async function loadJobs() {
     setLoading(true)
     setError('')
-    setSelectedJob(null)
-
     try {
-      const params = new URLSearchParams({
-        keyword,
-        location
-      })
-
-      const url = `${API_BASE_URL}/jobs/search?${params.toString()}`
-
-      console.log('Searching:', url)
-
-      const response = await fetch(url)
-
-      if (!response.ok) {
-        throw new Error(`API returned ${response.status}`)
-      }
-
+      const response = await fetch(FEED_URL + '?t=' + Date.now(), { cache: 'no-store' })
+      if (!response.ok) throw new Error('Job feed returned ' + response.status)
       const data = await response.json()
-
-      console.log('API RESPONSE:', data)
-
-      /*
-        Backend response:
-
-        {
-          count: 1821,
-          jobs: [...]
-        }
-      */
-
-      const list = Array.isArray(data)
-        ? data
-        : Array.isArray(data.jobs)
-          ? data.jobs
-          : Array.isArray(data.results)
-            ? data.results
-            : []
-
-      console.log('JOB COUNT:', list.length)
-
-      if (list.length === 0) {
-        console.warn('No jobs found in API response')
-      }
-
-      const normalized = list.map((job, index) => ({
-        job_id:
-          job.job_id ??
-          job.id ??
-          index + 1,
-
-        title:
-          job.title ??
-          'Untitled job',
-
-        company:
-          typeof job.company === 'string'
-            ? job.company
-            : job.company?.display_name ??
-              job.company_name ??
-              'Unknown company',
-
-        location:
-          typeof job.location === 'string'
-            ? job.location
-            : job.location?.display_name ??
-              job.location_display ??
-              location,
-
-        description:
-          job.description ??
-          '',
-
-        url:
-          job.url ??
-          job.redirect_url ??
-          '',
-
-        created:
-          job.created ??
-          '',
-
-        salary_min:
-          job.salary_min ??
-          null,
-
-        salary_max:
-          job.salary_max ??
-          null,
-
-        category:
-          typeof job.category === 'string'
-            ? job.category
-            : job.category?.label ??
-              '',
-
-        score:
-          typeof job.score === 'number'
-            ? job.score
-            : null,
-
-        decision:
-          job.decision ??
-          null,
-
-        matched_skills:
-          Array.isArray(job.matched_skills)
-            ? job.matched_skills
-            : [],
-
-        missing_skills:
-          Array.isArray(job.missing_skills)
-            ? job.missing_skills
-            : []
-      }))
-
-      console.log('NORMALIZED JOBS:', normalized)
-
-      setJobs(normalized)
-
+      setFeed({
+        jobs: Array.isArray(data.jobs) ? data.jobs : [],
+        count: Number(data.count || 0),
+        generated_at_utc: data.generated_at_utc || null
+      })
     } catch (err) {
-      console.error('SEARCH ERROR:', err)
-
-      setJobs([])
-
-      setError(
-        `${err.message}. Check API connectivity and frontend configuration.`
-      )
+      setError(err.message + '. Please refresh in a moment.')
     } finally {
       setLoading(false)
     }
   }
 
-  async function analyzeJob(job) {
-    setSelectedJob({
-      ...job,
-      analyzing: true
-    })
+  useEffect(() => {
+    loadJobs()
+  }, [])
 
-    setError('')
+  const sourceOptions = useMemo(
+    () => [...new Set(feed.jobs.map((job) => job.source).filter(Boolean))].sort(),
+    [feed.jobs]
+  )
 
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/jobs/${job.job_id}/ai-match`
-      )
+  const skillOptions = useMemo(
+    () =>
+      [...new Set(feed.jobs.flatMap((job) => (Array.isArray(job.skills) ? job.skills : [])))]
+        .filter(Boolean)
+        .sort(),
+    [feed.jobs]
+  )
 
-      if (!response.ok) {
-        throw new Error(
-          `AI match API returned ${response.status}`
-        )
+  const filteredJobs = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    const loc = location.trim().toLowerCase()
+
+    return feed.jobs.filter((job) => {
+      const title = String(job.title || '').toLowerCase()
+      const company = String(job.company || '').toLowerCase()
+      const jobLocation = String(job.location || '').toLowerCase()
+      const skills = Array.isArray(job.skills) ? job.skills : []
+
+      if (q && !title.includes(q) && !company.includes(q) && !skills.some((item) => item.includes(q))) {
+        return false
       }
+      if (loc && !jobLocation.includes(loc)) return false
+      if (source !== 'all' && job.source !== source) return false
+      if (skill !== 'all' && !skills.includes(skill)) return false
+      return true
+    })
+  }, [feed.jobs, query, location, source, skill])
 
-      const data = await response.json()
-
-      const analysis =
-        data.ai_analysis || data
-
-      setSelectedJob({
-        ...job,
-        ...analysis,
-        analyzing: false
-      })
-
-    } catch (err) {
-      console.error('AI ANALYSIS ERROR:', err)
-
-      setSelectedJob(null)
-      setError(err.message)
+  async function copyLink(job) {
+    try {
+      await navigator.clipboard.writeText(job.url)
+      setCopiedId(job.id)
+      window.setTimeout(() => setCopiedId(''), 1400)
+    } catch {
+      setError('Could not copy the link. You can open the job and copy it from your browser.')
     }
   }
 
+  const updatedText = feed.generated_at_utc
+    ? new Intl.DateTimeFormat('en-IN', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      }).format(new Date(feed.generated_at_utc))
+    : 'Waiting for first agent refresh'
+
   return (
     <div className="app-shell">
-
-      <header className="topbar">
-
-        <div>
-          <div className="eyebrow">
-            AI-POWERED JOB SEARCH
+      <header className="hero">
+        <nav className="nav">
+          <div className="brand">
+            <div className="brand-mark">D</div>
+            <div>
+              <strong>DraftflowAI Jobs</strong>
+              <span>Live role discovery</span>
+            </div>
           </div>
+          <button className="ghost-button" onClick={loadJobs} disabled={loading}>
+            {loading ? 'Refreshing…' : 'Refresh jobs'}
+          </button>
+        </nav>
 
-          <h1>
-            DevOps Job AI
-          </h1>
-
+        <div className="hero-copy">
+          <div className="eyebrow">DEVOPS · CLOUD · SRE · PLATFORM</div>
+          <h1>Find relevant jobs without searching dozens of career sites.</h1>
           <p>
-            Find DevOps roles that actually match your experience.
+            Our agent continuously discovers roles from supported employer job boards.
+            Search the live feed and apply on the company&apos;s original application page.
           </p>
         </div>
 
-        <div className="status-pill">
-          <span className="status-dot" />
-          API: {API_BASE_URL}
+        <div className="stats">
+          <div>
+            <strong>{feed.count}</strong>
+            <span>jobs in feed</span>
+          </div>
+          <div>
+            <strong>{filteredJobs.length}</strong>
+            <span>matching your filters</span>
+          </div>
+          <div>
+            <strong>Direct</strong>
+            <span>employer apply links</span>
+          </div>
         </div>
-
       </header>
 
       <main className="content">
-
-        <section className="search-card">
-
-          <div className="field">
-
-            <label>
-              Role
-            </label>
-
+        <section className="filter-card">
+          <div className="field field-wide">
+            <label>Role, company or technology</label>
             <input
-              value={keyword}
-              onChange={(e) =>
-                setKeyword(e.target.value)
-              }
-              placeholder="DevOps Engineer"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="DevOps, AWS, Kubernetes, SRE…"
             />
-
           </div>
 
           <div className="field">
-
-            <label>
-              Location
-            </label>
-
+            <label>Location</label>
             <input
               value={location}
-              onChange={(e) =>
-                setLocation(e.target.value)
-              }
-              placeholder="Hyderabad"
+              onChange={(event) => setLocation(event.target.value)}
+              placeholder="Hyderabad, Bengaluru, Remote…"
             />
-
           </div>
 
-          <button
-            className="primary-button"
-            onClick={searchJobs}
-            disabled={loading}
-          >
-            {loading
-              ? 'Searching...'
-              : 'Search Jobs'}
-          </button>
+          <div className="field">
+            <label>Source</label>
+            <select value={source} onChange={(event) => setSource(event.target.value)}>
+              <option value="all">All sources</option>
+              {sourceOptions.map((item) => (
+                <option value={item} key={item}>{prettySource(item)}</option>
+              ))}
+            </select>
+          </div>
 
+          <div className="field">
+            <label>Skill</label>
+            <select value={skill} onChange={(event) => setSkill(event.target.value)}>
+              <option value="all">All skills</option>
+              {skillOptions.map((item) => (
+                <option value={item} key={item}>{item}</option>
+              ))}
+            </select>
+          </div>
         </section>
 
-        {error && (
-          <div className="error-box">
-            {error}
-          </div>
-        )}
-
-        <section className="summary-row">
-
+        <div className="feed-meta">
           <div>
-            <h2>
-              Recommended Jobs
-            </h2>
-
-            <p>
-              {jobs.length} jobs returned
-            </p>
+            <h2>Live job feed</h2>
+            <p>Last feed change: {updatedText}</p>
           </div>
-
-        </section>
-
-        <section className="job-list">
-
-          {jobs.length === 0 && !loading && (
-            <div className="empty-state">
-              Search for DevOps jobs to get started.
-            </div>
-          )}
-
-          {jobs.map((job) => (
-
-            <article
-              className="job-card"
-              key={job.job_id}
+          {(query || location || source !== 'all' || skill !== 'all') && (
+            <button
+              className="text-button"
+              onClick={() => {
+                setQuery('')
+                setLocation('')
+                setSource('all')
+                setSkill('all')
+              }}
             >
+              Clear filters
+            </button>
+          )}
+        </div>
 
-              <div className="job-main">
+        {error && <div className="error-box">{error}</div>}
 
-                <div className="job-title-row">
-
-                  <div>
-
-                    <h3>
-                      {job.title}
-                    </h3>
-
-                    <p className="company">
-                      {job.company}
-                    </p>
-
-                  </div>
-
-                  {job.score !== null && (
-                    <div
-                      className={`score ${scoreClass(
-                        job.score
-                      )}`}
-                    >
-
-                      <strong>
-                        {job.score}%
-                      </strong>
-
-                      <span>
-                        match
-                      </span>
-
-                    </div>
-                  )}
-
+        {loading ? (
+          <section className="job-grid">
+            {[1, 2, 3, 4].map((item) => <div className="skeleton" key={item} />)}
+          </section>
+        ) : filteredJobs.length === 0 ? (
+          <div className="empty-state">
+            <h3>No jobs match these filters.</h3>
+            <p>Try a broader role, location, source or skill.</p>
+          </div>
+        ) : (
+          <section className="job-grid">
+            {filteredJobs.map((job) => (
+              <article className="job-card" key={job.id || job.url}>
+                <div className="job-card-top">
+                  <div className="source-badge">{prettySource(job.source)}</div>
+                  <span className="published">{formatDate(job.published)}</span>
                 </div>
 
-                <div className="meta">
-                  {job.location}
-                </div>
+                <h3>{job.title}</h3>
+                <div className="company">{prettyCompany(job.company)}</div>
+                <div className="location">{job.location}</div>
 
-                {job.category && (
-                  <div className="meta">
-                    {job.category}
-                  </div>
-                )}
-
-                {job.salary_min !== null && (
-                  <div className="meta">
-                    Salary: ₹
-                    {Number(job.salary_min).toLocaleString('en-IN')}
-                    {job.salary_max !== null &&
-                      ` - ₹${Number(
-                        job.salary_max
-                      ).toLocaleString('en-IN')}`}
-                  </div>
-                )}
-
-                {job.matched_skills?.length > 0 && (
-
+                {job.skills?.length > 0 && (
                   <div className="skills">
-
-                    {job.matched_skills
-                      .slice(0, 8)
-                      .map((skill) => (
-
-                        <span
-                          className="skill matched"
-                          key={skill}
-                        >
-                          {skill}
-                        </span>
-
-                      ))}
-
+                    {job.skills.slice(0, 8).map((item) => (
+                      <span className="skill" key={item}>{item}</span>
+                    ))}
                   </div>
-
                 )}
 
-                {job.missing_skills?.length > 0 && (
-
-                  <div className="missing">
-
-                    Missing:{' '}
-
-                    {job.missing_skills
-                      .slice(0, 5)
-                      .join(', ')}
-
-                  </div>
-
-                )}
-
-              </div>
-
-              <div className="job-actions">
-
-                <button
-                  className="secondary-button"
-                  onClick={() =>
-                    analyzeJob(job)
-                  }
-                >
-                  AI Analysis
-                </button>
-
-                {job.url ? (
-
+                <div className="job-actions">
                   <a
-                    className="primary-button link-button"
+                    className="primary-button"
                     href={job.url}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
-                    Apply
+                    View & apply
                   </a>
-
-                ) : (
-
-                  <button
-                    className="secondary-button"
-                    disabled
-                  >
-                    No Apply Link
+                  <button className="secondary-button" onClick={() => copyLink(job)}>
+                    {copiedId === job.id ? 'Copied' : 'Copy link'}
                   </button>
-
-                )}
-
-              </div>
-
-            </article>
-
-          ))}
-
-        </section>
-
-        {selectedJob && (
-
-          <section className="analysis-card">
-
-            <div className="analysis-header">
-
-              <div>
-
-                <div className="eyebrow">
-                  AI ANALYSIS
                 </div>
-
-                <h2>
-                  {selectedJob.title}
-                </h2>
-
-                <p>
-                  {selectedJob.company}
-                </p>
-
-              </div>
-
-              {!selectedJob.analyzing && (
-
-                <div
-                  className={`score large ${scoreClass(
-                    selectedJob.score || 0
-                  )}`}
-                >
-
-                  <strong>
-                    {selectedJob.score ?? '--'}%
-                  </strong>
-
-                  <span>
-                    {selectedJob.decision || ''}
-                  </span>
-
-                </div>
-
-              )}
-
-            </div>
-
-            {selectedJob.analyzing ? (
-
-              <p>
-                Analyzing job...
-              </p>
-
-            ) : (
-
-              <>
-
-                <h4>
-                  Matched Skills
-                </h4>
-
-                <div className="skills">
-
-                  {(selectedJob.matched_skills || [])
-                    .map((skill) => (
-
-                      <span
-                        className="skill matched"
-                        key={skill}
-                      >
-                        {skill}
-                      </span>
-
-                    ))}
-
-                </div>
-
-                <h4>
-                  Missing Skills
-                </h4>
-
-                <div className="skills">
-
-                  {(selectedJob.missing_skills || [])
-                    .length === 0 ? (
-
-                    <span className="good-text">
-                      No missing skills
-                    </span>
-
-                  ) : (
-
-                    selectedJob.missing_skills
-                      .map((skill) => (
-
-                        <span
-                          className="skill missing-skill"
-                          key={skill}
-                        >
-                          {skill}
-                        </span>
-
-                      ))
-
-                  )}
-
-                </div>
-
-                {selectedJob.reason && (
-
-                  <div className="reason">
-
-                    <h4>
-                      Why?
-                    </h4>
-
-                    <p>
-                      {selectedJob.reason}
-                    </p>
-
-                  </div>
-
-                )}
-
-              </>
-
-            )}
-
+              </article>
+            ))}
           </section>
-
         )}
 
+        <section className="trust-card">
+          <div>
+            <div className="eyebrow dark">HOW IT WORKS</div>
+            <h2>The agent finds jobs. You stay in control.</h2>
+          </div>
+          <p>
+            DraftflowAI Jobs does not claim to be the employer and does not guarantee hiring.
+            Job links open the original employer or ATS page so users can review the full
+            description and submit their own application.
+          </p>
+        </section>
       </main>
 
+      <footer>
+        <strong>DraftflowAI Jobs</strong>
+        <span>Job discovery made simpler.</span>
+      </footer>
     </div>
   )
 }
