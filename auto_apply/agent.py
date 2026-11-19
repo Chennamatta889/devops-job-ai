@@ -78,8 +78,19 @@ def persist(ledger):
     STATE.write_text(json.dumps(ledger,indent=2,sort_keys=True)+"\n")
     if os.getenv("GITHUB_ACTIONS")=="true":
         subprocess.run(["git","add",str(STATE)],check=True)
+        if subprocess.run(["git","diff","--cached","--quiet"]).returncode==0:
+            return
         subprocess.run(["git","commit","-m","Update application ledger"],check=True)
-        subprocess.run(["git","push"],check=True)
+        for attempt in range(3):
+            pushed=subprocess.run(["git","push"],capture_output=True,text=True)
+            if pushed.returncode==0:
+                return
+            print("Ledger push retry:",attempt+1,file=sys.stderr)
+            rebased=subprocess.run(["git","pull","--rebase","origin","main"],capture_output=True,text=True)
+            if rebased.returncode!=0:
+                subprocess.run(["git","rebase","--abort"],capture_output=True)
+                raise RuntimeError("Ledger rebase failed")
+        raise RuntimeError("Ledger push failed after retries")
 def email_apply(j,profile,resume):
     address=j["application_email"]
     if not re.fullmatch(r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",address): raise ValueError("Invalid address")
