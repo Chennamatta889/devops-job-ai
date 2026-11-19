@@ -130,7 +130,7 @@ a { color: inherit; }
 
 .filter-card {
   display: grid;
-  grid-template-columns: 1.6fr 1fr .8fr .8fr;
+  grid-template-columns: 1.5fr 1fr .8fr .8fr .9fr;
   gap: 14px;
   padding: 18px;
   border: 1px solid #e4e7ec;
@@ -230,6 +230,12 @@ a { color: inherit; }
 
 .company { color: #344054; font-weight: 700; }
 .location { margin-top: 8px; color: #667085; font-size: 13px; }
+.experience {
+  margin-top: 7px;
+  color: #475467;
+  font-size: 12px;
+  font-weight: 700;
+}
 
 .skills {
   display: flex;
