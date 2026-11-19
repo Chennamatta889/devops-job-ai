@@ -53,4 +53,11 @@ class AlertTests(unittest.TestCase):
         self.assertEqual(len(parse_alert(html,"Jobs","naukri_alert")),1)
     def test_reject_lookalike(self):
         self.assertEqual(platform("https://linkedin.com.evil.example/jobs/view/123"),"")
+class ScreeningTests(unittest.TestCase):
+    def test_explicit_facts(self):
+        from screening import answer_for
+        self.assertEqual(answer_for("Notice period in days?",{"notice_period_days":30}),30)
+        self.assertIsNone(answer_for("Total years of experience",{"max_required_years":4}))
+        self.assertIsNone(answer_for("Are you authorized to work in the US?",{}))
+        self.assertEqual(answer_for("Willing to relocate?",{"screening_answers":{"Willing to relocate?":False}}),False)
 if __name__=="__main__": unittest.main()
