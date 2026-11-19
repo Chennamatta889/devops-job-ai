@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DraftflowAI Assisted Apply</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div class="mark">D</div>
+      <div>
+        <h1>DraftflowAI</h1>
+        <p>Assisted Apply</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Candidate session</h2>
+      <div class="grid">
+        <label>Full name<input id="fullName" autocomplete="name"></label>
+        <label>Email<input id="email" type="email" autocomplete="email"></label>
+        <label>Phone<input id="phone" autocomplete="tel"></label>
+        <label>Location<input id="location" autocomplete="address-level2"></label>
+        <label class="wide">LinkedIn<input id="linkedin" placeholder="https://linkedin.com/in/..."></label>
+        <label class="wide">Resume PDF<input id="resume" type="file" accept="application/pdf,.pdf"></label>
+      </div>
+      <button id="save" class="secondary">Save for this browser session</button>
+      <p id="resumeStatus" class="hint">Nothing is synced. Session data clears when Chrome closes.</p>
+    </section>
+
+    <section class="card">
+      <h2>Current application</h2>
+      <p id="siteStatus" class="status">Open a supported Greenhouse, Lever, or Ashby application.</p>
+      <button id="fill" class="primary">Fill application</button>
+      <button id="continue" class="secondary">Re-check after verification</button>
+      <button id="submit" class="danger">Submit application</button>
+      <p class="hint">Submission is blocked if human verification or unanswered required fields are detected.</p>
+    </section>
+
+    <div id="result" class="result" hidden></div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
