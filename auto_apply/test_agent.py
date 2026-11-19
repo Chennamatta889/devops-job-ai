@@ -179,4 +179,15 @@ class AshbySubmitTests(unittest.TestCase):
         self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormRender","id":"form"},"messages":{}}}}),"validation")
         self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormSubmitSuccess","_":True},"messages":{"blockMessageForCandidateHtml":"blocked"}}}}),"blocked")
         self.assertEqual(ashby_submit_signal({"errors":[{"message":"x"}]}),"")
+class PrivateLinkedInFallbackTests(unittest.TestCase):
+    def test_extract_candidate_linkedin(self):
+        from portal import extract_candidate_linkedin
+        body="LinkedIn: https://www.linkedin.com/in/chenna123/ recruiter https://www.linkedin.com/in/other-person/"
+        self.assertEqual(extract_candidate_linkedin(body,"Matta Chenna Rao"),"https://www.linkedin.com/in/chenna123")
+    @patch("portal.linkedin_from_sent_mail",return_value="https://www.linkedin.com/in/chenna123")
+    @patch.dict("os.environ", {"SMTP_USER":"candidate@example.com","PORTAL_PROFILE_JSON":""})
+    def test_candidate_data_private_linkedin_fallback(self,mock_linkedin):
+        from portal import candidate_data
+        d=candidate_data({"name":"Matta Chenna Rao","phone":"+919876543210","current_company":"Example Ltd"},b"%PDF-invalid")
+        self.assertEqual(d["linkedin"],"https://www.linkedin.com/in/chenna123")
 if __name__=="__main__": unittest.main()
