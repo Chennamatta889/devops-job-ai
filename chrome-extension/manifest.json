@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "DraftflowAI Assisted Apply",
+  "version": "0.1.0",
+  "description": "Fill supported job applications in your own browser, pause for human verification, and continue in the same tab.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": {
+    "default_title": "DraftflowAI Assisted Apply",
+    "default_popup": "popup.html"
+  },
+  "host_permissions": [
+    "https://job-boards.greenhouse.io/*",
+    "https://boards.greenhouse.io/*",
+    "https://jobs.lever.co/*",
+    "https://jobs.ashbyhq.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://job-boards.greenhouse.io/*",
+        "https://boards.greenhouse.io/*",
+        "https://jobs.lever.co/*",
+        "https://jobs.ashbyhq.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
