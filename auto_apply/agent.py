@@ -259,16 +259,15 @@ def aggregator_jobs():
             continue
         if not published_within_days(published,30):
             continue
-        for candidate in (listing,direct):
-            if not candidate:
-                continue
-            parsed=urlparse(candidate)
-            if parsed.scheme!="https" or not parsed.hostname:
-                break
-        else:
-            pass
         if not listing:
             continue
+        listing_parsed=urlparse(listing)
+        if listing_parsed.scheme!="https" or not listing_parsed.hostname:
+            continue
+        if direct:
+            direct_parsed=urlparse(direct)
+            if direct_parsed.scheme!="https" or not direct_parsed.hostname:
+                direct=""
         jobs.append({
             "company":str(row.get("company","")).strip() or "Company",
             "title":title,
