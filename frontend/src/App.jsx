@@ -34,12 +34,35 @@ function formatDate(value) {
   }).format(date)
 }
 
+const EXPERIENCE_OPTIONS = [
+  { value: 'all', label: 'All experience' },
+  { value: '0-1', label: '0-1 years', min: 0, max: 1 },
+  { value: '2-3', label: '2-3 years', min: 2, max: 3 },
+  { value: '3-4', label: '3-4 years', min: 3, max: 4 },
+  { value: '4-6', label: '4-6 years', min: 4, max: 6 },
+  { value: '6+', label: '6+ years', min: 6, max: Infinity },
+  { value: 'unspecified', label: 'Not specified' }
+]
+
+function experienceMatches(job, selected) {
+  if (selected === 'all') return true
+  const min = Number.isFinite(job.experience_min) ? job.experience_min : null
+  const max = Number.isFinite(job.experience_max) ? job.experience_max : null
+  if (selected === 'unspecified') return min === null
+  if (min === null) return false
+  const option = EXPERIENCE_OPTIONS.find((item) => item.value === selected)
+  if (!option) return true
+  const jobMax = max === null ? Infinity : max
+  return min <= option.max && jobMax >= option.min
+}
+
 function App() {
   const [feed, setFeed] = useState({ jobs: [], count: 0, generated_at_utc: null })
   const [query, setQuery] = useState('')
   const [location, setLocation] = useState('')
   const [source, setSource] = useState('all')
   const [skill, setSkill] = useState('all')
+  const [experience, setExperience] = useState('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [copiedId, setCopiedId] = useState('')
@@ -96,9 +119,10 @@ function App() {
       if (loc && !jobLocation.includes(loc)) return false
       if (source !== 'all' && job.source !== source) return false
       if (skill !== 'all' && !skills.includes(skill)) return false
+      if (!experienceMatches(job, experience)) return false
       return true
     })
-  }, [feed.jobs, query, location, source, skill])
+  }, [feed.jobs, query, location, source, skill, experience])
 
   async function copyLink(job) {
     try {
@@ -197,6 +221,15 @@ function App() {
               ))}
             </select>
           </div>
+
+          <div className="field">
+            <label>Experience required</label>
+            <select value={experience} onChange={(event) => setExperience(event.target.value)}>
+              {EXPERIENCE_OPTIONS.map((item) => (
+                <option value={item.value} key={item.value}>{item.label}</option>
+              ))}
+            </select>
+          </div>
         </section>
 
         <div className="feed-meta">
@@ -204,7 +237,7 @@ function App() {
             <h2>Live job feed</h2>
             <p>Last feed change: {updatedText}</p>
           </div>
-          {(query || location || source !== 'all' || skill !== 'all') && (
+          {(query || location || source !== 'all' || skill !== 'all' || experience !== 'all') && (
             <button
               className="text-button"
               onClick={() => {
@@ -212,6 +245,7 @@ function App() {
                 setLocation('')
                 setSource('all')
                 setSkill('all')
+                setExperience('all')
               }}
             >
               Clear filters
@@ -242,6 +276,7 @@ function App() {
                 <h3>{job.title}</h3>
                 <div className="company">{prettyCompany(job.company)}</div>
                 <div className="location">{job.location}</div>
+                <div className="experience">Experience: {job.experience_label || 'Not specified'}</div>
 
                 {job.skills?.length > 0 && (
                   <div className="skills">
