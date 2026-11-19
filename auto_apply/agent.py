@@ -91,6 +91,69 @@ def persist(ledger):
                 subprocess.run(["git","rebase","--abort"],capture_output=True)
                 raise RuntimeError("Ledger rebase failed")
         raise RuntimeError("Ledger push failed after retries")
+def publish_public_feed(jobs):
+    """Publish a sanitized job-only feed for the public UI."""
+    aliases={"aws":["amazon web services"],"azure":["microsoft azure"],"kubernetes":["k8s","eks","aks"],"openshift":["ocp","red hat openshift"],"ci/cd":["cicd","ci cd","continuous integration","continuous delivery","continuous deployment"],"jfrog":["artifactory"],"gcp":["google cloud"],"argocd":["argo cd"]}
+    public=[]
+    seen=set()
+    for j in jobs:
+        title=str(j.get("title","")).strip()
+        location=str(j.get("location","")).strip()
+        url=str(j.get("url") or j.get("apply_url") or "").strip()
+        if not title or not relevant_role(title) or not india_location(location):
+            continue
+        parsed=urlparse(url)
+        if parsed.scheme!="https" or not parsed.hostname:
+            continue
+        identity=(str(j.get("company","")).strip().lower(),title.lower(),location.lower(),url)
+        if identity in seen:
+            continue
+        seen.add(identity)
+        body=clean(j.get("description",""))
+        skills=[]
+        for skill in SKILLS:
+            if any(has(body,t) for t in [skill]+aliases.get(skill,[])):
+                skills.append(skill)
+        public.append({
+            "id":hashlib.sha256("|".join(identity).encode()).hexdigest()[:16],
+            "title":title,
+            "company":str(j.get("company","")).strip() or "Company",
+            "location":location,
+            "source":str(j.get("source","career_site")).strip() or "career_site",
+            "published":str(j.get("published") or j.get("publishedAt") or j.get("created_at") or "").strip(),
+            "url":url,
+            "skills":skills[:12],
+        })
+    public.sort(key=lambda x:(x.get("published",""),x["title"].lower()),reverse=True)
+    target=ROOT.parent/"data"/"jobs.json"
+    target.parent.mkdir(parents=True,exist_ok=True)
+    old=None
+    try:
+        old=json.loads(target.read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    if isinstance(old,dict) and old.get("jobs")==public:
+        print("Public job feed unchanged:",len(public))
+        return
+    payload={"generated_at_utc":datetime.now(timezone.utc).isoformat(),"count":len(public),"jobs":public}
+    target.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    print("Public job feed updated:",len(public))
+    if os.getenv("GITHUB_ACTIONS")=="true":
+        subprocess.run(["git","add",str(target)],check=True)
+        if subprocess.run(["git","diff","--cached","--quiet"]).returncode==0:
+            return
+        subprocess.run(["git","commit","-m","Refresh public job feed"],check=True)
+        for attempt in range(3):
+            pushed=subprocess.run(["git","push"],capture_output=True,text=True)
+            if pushed.returncode==0:
+                return
+            print("Feed push retry:",attempt+1,file=sys.stderr)
+            rebased=subprocess.run(["git","pull","--rebase","origin","main"],capture_output=True,text=True)
+            if rebased.returncode!=0:
+                subprocess.run(["git","rebase","--abort"],capture_output=True)
+                raise RuntimeError("Feed rebase failed")
+        raise RuntimeError("Feed push failed after retries")
+
 def email_apply(j,profile,resume):
     address=j["application_email"]
     if not re.fullmatch(r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",address): raise ValueError("Invalid address")
@@ -132,6 +195,7 @@ def main():
     if auto and (not resume.startswith(b"%PDF-") or not os.getenv("SMTP_USER") or not os.getenv("SMTP_APP_PASSWORD")):
         print("Email auto-apply disabled: missing PDF or SMTP configuration."); auto=False
     jobs=get_jobs()
+    publish_public_feed(jobs)
     alerts=discover_alerts()
     with (ROOT/"platform-alerts.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["source","title","location","status","url"])
