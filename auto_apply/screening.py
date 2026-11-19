@@ -23,7 +23,18 @@ def answer_for(question, profile):
         if ("work from office" in q or "work from office role" in q) and profile.get("open_to_onsite") is not None:
             return bool(profile["willing_to_work_in_shifts"]) and bool(profile["open_to_onsite"])
         return bool(profile["willing_to_work_in_shifts"])
-    if q in ("what is the earliest you would want to start","earliest start date","when can you start","when would you be available to start"):
+    if q in ("what is your current notice period","current notice period"):
+        if profile.get("notice_period_days") is not None: return profile["notice_period_days"]
+    if q in ("what is your expected annual ctc range","expected annual ctc range"):
+        if profile.get("expected_ctc_lpa") is not None: return f"{profile['expected_ctc_lpa']:g} LPA"
+        if profile.get("expected_ctc_inr") is not None: return f"{float(profile['expected_ctc_inr'])/100000:g} LPA"
+    if q in ("how did you come to know about plane","how did you hear about us","how did you hear about this role"):
+        if profile.get("application_source"): return profile["application_source"]
+    if q in ("if available immediately what was your last working day in the previous organisation","if available immediately what was your last working day in the previous organization"):
+        if profile.get("immediate_joiner") is False or (isinstance(profile.get("notice_period_days"),int) and profile["notice_period_days"]>0):
+            return f"Not applicable - serving a {profile.get('notice_period_days',0)}-day notice period."
+    if q in ("what is the earliest you would want to start","earliest start date","when can you start","when would you be available to start","if you are offered by when can you join"):
+
         if profile.get("earliest_start_date"): return profile["earliest_start_date"]
         days=profile.get("notice_period_days")
         if type(days) is int and days>=0:
@@ -70,7 +81,7 @@ def answer_for(question, profile):
         (r"^(?:what is your )?(?:notice period|notice period in days|notice period days|how many days is your notice period)$","notice_period_days"),
         (r"^(?:how many years of )?relevant (?:work |professional )?experience(?: do you have| in years)?$","experience_years"),
         (r"^(?:what is your )?(?:total (?:work |professional )?experience in years|total years of experience|years of professional experience|how many years of (?:total |professional |work )?experience do you have)$","experience_years"),
-        (r"^(?:what is your )?(?:linkedin profile|linkedin profile url|linkedin url)$","linkedin"),
+        (r"^(?:what is your )?(?:linkedin profile|linkedin profile url|linkedin profile link|linkedin url)$","linkedin"),
         (r"^(?:what is your )?(?:github profile|github profile url|github url)$","github"),
         (r"^(?:what is your )?(?:highest qualification|highest educational qualification)$","education"),
     )
