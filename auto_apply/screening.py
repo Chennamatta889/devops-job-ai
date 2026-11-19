@@ -83,7 +83,7 @@ def answer_for(question, profile):
         (r"^(?:what is your )?(?:notice period|notice period in days|notice period days|how many days is your notice period)$","notice_period_days"),
                 (r"^(?:how many years of )?relevant (?:work |professional )?experience(?: do you have| in years)?$|^(?:what is your )?total work experience in a similar role capacity$","experience_years"),
         (r"^(?:what is your )?(?:total (?:work |professional )?experience in years|total years of experience|years of professional experience|how many years of (?:total |professional |work )?experience do you have)$","experience_years"),
-        (r"^(?:what is your )?(?:linkedin profile|linkedin profile url|linkedin profile link|linkedin url)$","linkedin"),
+        (r"^(?:(?:what is )?your )?(?:linkedin profile|linkedin profile url|linkedin profile link|linkedin url)$","linkedin"),
         (r"^(?:what is your )?(?:github profile|github profile url|github url)$","github"),
         (r"^(?:what is your )?(?:highest qualification|highest educational qualification)$","education"),
     )
