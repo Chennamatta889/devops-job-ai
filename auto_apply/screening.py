@@ -86,6 +86,10 @@ def answer_for(question, profile):
         (r"^(?:(?:what is )?your )?(?:linkedin profile|linkedin profile url|linkedin profile link|linkedin url)$","linkedin"),
         (r"^(?:what is your )?(?:github profile|github profile url|github url)$","github"),
         (r"^(?:what is your )?(?:highest qualification|highest educational qualification)$","education"),
+        (r"^(?:will you now or in the future require sponsorship|do you (?:now or in the future )?require (?:visa |employment )?sponsorship|will you require sponsorship (?:now or in the future)?|do you require (?:us |u s )?visa sponsorship)$","requires_us_visa_sponsorship"),
+        (r"^(?:do you have an offer in hand|do you currently have an offer in hand|offer in hand)$","offer_in_hand"),
+        (r"^(?:are you willing to take (?:an? )?(?:online |technical )?assessment|are you willing to complete (?:an? )?(?:online |technical )?assessment|assessment consent)$","willing_to_take_assessments"),
+        (r"^(?:can you provide (?:valid )?(?:india |indian )?(?:right to work|work authorization|work eligibility) (?:proof|documents?)|do you have (?:valid )?(?:india |indian )?(?:right to work|work authorization|work eligibility))$","can_provide_india_right_to_work_proof"),
     )
     for pattern,key in fields:
         if re.fullmatch(pattern,q) and profile.get(key) is not None and profile.get(key)!="":
