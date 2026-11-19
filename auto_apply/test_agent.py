@@ -158,4 +158,18 @@ class TargetingAndOptionTests(unittest.TestCase):
         self.assertTrue(option_match("Current location","Hyderabad","Hyderabad, Telangana, India",{"country":"India"}))
         self.assertFalse(option_match("Current location","Hyderabad","Hyderabad, Sindh, Pakistan",{"country":"India"}))
         self.assertFalse(option_match("Expected CTC","11","11 LPA"))
+class DemandbaseAndPlaneTests(unittest.TestCase):
+    def test_demandbase_questions(self):
+        from screening import answer_for
+        p={"notice_period_days":30,"expected_ctc_inr":1100000,"expected_ctc_lpa":11}
+        self.assertEqual(answer_for("What is your current notice period?",p),30)
+        self.assertEqual(answer_for("What is your expected annual CTC range?",p),"11 LPA")
+    def test_plane_joining_and_ctc(self):
+        from screening import answer_for
+        p={"notice_period_days":30,"immediate_joiner":False,"current_ctc_inr":500000,"experience_years":2.9,"application_source":"Company careers page"}
+        self.assertEqual(answer_for("How did you come to know about Plane?",p),"Company careers page")
+        self.assertEqual(answer_for("If you are offered, by when can you join?",p),"Available after my 30-day notice period.")
+        self.assertEqual(answer_for("If available immediately, what was your last working day in the previous organisation?",p),"Not applicable - serving a 30-day notice period.")
+        self.assertEqual(answer_for("What is your current CTC/ last drawn CTC?",p),500000)
+        self.assertEqual(answer_for("What is your total work experience in a similar role/ capacity?",p),2.9)
 if __name__=="__main__": unittest.main()
