@@ -477,6 +477,10 @@ def publish_public_feed(jobs):
                 skills.append(skill)
         source=str(j.get("source","career_site")).strip() or "career_site"
         direct_apply=bool(direct_apply_url) or source in {"greenhouse","lever","ashby","smartrecruiters","recruitee"}
+        auto_apply_host=(urlparse(url).hostname or "").lower()
+        auto_apply_supported=auto_apply_host in {
+            "job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"
+        }
         public.append({
             "id":hashlib.sha256("|".join(identity).encode()).hexdigest()[:16],
             "title":title,
@@ -488,6 +492,7 @@ def publish_public_feed(jobs):
             "url":url,
             "listing_url":listing_url or url,
             "direct_apply":direct_apply,
+            "auto_apply_supported":auto_apply_supported,
             "discovered_via":list(j.get("discovered_via") or []),
             "source_listings":dict(j.get("source_listings") or {}),
             "resolution":str(j.get("resolution") or ""),
