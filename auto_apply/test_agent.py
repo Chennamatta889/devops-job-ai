@@ -172,4 +172,11 @@ class DemandbaseAndPlaneTests(unittest.TestCase):
         self.assertEqual(answer_for("If available immediately, what was your last working day in the previous organisation?",p),"Not applicable - serving a 30-day notice period.")
         self.assertEqual(answer_for("What is your current CTC/ last drawn CTC?",p),500000)
         self.assertEqual(answer_for("What is your total work experience in a similar role/ capacity?",p),2.9)
+class AshbySubmitTests(unittest.TestCase):
+    def test_ashby_submit_signals(self):
+        from portal import ashby_submit_signal
+        self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormSubmitSuccess","_":True},"messages":{}}}}),"success")
+        self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormRender","id":"form"},"messages":{}}}}),"validation")
+        self.assertEqual(ashby_submit_signal({"data":{"submitMultipleFormsAction":{"applicationFormResult":{"__typename":"FormSubmitSuccess","_":True},"messages":{"blockMessageForCandidateHtml":"blocked"}}}}),"blocked")
+        self.assertEqual(ashby_submit_signal({"errors":[{"message":"x"}]}),"")
 if __name__=="__main__": unittest.main()
