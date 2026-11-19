@@ -1,7 +1,7 @@
 """Conservative applicant-side browser adapter; never bypass challenges."""
 import os, json, base64, re, io
 from urllib.parse import urlparse
-from screening import fill_screening
+from screening import fill_screening, unanswered_required
 
 HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
 def portal_enabled(profile, pdf):
@@ -41,7 +41,8 @@ def verification_required(page):
         if selectors.nth(i).is_visible(): return True
     return False
 
-def portal_apply(job, profile, pdf):
+def portal_apply(job, profile, pdf, diagnostic=None):
+    diagnostic=diagnostic if diagnostic is not None else {}
     stage="candidate"
     submitted=False
     try:
@@ -84,7 +85,10 @@ def portal_apply(job, profile, pdf):
             if files.count()!=1: return "portal_review_resume_field"
             stage="screening"
             print("Screening fields filled:",fill_screening(page,data))
-            if page.locator('[role=combobox]:visible[aria-required=true]:not(select), input[type=checkbox]:visible[required], input[type=radio]:visible[required]').count(): return "portal_review_choices"
+            missing=unanswered_required(page)
+            if missing:
+                diagnostic["missing_fields"]=missing
+                return "portal_review_missing_screening_v3"
             selects=page.locator("select:visible[required], select:visible[aria-required=true]")
             for i in range(selects.count()):
                 if not selects.nth(i).input_value(): return "portal_review_unanswered_select"
@@ -95,6 +99,7 @@ def portal_apply(job, profile, pdf):
             if not all(data.get(x) for x in ("email","phone")): return "portal_review_contact"
             buttons=page.get_by_role("button",name=re.compile(r"^(submit application|submit|apply for this job)$",re.I))
             if buttons.count()!=1: return "portal_review_submit_button"
+            if not buttons.is_enabled(): return "portal_review_submit_disabled"
             if verification_required(page): return "portal_review_human_verification_v2"
             stage="resume_upload"
             files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":pdf})
@@ -111,3 +116,5 @@ def portal_apply(job, profile, pdf):
     except Exception as exc:
         print("Portal diagnostic:",stage,type(exc).__name__)
         return "portal_uncertain_"+stage if submitted else "portal_review_"+stage+"_error"
+    finally:
+        diagnostic["stage"]=stage
