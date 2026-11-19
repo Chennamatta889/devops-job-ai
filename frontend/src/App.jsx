@@ -103,6 +103,12 @@ function App() {
     [feed.jobs]
   )
 
+  const normalizedSource = source === 'all' || sourceOptions.includes(source) ? source : 'all'
+  const normalizedSkill = skill === 'all' || skillOptions.includes(skill) ? skill : 'all'
+  const normalizedExperience = EXPERIENCE_OPTIONS.some((item) => item.value === experience)
+    ? experience
+    : 'all'
+
   const filteredJobs = useMemo(() => {
     const q = query.trim().toLowerCase()
     const loc = location.trim().toLowerCase()
@@ -117,12 +123,12 @@ function App() {
         return false
       }
       if (loc && !jobLocation.includes(loc)) return false
-      if (source !== 'all' && job.source !== source) return false
-      if (skill !== 'all' && !skills.includes(skill)) return false
-      if (!experienceMatches(job, experience)) return false
+      if (normalizedSource !== 'all' && job.source !== normalizedSource) return false
+      if (normalizedSkill !== 'all' && !skills.includes(normalizedSkill)) return false
+      if (!experienceMatches(job, normalizedExperience)) return false
       return true
     })
-  }, [feed.jobs, query, location, source, skill, experience])
+  }, [feed.jobs, query, location, normalizedSource, normalizedSkill, normalizedExperience])
 
   async function copyLink(job) {
     try {
@@ -204,7 +210,7 @@ function App() {
 
           <div className="field">
             <label>Source</label>
-            <select value={source} onChange={(event) => setSource(event.target.value)}>
+            <select value={normalizedSource} onChange={(event) => setSource(event.target.value)}>
               <option value="all">All sources</option>
               {sourceOptions.map((item) => (
                 <option value={item} key={item}>{prettySource(item)}</option>
@@ -214,7 +220,7 @@ function App() {
 
           <div className="field">
             <label>Skill</label>
-            <select value={skill} onChange={(event) => setSkill(event.target.value)}>
+            <select value={normalizedSkill} onChange={(event) => setSkill(event.target.value)}>
               <option value="all">All skills</option>
               {skillOptions.map((item) => (
                 <option value={item} key={item}>{item}</option>
@@ -224,7 +230,7 @@ function App() {
 
           <div className="field">
             <label>Experience required</label>
-            <select value={experience} onChange={(event) => setExperience(event.target.value)}>
+            <select value={normalizedExperience} onChange={(event) => setExperience(event.target.value)}>
               {EXPERIENCE_OPTIONS.map((item) => (
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
@@ -237,7 +243,7 @@ function App() {
             <h2>Live job feed</h2>
             <p>Last feed change: {updatedText}</p>
           </div>
-          {(query || location || source !== 'all' || skill !== 'all' || experience !== 'all') && (
+          {(query.trim() || location.trim() || normalizedSource !== 'all' || normalizedSkill !== 'all' || normalizedExperience !== 'all') && (
             <button
               className="text-button"
               onClick={() => {
@@ -262,7 +268,7 @@ function App() {
         ) : filteredJobs.length === 0 ? (
           <div className="empty-state">
             <h3>No jobs match these filters.</h3>
-            <p>Try a broader role, location, source or skill.</p>
+            <p>Try a broader role, location, source, skill or experience range.</p>
           </div>
         ) : (
           <section className="job-grid">
