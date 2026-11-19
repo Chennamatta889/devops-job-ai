@@ -35,9 +35,11 @@ def linkedin_from_sent_mail(name):
             if status!="OK":
                 status,_=box.select('"[Gmail]/All Mail"',readonly=True)
             if status!="OK": return ""
-            typ,ids=box.uid("search",None,"ALL")
+            typ,ids=box.uid("search",None,"BODY",'"linkedin.com/in/"')
+            if typ!="OK" or not (ids[0] or b"").strip():
+                typ,ids=box.uid("search",None,"ALL")
             if typ!="OK": return ""
-            for uid in (ids[0] or b"").split()[-150:]:
+            for uid in (ids[0] or b"").split()[-60:]:
                 typ,parts=box.uid("fetch",uid,"(BODY.PEEK[])")
                 if typ!="OK": continue
                 for item in parts:
