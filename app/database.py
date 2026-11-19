@@ -3,10 +3,10 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-DATA_DIR = "/app/data"
+DATA_DIR = os.getenv("DATA_DIR", "/app/data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
-DATABASE_URL = f"sqlite:///{DATA_DIR}/devops_job_ai.db"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DATA_DIR}/devops_job_ai.db")
 
 engine = create_engine(
     DATABASE_URL,
