@@ -97,7 +97,7 @@ def main():
     profile=json.loads(os.environ["PROFILE_JSON"])
     actual_years=float(profile.get("max_required_years",3))
     profile["max_required_years"]=max(actual_years,4)
-    profile["minimum_match"]=int(os.getenv("MINIMUM_MATCH","").strip() or "65")
+    profile["minimum_match"]=0  # Skill score ranks jobs; never rejects them.
     ledger=json.loads(STATE.read_text()) if STATE.exists() else {}
     auto=os.getenv("AUTO_APPLY","").strip().lower()!="false"
     raw=os.getenv("RESUME_BASE64","") or (os.getenv("RESUME_PART_1","")+os.getenv("RESUME_PART_2",""))
@@ -140,10 +140,10 @@ def main():
         if k in seen:
             audit_row(j,score,matched,missing,reason,"duplicate_in_run"); continue
         seen.add(k)
-        if score<profile.get("minimum_match",65):
-            audit_row(j,score,matched,missing,reason,"below_threshold" if score else "filtered_"+reason.replace(" ","_")); continue
+        if reason in ("role","location","experience"):
+            audit_row(j,score,matched,missing,reason,"filtered_"+reason); continue
         real_profile=dict(profile,max_required_years=actual_years)
-        if match(j,real_profile)[0]==0 and reason=="matched": reason="stretch experience - review only"
+        if match(j,real_profile)[3]=="experience" and reason=="matched": reason="stretch experience - review only"
         status=ledger.get(k,"review_portal")
         if k not in ledger:
             if reason!="matched": status="review_"+reason.replace(" ","_")
@@ -151,7 +151,7 @@ def main():
             elif not portal_on and not auto: status="review_application_disabled"
             elif j.get("source") in ("greenhouse","lever","ashby") and portal_on: status="portal_eligible_waiting_limit"
             else: status="review_no_supported_application_channel"
-        eligible=reason=="matched" and score>=65 and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever","ashby","smartrecruiters")
+        eligible=reason=="matched" and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever","ashby","smartrecruiters")
         if k not in ledger and eligible:
             status="ready_email"
             if auto and count<min(int(profile.get("max_per_run",5)),10):
@@ -162,7 +162,7 @@ def main():
                 except Exception:
                     ledger[k]="uncertain_manual_review"; status=ledger[k]
                 persist(ledger)
-        if k not in ledger and portal_on and reason=="matched" and score>=profile["minimum_match"] and j.get("source") in ("greenhouse","lever","ashby") and portal_count<3:
+        if k not in ledger and portal_on and reason=="matched" and j.get("source") in ("greenhouse","lever","ashby") and portal_count<3:
             ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
             status=portal_apply(j,profile,resume)
             if status=="portal_confirmed": confirmed+=1
