@@ -1,6 +1,6 @@
 """Scheduled job matcher and opt-in email application agent (stdlib only)."""
 import csv, hashlib, json, os, re, smtplib, ssl, subprocess, sys, io
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from email.message import EmailMessage
 from pathlib import Path
 from urllib.request import urlopen
@@ -8,18 +8,57 @@ from urllib.parse import quote, urlparse
 from html import unescape
 from concurrent.futures import ThreadPoolExecutor
 from collections import Counter
-from india_sources import india_location, relevant_role, discover
+from india_sources import india_location, relevant_role, technology_role, technology_category, discover
 from job_alerts import discover_alerts
 from reconcile import read_acknowledgments, ack_matches
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / "ledger.json"
 ROLES = r"\b(devops|devsecops|site reliability|sre|cloud (?:engineer|platform|infrastructure|operations)|platform engineer|release engineer)\b"
-SKILLS = ["aws","azure","jenkins","kubernetes","openshift","docker","terraform","linux","python","ci/cd","jfrog","git","dynatrace","splunk","ansible","prometheus","grafana","helm","argocd","gcp","datadog","bash","github actions"]
+SKILLS = [
+    "java","spring boot",".net","c#","python","javascript","typescript","react","angular","node.js","golang","php","ruby","scala",
+    "android","ios","sql","postgresql","mysql","mongodb","redis","kafka","spark","databricks","snowflake","etl","power bi","tableau",
+    "machine learning","tensorflow","pytorch","llm","genai","aws","azure","gcp","jenkins","github actions","kubernetes","openshift",
+    "docker","terraform","ansible","linux","bash","ci/cd","jfrog","git","dynatrace","splunk","prometheus","grafana","helm","argocd",
+    "datadog","selenium","playwright","cypress","appium","jmeter","postman","cybersecurity","iam","servicenow","salesforce","sap"
+]
 def clean(s):
     return unescape(re.sub(r"<[^>]+>", " ", str(s or ""))).lower()
 def has(s, term):
     return bool(re.search(r"(?<![\w])"+re.escape(term)+r"(?![\w])", s))
+def normalize_published(value):
+    if value in (None,""):
+        return ""
+    if isinstance(value,(int,float)):
+        number=float(value)
+        if number>10_000_000_000:
+            number/=1000
+        try:
+            return datetime.fromtimestamp(number,tz=timezone.utc).isoformat()
+        except Exception:
+            return ""
+    raw=str(value).strip()
+    if not raw:
+        return ""
+    try:
+        dt=datetime.fromisoformat(raw.replace("Z","+00:00"))
+        if dt.tzinfo is None:
+            dt=dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc).isoformat()
+    except Exception:
+        return ""
+
+def published_within_days(value,days=30):
+    published=normalize_published(value)
+    if not published:
+        return False
+    try:
+        dt=datetime.fromisoformat(published)
+    except Exception:
+        return False
+    now=datetime.now(timezone.utc)
+    return now-timedelta(days=days) <= dt <= now+timedelta(hours=6)
+
 def extract_experience_requirement(text):
     """Return a conservative min/max years requirement from public job text."""
     body=clean(text)
@@ -81,9 +120,9 @@ def get_jobs():
             found=[]
             for j in (data["jobs"] if kind=="greenhouse" else data):
                 if kind=="greenhouse":
-                    found.append(dict(id=str(j["id"]),company=board,title=j["title"],description=j.get("content",""),location=j.get("location",{}).get("name",""),url=j.get("absolute_url",""),source=kind))
+                    found.append(dict(id=str(j["id"]),company=board,title=j["title"],description=j.get("content",""),location=j.get("location",{}).get("name",""),url=j.get("absolute_url",""),published=normalize_published(j.get("updated_at") or j.get("created_at")),source=kind))
                 else:
-                    found.append(dict(id=str(j["id"]),company=board,title=j.get("text",""),description=j.get("descriptionPlain","")+" "+ " ".join(x.get("text","")+" "+x.get("content","") for x in j.get("lists",[])),location=j.get("categories",{}).get("location",""),url=j.get("hostedUrl",""),source=kind))
+                    found.append(dict(id=str(j["id"]),company=board,title=j.get("text",""),description=j.get("descriptionPlain","")+" "+ " ".join(x.get("text","")+" "+x.get("content","") for x in j.get("lists",[])),location=j.get("categories",{}).get("location",""),url=j.get("hostedUrl",""),published=normalize_published(j.get("createdAt") or j.get("updatedAt")),source=kind))
             print("Source:",kind,board,"jobs:",len(found))
             return found
         except Exception as e:
@@ -93,9 +132,9 @@ def get_jobs():
         for found in pool.map(fetch,sources):
             jobs.extend(found)
     print("Raw legacy board jobs:",len(jobs))
-    jobs=[j for j in jobs if india_location(j.get("location")) and relevant_role(j.get("title"))]
-    jobs.extend(discover())
-    if not jobs: print("No India-based target jobs discovered.")
+    jobs=[j for j in jobs if india_location(j.get("location")) and technology_role(j.get("title"))]
+    jobs.extend(discover(all_tech=True))
+    if not jobs: print("No India-based technology jobs discovered.")
     return jobs
 def key(j):
     identity = str(j.get("company","")).strip().lower()+"|"+str(j.get("title","")).strip().lower()+"|"+str(j.get("location","")).strip().lower()
@@ -126,7 +165,7 @@ def publish_public_feed(jobs):
         title=str(j.get("title","")).strip()
         location=str(j.get("location","")).strip()
         url=str(j.get("url") or j.get("apply_url") or "").strip()
-        if not title or not relevant_role(title) or not india_location(location):
+        if not title or not technology_role(title) or not india_location(location):
             continue
         parsed=urlparse(url)
         if parsed.scheme!="https" or not parsed.hostname:
@@ -135,6 +174,10 @@ def publish_public_feed(jobs):
         if identity in seen:
             continue
         seen.add(identity)
+        published=normalize_published(j.get("published") or j.get("publishedAt") or j.get("created_at"))
+        if not published_within_days(published,30):
+            continue
+        category=technology_category(title)
         body=clean(j.get("description",""))
         experience=extract_experience_requirement(j.get("description",""))
         skills=[]
@@ -147,7 +190,8 @@ def publish_public_feed(jobs):
             "company":str(j.get("company","")).strip() or "Company",
             "location":location,
             "source":str(j.get("source","career_site")).strip() or "career_site",
-            "published":str(j.get("published") or j.get("publishedAt") or j.get("created_at") or "").strip(),
+            "category":category,
+            "published":published,
             "url":url,
             "skills":skills[:12],
             "experience_min":experience["min"],
