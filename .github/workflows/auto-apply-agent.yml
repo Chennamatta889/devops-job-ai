@@ -2,7 +2,7 @@ name: Job application agent
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 4,12 * * *'
+    - cron: '30 * * * *'
 permissions:
   contents: write
 concurrency:
@@ -11,7 +11,7 @@ concurrency:
 jobs:
   match:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,6 +21,11 @@ jobs:
       - run: |
           git config user.name "job-agent[bot]"
           git config user.email "job-agent@users.noreply.github.com"
+      - name: Install browser for optional portal submissions
+        if: ${{ vars.PORTAL_AUTO_APPLY == 'true' }}
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
       - name: Discover and match
         if: ${{ env.PROFILE_JSON != '' }}
         env:
@@ -32,6 +37,10 @@ jobs:
           RESUME_PART_1: ${{ secrets.RESUME_PART_1 }}
           RESUME_PART_2: ${{ secrets.RESUME_PART_2 }}
           RESUME_BASE64: ${{ secrets.RESUME_BASE64 }}
+          LEVER_BOARDS: ${{ secrets.LEVER_BOARDS }}
+          MINIMUM_MATCH: ${{ vars.MINIMUM_MATCH }}
+          PORTAL_PROFILE_JSON: ${{ secrets.PORTAL_PROFILE_JSON }}
+          PORTAL_AUTO_APPLY: ${{ vars.PORTAL_AUTO_APPLY }}
           AUTO_APPLY: ${{ vars.AUTO_APPLY }}
         run: python auto_apply/agent.py
       - uses: actions/upload-artifact@v4
