@@ -118,4 +118,14 @@ class ExpandedProfileTests(unittest.TestCase):
         profile={"experience_years":2.9,"willing_to_relocate":True}
         for question in ("AWS experience in years","Are you authorized to work in the US?","Do you have a security clearance?","Current CTC","Expected joining date"):
             self.assertIsNone(answer_for(question,profile))
+class IndeedAlertTests(unittest.TestCase):
+    def test_indeed_links(self):
+        html='<a href="https://in.indeed.com/viewjob?jk=0123456789abcdef&amp;from=alert">DevOps Engineer</a><a href="https://www.indeed.com/rc/clk?jk=0123456789abcdef">DevOps Engineer</a>'
+        rows=parse_alert(html,"Daily jobs","indeed_alert")
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]["url"],"https://in.indeed.com/viewjob?jk=0123456789abcdef")
+        self.assertEqual(rows[0]["location"],"Unverified location")
+    def test_reject_invalid_links(self):
+        self.assertEqual(platform("https://indeed.com.evil.example/viewjob?jk=0123456789abcdef"),"")
+        self.assertEqual(platform("https://in.indeed.com/viewjob?jk=invalid"),"")
 if __name__=="__main__": unittest.main()
