@@ -12,7 +12,8 @@ function prettySource(value = '') {
     smartrecruiters: 'SmartRecruiters',
     linkedin_alert: 'LinkedIn',
     naukri_alert: 'Naukri',
-    indeed_alert: 'Indeed'
+    indeed_alert: 'Indeed',
+    foundit_alert: 'Foundit'
   }
   return names[value] || value.replaceAll('_', ' ') || 'Career site'
 }
@@ -165,6 +166,11 @@ function App() {
     }
   }
 
+  const directCount = useMemo(
+    () => feed.jobs.filter((job) => job.direct_apply).length,
+    [feed.jobs]
+  )
+
   const updatedText = feed.generated_at_utc
     ? new Intl.DateTimeFormat('en-IN', {
         dateStyle: 'medium',
@@ -207,8 +213,8 @@ function App() {
             <span>matching your filters</span>
           </div>
           <div>
-            <strong>Direct</strong>
-            <span>employer apply links</span>
+            <strong>{directCount}</strong>
+            <span>direct employer/ATS links</span>
           </div>
         </div>
       </header>
@@ -352,11 +358,22 @@ function App() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    View & apply
+                    {job.direct_apply ? 'Direct company apply' : 'View on ' + prettySource(job.source)}
                   </a>
-                  <button className="secondary-button" onClick={() => copyLink(job)}>
-                    {copiedId === job.id ? 'Copied' : 'Copy link'}
-                  </button>
+                  {job.direct_apply && job.listing_url ? (
+                    <a
+                      className="secondary-button"
+                      href={job.listing_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Source listing
+                    </a>
+                  ) : (
+                    <button className="secondary-button" onClick={() => copyLink(job)}>
+                      {copiedId === job.id ? 'Copied' : 'Copy link'}
+                    </button>
+                  )}
                 </div>
               </article>
             ))}
