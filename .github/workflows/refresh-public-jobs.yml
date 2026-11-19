@@ -4,6 +4,13 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '15 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'auto_apply/agent.py'
+      - 'auto_apply/india_sources.py'
+      - 'auto_apply/test_agent.py'
+      - '.github/workflows/refresh-public-jobs.yml'
 
 permissions:
   contents: write
@@ -37,4 +44,5 @@ jobs:
       - name: Refresh public technology feed
         env:
           PUBLIC_FEED_ONLY: 'true'
+          AGGREGATOR_JOB_FEED_JSON: ${{ secrets.AGGREGATOR_JOB_FEED_JSON }}
         run: python auto_apply/agent.py
