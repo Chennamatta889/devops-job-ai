@@ -27,13 +27,27 @@ LOGIN_RE = re.compile(r"sign in|log in|login|create an account", re.I)
 SUCCESS_RE = re.compile(r"application submitted|application has been submitted|thank you for applying|thanks for applying|application received|successfully applied", re.I)
 
 
+SUPPORTED_AUTO_APPLY_HOSTS=(
+    "job-boards.greenhouse.io",
+    "boards.greenhouse.io",
+    "jobs.lever.co",
+    "jobs.ashbyhq.com",
+)
+
+def auto_submit_supported(url: str) -> bool:
+    try:
+        host=(urlparse(url).hostname or "").lower()
+    except Exception:
+        return False
+    return any(host==allowed or host.endswith("."+allowed) for allowed in SUPPORTED_AUTO_APPLY_HOSTS)
+
 def _profile_values(profile):
     parts = (profile.name or "").strip().split()
     first_name = parts[0] if parts else ""
     last_name = " ".join(parts[1:]) if len(parts) > 1 else ""
 
-    email = os.getenv("CANDIDATE_EMAIL", "")
-    phone = os.getenv("CANDIDATE_PHONE", "")
+    email = str(getattr(profile, "email", "") or os.getenv("CANDIDATE_EMAIL", ""))
+    phone = str(getattr(profile, "phone", "") or os.getenv("CANDIDATE_PHONE", ""))
     return {
         "first_name": first_name,
         "last_name": last_name,
@@ -125,6 +139,36 @@ def _fill_cover_letter(page, cover_letter: str):
     ])
     return _fill(locator, cover_letter)
 
+
+def _unanswered_required_fields(page):
+    """Return visible required controls that still have no value after safe autofill."""
+    missing=[]
+    selectors='input[required], textarea[required], select[required]'
+    locator=page.locator(selectors)
+    try:
+        count=locator.count()
+    except Exception:
+        return missing
+    for index in range(count):
+        item=locator.nth(index)
+        try:
+            if not item.is_visible():
+                continue
+            typ=(item.get_attribute("type") or "").lower()
+            if typ in {"hidden","submit","button","file"}:
+                continue
+            if typ in {"checkbox","radio"}:
+                if item.is_checked():
+                    continue
+            else:
+                value=item.input_value(timeout=1000)
+                if str(value or "").strip():
+                    continue
+            label=(item.get_attribute("aria-label") or item.get_attribute("name") or item.get_attribute("id") or "required field")
+            missing.append(label[:120])
+        except Exception:
+            continue
+    return missing
 
 def _attach_resume(page, pdf_path: Path):
     inputs = page.locator('input[type="file"]')
@@ -253,7 +297,7 @@ def _find_submit_button(page):
     return None
 
 
-def submit_application(application, artifact, profile) -> SubmissionResult:
+def submit_application(application, artifact, profile, resume_pdf_bytes: bytes | None = None) -> SubmissionResult:
     """Attempt a permitted browser submission after explicit approval.
 
     This intentionally does not bypass CAPTCHA, MFA, login walls, bot checks,
@@ -263,7 +307,18 @@ def submit_application(application, artifact, profile) -> SubmissionResult:
     timeout_ms = int(os.getenv("APPLICATION_BROWSER_TIMEOUT_MS", "15000"))
     headless = os.getenv("PLAYWRIGHT_HEADLESS", "true").lower() != "false"
 
-    resume_pdf = _make_resume_pdf(artifact.tailored_resume or "")
+    if not auto_submit_supported(application.apply_url):
+        return SubmissionResult("MANUAL_ACTION_REQUIRED", "Automatic submission is not enabled for this ATS yet.", application.apply_url)
+
+    temp_uploaded=None
+    if resume_pdf_bytes:
+        fd, raw_path=tempfile.mkstemp(prefix="uploaded_resume_",suffix=".pdf")
+        os.close(fd)
+        temp_uploaded=Path(raw_path)
+        temp_uploaded.write_bytes(resume_pdf_bytes)
+        resume_pdf=temp_uploaded
+    else:
+        resume_pdf = _make_resume_pdf(artifact.tailored_resume or "")
 
     try:
         with sync_playwright() as playwright:
@@ -301,6 +356,14 @@ def submit_application(application, artifact, profile) -> SubmissionResult:
             _fill_common_fields(page, profile)
             _fill_cover_letter(page, artifact.cover_letter or "")
             _attach_resume(page, resume_pdf)
+
+            unanswered=_unanswered_required_fields(page)
+            if unanswered:
+                return SubmissionResult(
+                    "MANUAL_ACTION_REQUIRED",
+                    "Required application fields need candidate input: "+", ".join(unanswered[:8]),
+                    final_url,
+                )
 
             submit_button = _find_submit_button(page)
             if not submit_button:
