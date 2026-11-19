@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 from portal import candidate_data, portal_enabled
-from agent import match, key
+from agent import match, key, extract_experience_requirement
 from job_alerts import parse_alert, platform
 from india_sources import india_location, relevant_role
 class AgentTests(unittest.TestCase):
@@ -18,6 +18,11 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(match(dict(self.j,description="AWS Jenkins Docker"),self.p)[3],"experience unclear")
     def test_duplicate(self):
         self.assertEqual(key(self.j),key(dict(self.j,url="other")))
+    def test_experience_extraction(self):
+        self.assertEqual(extract_experience_requirement("Need 2-4 years of DevOps experience"),{"min":2,"max":4,"label":"2-4 years"})
+        self.assertEqual(extract_experience_requirement("Minimum 3 years experience required"),{"min":3,"max":None,"label":"3+ years"})
+        self.assertEqual(extract_experience_requirement("5+ years in cloud operations"),{"min":5,"max":None,"label":"5+ years"})
+        self.assertEqual(extract_experience_requirement("Strong AWS and Kubernetes skills"),{"min":None,"max":None,"label":"Not specified"})
 class PortalTests(unittest.TestCase):
     @patch.dict("os.environ", {"SMTP_USER":"candidate@example.com","PORTAL_PROFILE_JSON":"","PORTAL_AUTO_APPLY":""})
     def test_existing_secrets(self):
