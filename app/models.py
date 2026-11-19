@@ -103,3 +103,20 @@ class ResumeVariant(Base):
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class AutoApplyAttempt(Base):
+    __tablename__ = "auto_apply_attempts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_key: Mapped[str] = mapped_column(String(120), index=True)
+    external_job_id: Mapped[str] = mapped_column(String(120), index=True)
+    title: Mapped[str] = mapped_column(String(240))
+    company: Mapped[str] = mapped_column(String(200))
+    location: Mapped[str] = mapped_column(String(240), default="")
+    apply_url: Mapped[str] = mapped_column(String(1200))
+    match_score: Mapped[float] = mapped_column(Float, default=0)
+    status: Mapped[str] = mapped_column(String(60), default="QUEUED")
+    message: Mapped[str] = mapped_column(Text, default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
