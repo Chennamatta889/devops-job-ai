@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -26,10 +28,12 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-ubuntu-24.04-${{ runner.arch }}-1.51.0
+      - name: Install PDF validation dependency
+        run: pip install pypdf
       - name: Install browser for optional portal submissions
         if: ${{ vars.PORTAL_AUTO_APPLY != 'false' }}
         run: |
-          pip install playwright==1.51.0 pypdf
+          pip install playwright==1.51.0
           python -m playwright install --with-deps chromium
       - name: Discover and match
         if: ${{ env.PROFILE_JSON != '' }}
@@ -49,6 +53,7 @@ jobs:
           AUTO_APPLY: ${{ vars.AUTO_APPLY }}
         run: python auto_apply/agent.py
       - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
         with:
           name: matched-jobs
           path: |
