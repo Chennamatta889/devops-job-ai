@@ -81,6 +81,11 @@ def answer_for(question, profile):
 def as_text(value):
     if isinstance(value,bool): return "Yes" if value else "No"
     return str(value)
+def option_match(question, value, label):
+    q=normalize(question); v=normalize(value); l=normalize(label)
+    if not v or not l: return False
+    if l==v: return True
+    return bool(re.search(r"\b(?:location|city)\b",q)) and l.startswith(v+" ")
 def field_question(field):
     return field.evaluate("""el => {
         const labels=Array.from(el.labels||[]).map(l=>l.innerText);
@@ -108,7 +113,7 @@ def fill_screening(page,profile):
         if field.get_attribute("type")=="date" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}",value): continue
         if tag=="select":
             options=field.locator("option").evaluate_all("els => els.map(e => ({label:e.textContent.trim(), value:e.value, disabled:e.disabled}))")
-            choices=[o for o in options if not o["disabled"] and o["value"] and normalize(o["label"])==normalize(value)]
+            choices=[o for o in options if not o["disabled"] and o["value"] and option_match(question,value,o["label"])]
             if len(choices)!=1: continue
             field.select_option(value=choices[0]["value"])
         else:
@@ -150,10 +155,17 @@ def fill_screening(page,profile):
         controls=field.get_attribute("aria-controls")
         if not controls: continue
         field.click()
-        scope=page.locator('[role=listbox]:visible').filter(has=page.get_by_role("option",name=as_text(answer),exact=True))
-        options=scope.get_by_role("option",name=as_text(answer),exact=True)
-        if scope.count()==1 and scope.get_attribute("id")==controls and options.count()==1 and options.is_enabled():
-            options.click()
+        scope=page.locator('[role=listbox]:visible')
+        if scope.count()!=1 or scope.get_attribute("id")!=controls:
+            field.press("Escape"); continue
+        options=scope.get_by_role("option")
+        matches=[]
+        for j in range(options.count()):
+            opt=options.nth(j)
+            if opt.is_visible() and opt.is_enabled() and option_match(question,answer,opt.inner_text()):
+                matches.append(opt)
+        if len(matches)==1:
+            matches[0].click()
             filled+=1
         else:
             field.press("Escape")
