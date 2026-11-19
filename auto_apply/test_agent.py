@@ -83,4 +83,12 @@ class VerificationTests(unittest.TestCase):
         p.get_by_text.return_value.count.return_value=1
         p.get_by_text.return_value.nth.return_value.is_visible.return_value=True
         self.assertTrue(verification_required(p))
+class ReconciliationTests(unittest.TestCase):
+    def test_acknowledgment(self):
+        from reconcile import ack_matches
+        job={"company":"ExampleCo","title":"DevOps Engineer"}
+        self.assertTrue(ack_matches("Application confirmation","ExampleCo: Thank you for applying to DevOps Engineer.","jobs@ashbyhq.com",job))
+        self.assertFalse(ack_matches("Application confirmation","ExampleCo: Thank you for applying to Cloud Engineer.","jobs@ashbyhq.com",job))
+        self.assertFalse(ack_matches("Application confirmation","ExampleCo: Thank you for applying to DevOps Engineer.","someone@gmail.com",job))
+        self.assertFalse(ack_matches("Application confirmation","ExampleCo: Failed to submit. Your application received an error for DevOps Engineer.","jobs@ashbyhq.com",job))
 if __name__=="__main__": unittest.main()
