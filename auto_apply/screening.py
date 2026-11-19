@@ -74,8 +74,8 @@ def field_question(field):
         const aria=ids.map(id=>document.getElementById(id)?.innerText||'');
         const group=el.closest('fieldset');
         const legend=group?.querySelector('legend')?.innerText||'';
-        const lever=el.closest(".application-question,.application-field,.custom-question,.application-question-container,.application-question-group,[data-field-id]");
-        const prompt=lever?.querySelector(".application-label,.application-question-label,.question-label,.application-question-title,legend,[role=heading]")?.innerText||"";
+        const lever=el.closest(".application-question,.custom-question,.application-question-container,.application-question-group,[data-field-id],[data-qa*=question]");
+        const prompt=lever?.querySelector("label:not([for]),.application-label,.application-question-label,.question-label,.application-question-title,legend,[role=heading]")?.innerText||"";
         return (el.getAttribute('aria-label')||aria.join(' ').trim()||labels.join(' ').trim()||legend||prompt||el.getAttribute('placeholder')||'').trim();
     }""")
 def fill_screening(page,profile):
@@ -164,9 +164,10 @@ def unanswered_required(page):
             const legend=el.closest('fieldset')?.querySelector('legend')?.innerText;
             const labels=Array.from(el.labels||[]).map(l=>l.innerText).join(' ');
             const aria=(el.getAttribute('aria-labelledby')||'').split(/\\s+/).map(id=>document.getElementById(id)?.innerText||'').join(' ');
-            const wrapper=el.closest('.application-question,.application-field,.custom-question,.application-question-container');
-            const prompt=wrapper?.querySelector('.application-label,.application-question-label,.question-label,.application-question-title')?.innerText;
-            const label=(legend||el.getAttribute('aria-label')||aria.trim()||labels||prompt||el.getAttribute('placeholder')||el.name||'Unlabeled required field').replace(/\\s+/g,' ').trim().slice(0,180);
+            const wrapper=el.closest('.application-question,.custom-question,.application-question-container,.application-question-group,[data-field-id],[data-qa*=question]');
+            const prompt=wrapper?.querySelector('label:not([for]),.application-label,.application-question-label,.question-label,.application-question-title,legend,[role=heading]')?.innerText;
+            const groupPrompt=(el.type==='radio'||el.type==='checkbox') ? prompt : '';
+            const label=(legend||groupPrompt||el.getAttribute('aria-label')||aria.trim()||labels||prompt||el.getAttribute('placeholder')||el.name||'Unlabeled required field').replace(/\\s+/g,' ').trim().slice(0,180);
             if(!visited.has(label)){visited.add(label);missing.push(label)}
         }
         return missing.slice(0,30);
