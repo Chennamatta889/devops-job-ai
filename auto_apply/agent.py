@@ -9,7 +9,6 @@ from html import unescape
 from concurrent.futures import ThreadPoolExecutor
 from collections import Counter
 from india_sources import india_location, relevant_role, technology_role, technology_category, discover
-from job_alerts import discover_alerts
 from reconcile import read_acknowledgments, ack_matches
 
 ROOT = Path(__file__).resolve().parent
@@ -233,6 +232,57 @@ def match(job, profile):
     weights={"aws":3,"azure":3,"kubernetes":3,"openshift":3,"jenkins":3,"ci/cd":3,"terraform":3,"docker":2,"linux":2,"python":2,"gcp":3,"ansible":2,"prometheus":2,"grafana":2}
     score = round(100*sum(weights.get(s,1) for s in matched)/sum(weights.get(s,1) for s in required)) if len(required)>=3 else 0
     return score, matched, missing, "matched" if years else "experience unclear"
+def aggregator_jobs():
+    """Load optional approved aggregator/partner feed rows without accessing email."""
+    raw=os.getenv("AGGREGATOR_JOB_FEED_JSON","").strip()
+    if not raw:
+        return []
+    try:
+        rows=json.loads(raw)
+    except Exception:
+        print("AGGREGATOR_JOB_FEED_JSON is invalid JSON",file=sys.stderr)
+        return []
+    if not isinstance(rows,list):
+        return []
+    allowed={"linkedin","indeed","naukri","foundit"}
+    jobs=[]
+    for row in rows:
+        if not isinstance(row,dict):
+            continue
+        source=str(row.get("source","")).strip().lower()
+        title=str(row.get("title","")).strip()
+        location=str(row.get("location","")).strip()
+        listing=str(row.get("listing_url") or row.get("url") or "").strip()
+        direct=str(row.get("direct_apply_url") or "").strip()
+        published=normalize_published(row.get("published") or row.get("published_at"))
+        if source not in allowed or not title or not technology_role(title) or not india_location(location):
+            continue
+        if not published_within_days(published,30):
+            continue
+        for candidate in (listing,direct):
+            if not candidate:
+                continue
+            parsed=urlparse(candidate)
+            if parsed.scheme!="https" or not parsed.hostname:
+                break
+        else:
+            pass
+        if not listing:
+            continue
+        jobs.append({
+            "company":str(row.get("company","")).strip() or "Company",
+            "title":title,
+            "location":location,
+            "description":str(row.get("description","")),
+            "url":listing,
+            "listing_url":listing,
+            "direct_apply_url":direct,
+            "published":published,
+            "source":source,
+        })
+    print("Approved aggregator feed jobs:",len(jobs))
+    return jobs
+
 def get_jobs():
     jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
     if not isinstance(jobs,list): raise ValueError("JOB_FEED_JSON must be an array")
@@ -264,6 +314,7 @@ def get_jobs():
     print("Raw legacy board jobs:",len(jobs))
     jobs=[j for j in jobs if india_location(j.get("location")) and technology_role(j.get("title"))]
     jobs.extend(discover(all_tech=True))
+    jobs.extend(aggregator_jobs())
     if not jobs: print("No India-based technology jobs discovered.")
     return jobs
 def key(j):
@@ -294,13 +345,15 @@ def publish_public_feed(jobs):
     for j in jobs:
         title=str(j.get("title","")).strip()
         location=str(j.get("location","")).strip()
-        url=str(j.get("url") or j.get("apply_url") or "").strip()
+        listing_url=str(j.get("listing_url") or j.get("url") or "").strip()
+        direct_apply_url=str(j.get("direct_apply_url") or j.get("apply_url") or "").strip()
+        url=direct_apply_url or listing_url
         if not title or not technology_role(title) or not india_location(location):
             continue
         parsed=urlparse(url)
         if parsed.scheme!="https" or not parsed.hostname:
             continue
-        identity=(str(j.get("company","")).strip().lower(),title.lower(),location.lower(),url)
+        identity=(str(j.get("company","")).strip().lower(),title.lower(),location.lower(),listing_url or url)
         if identity in seen:
             continue
         seen.add(identity)
@@ -323,6 +376,8 @@ def publish_public_feed(jobs):
             "category":category,
             "published":published,
             "url":url,
+            "listing_url":listing_url or url,
+            "direct_apply":bool(direct_apply_url),
             "listing_url":str(j.get("listing_url") or "").strip(),
             "direct_apply":bool(j.get("direct_apply", j.get("source") in ("greenhouse","lever","ashby","smartrecruiters"))),
             "skills":skills[:12],
@@ -375,6 +430,12 @@ def email_apply(j,profile,resume):
         if refused: raise RuntimeError("Recipient refused")
 def main():
     import base64
+    public_only=os.getenv("PUBLIC_FEED_ONLY","").strip().lower()=="true"
+    if public_only:
+        jobs=get_jobs()
+        publish_public_feed(jobs)
+        print("Public discovery-only refresh complete:",len(jobs))
+        return
     profile=json.loads(os.environ["PROFILE_JSON"])
     actual_years=float(profile.get("experience_years",profile.get("max_required_years",3)))
     profile["max_required_years"]=max(actual_years,4)
@@ -492,7 +553,7 @@ def main():
     with (ROOT/"matches.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["company","title","location","skill_match","matched","missing","experience","status","url"]); w.writerows([cell(v) for v in row] for row in rows)
     (ROOT/"screening-review.json").write_text(json.dumps(screening_report,indent=2,ensure_ascii=False))
-    summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),"target_jobs":len(jobs),"matches":len(rows),"email_attempts":count,"portal_attempts":portal_count,"email_accepted":email_sent,"portal_confirmed":confirmed,"email_reconciled":reconciled,"alert_links":len(seen_alerts),"decisions":dict(Counter(row[8] for row in audit)),"sources":dict(Counter(j.get("source","feed") for j in jobs))}
+    summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),"target_jobs":len(jobs),"matches":len(rows),"email_attempts":count,"portal_attempts":portal_count,"email_accepted":email_sent,"portal_confirmed":confirmed,"email_reconciled":reconciled,"decisions":dict(Counter(row[8] for row in audit)),"sources":dict(Counter(j.get("source","feed") for j in jobs))}
     (ROOT/"run-summary.json").write_text(json.dumps(summary,indent=2))
     print("Gmail reconciled applications:",reconciled)
     print("Decision outcomes:",summary["decisions"])
