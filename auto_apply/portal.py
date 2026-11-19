@@ -15,10 +15,13 @@ def candidate_data(profile, pdf):
         data.setdefault("first_name",name.split()[0])
         data.setdefault("last_name"," ".join(name.split()[1:]))
     data.setdefault("email",os.getenv("SMTP_USER",""))
-    from pypdf import PdfReader
     if not data.get("phone") or not data.get("linkedin") or not data.get("current_company"):
         # Parse only unambiguous, explicitly identifiable resume facts.
-        text="\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(pdf)).pages[:2])
+        try:
+            from pypdf import PdfReader
+            text="\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(pdf)).pages[:2])
+        except Exception:
+            text=""
         matches=set(re.sub(r"[^0-9+]","",m) for m in re.findall(r"(?<!\d)(?:\+91[\s-]*)?[6-9]\d{4}[\s-]?\d{5}(?!\d)",text))
         normalized={"+91"+m[-10:] for m in matches}
         if len(normalized)==1 and not data.get("phone"): data["phone"]=normalized.pop()
@@ -64,6 +67,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
     try:
         if not pdf.startswith(b"%PDF-"): return "portal_review_invalid_resume"
         data=candidate_data(profile,pdf)
+        data.setdefault("interest_statement","I am interested in this "+str(job.get("title","")).strip()+" opportunity because it aligns with my interest in cloud infrastructure, automation and reliable software delivery.")
         if not all(data.get(x) for x in ("first_name","last_name","email","phone")):
             return "portal_review_contact"
         url=job.get("apply_url") or job.get("url","")
