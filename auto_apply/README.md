@@ -1,22 +1,9 @@
-# Auto Apply Agent
+# Automated job application agent
 
-A dependency-free Python job discovery, skill matching and controlled email application agent. It does not use an LLM or invent resume facts.
+Runs hourly on GitHub Actions. Required secrets: PROFILE_JSON, RESUME_BASE64 (or existing split resume secrets), SMTP_USER and SMTP_APP_PASSWORD. No extra variables needed. The PDF is never committed. Make this repository private to protect job search activity.
 
-## Setup
-Prefer a private repository for job search activity. In Settings > Secrets and variables > Actions, add:
-- PROFILE_JSON: JSON with name, skills (array), locations (array), max_required_years (number), minimum_match (80 recommended), max_per_run (5 recommended).
-- GREENHOUSE_BOARDS: comma-separated employer board identifiers (optional).
-- JOB_FEED_JSON: trusted array of job objects (optional). Each contains company, title, description, location, url. Add application_email and email_application_authorized: true only when the employer explicitly accepts applications at that address.
-- SMTP_USER, SMTP_APP_PASSWORD: Gmail account and app password (only for email mode).
-- RESUME_BASE64: base64 of your actual PDF resume (only for email mode; GitHub secret size limit applies).
+The portal adapter uses the name and optional explicit contact details from PROFILE_JSON, falls back to SMTP_USER for email, and attempts to extract an unambiguous Indian phone number from the PDF. If contact details cannot be determined, it reports review rather than inventing them. It handles ordinary Greenhouse and Lever hosted forms only, without bypassing challenges or guessing screening answers. Successful submissions require visible confirmation. Optional AUTO_APPLY=false and PORTAL_AUTO_APPLY=false disable the respective channels.
 
-Example profile (replace all values with verified facts):
-```json
-{"name":"Your Name","skills":["aws","jenkins","docker","kubernetes","openshift","linux","ci/cd","git"],"locations":["india","hyderabad","bengaluru","bangalore","pune","chennai","noida","gurugram","mumbai"],"max_required_years":3,"minimum_match":80,"max_per_run":5}
-```
+Discovery defaults to 58 boards verified in the last successful run; their future availability may change. Discovery includes up to four years of required experience and a 65% skill threshold by default. Automatic applications require at least 80% and eligibility under the original profile experience limit. Email submissions require an explicitly authorized application address in a trusted JOB_FEED_JSON; ordinary portal listings are not email sources. At most three portal attempts per run. Ledger reservations prevent retries after ambiguous outcomes. Reports include match details, review statuses and counts.
 
-Set Actions repository variable AUTO_APPLY to true only after reviewing a dry-run and verifying the feed. Default false. Job descriptions are treated as data, not instructions. Public Greenhouse listings are discovery-only; portal applications are reported for manual handling. No CAPTCHA or authentication bypass. Email sending is restricted to explicit authorized addresses from your trusted feed. Do not use unsolicited recruiter lists.
-
-The match score measures overlap with recognized technologies mentioned in the JD; it is not a hiring probability. Senior roles and experience/location mismatches are excluded conservatively. Unknown experience is review-only. The ledger stores hashed identities and status; reservations are pushed before sending to reduce duplicates, and ambiguous outcomes require manual review. Never run simultaneous local and Actions instances. Job reports may be visible in a public repository's Actions artifacts; use a private repository for sensitive searches.
-
-Run locally: export PROFILE_JSON and optional source variables, then python auto_apply/agent.py. Run tests: python -m unittest discover -s auto_apply -p 'test_*.py'. The workflow runs at 10 AM and 6 PM IST approximately (GitHub schedules may be delayed).
+Run a fresh workflow on main, not a rerun of an old commit. Download matched-jobs artifact. Do not print secrets or commit a resume. GitHub schedules can be delayed and public-repository scheduled workflows may be disabled by GitHub after inactivity.
