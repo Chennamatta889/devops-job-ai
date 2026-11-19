@@ -4,6 +4,7 @@ from urllib.parse import urlparse, parse_qs
 from screening import fill_screening, unanswered_required, field_question
 
 HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
+_PRIVATE_LINKEDIN_CACHE={}
 def portal_enabled(profile, pdf):
     return os.getenv("PORTAL_AUTO_APPLY","").strip().lower()!="false" and pdf.startswith(b"%PDF-")
 def extract_candidate_linkedin(text, name):
@@ -20,6 +21,8 @@ def extract_candidate_linkedin(text, name):
 def linkedin_from_sent_mail(name):
     user=os.getenv("SMTP_USER",""); password=os.getenv("SMTP_APP_PASSWORD","")
     if not user or not password or not name: return ""
+    cache_key=(user.lower(),str(name).strip().lower())
+    if cache_key in _PRIVATE_LINKEDIN_CACHE: return _PRIVATE_LINKEDIN_CACHE[cache_key]
     found=set()
     try:
         with imaplib.IMAP4_SSL("imap.gmail.com",993,ssl_context=ssl.create_default_context(),timeout=20) as box:
@@ -42,8 +45,11 @@ def linkedin_from_sent_mail(name):
                         if raw: chunks.append(raw.decode(part.get_content_charset() or "utf-8","ignore"))
                     link=extract_candidate_linkedin("\n".join(chunks),name)
                     if link: found.add(link)
-        return next(iter(found)) if len(found)==1 else ""
+        result=next(iter(found)) if len(found)==1 else ""
+        _PRIVATE_LINKEDIN_CACHE[cache_key]=result
+        return result
     except Exception:
+        _PRIVATE_LINKEDIN_CACHE[cache_key]=""
         return ""
 
 def candidate_data(profile, pdf):
