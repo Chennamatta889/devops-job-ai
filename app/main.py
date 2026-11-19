@@ -50,6 +50,10 @@ PUBLIC_JOB_FEED_URL = os.getenv(
     "PUBLIC_JOB_FEED_URL",
     "https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/jobs.json",
 )
+VERIFICATION_STATUS_URL = os.getenv(
+    "VERIFICATION_STATUS_URL",
+    "https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/verification-status.json",
+)
 
 def _require_private_auto_apply():
     if os.getenv("AUTO_APPLY_PRIVATE_MODE", "").lower() != "true":
@@ -261,8 +265,22 @@ def run_auto_apply(db: Session = Depends(get_db)):
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Could not load public job feed: {type(exc).__name__}")
 
+    verification_jobs = {}
+    try:
+        verification_response = requests.get(VERIFICATION_STATUS_URL, timeout=15)
+        if verification_response.ok:
+            verification_jobs = verification_response.json().get("jobs", {})
+    except Exception:
+        verification_jobs = {}
+
+    require_no_verification = os.getenv("AUTO_APPLY_REQUIRE_NO_VERIFICATION", "true").lower() != "false"
+
     ranked = []
     for job in jobs:
+        verification = verification_jobs.get(str(job.get("id", "")), {})
+        verification_status = str(verification.get("status", "unknown"))
+        if require_no_verification and verification_status != "no_verification_detected":
+            continue
         score, reason = _public_job_match(job, profile)
         if reason != "matched" or score < profile.minimum_match_score:
             continue
