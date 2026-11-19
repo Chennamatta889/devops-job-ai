@@ -103,7 +103,14 @@ function App() {
   }, [])
 
   const sourceOptions = useMemo(
-    () => [...new Set(feed.jobs.map((job) => job.source).filter(Boolean))].sort(),
+    () => [
+      ...new Set(
+        feed.jobs.flatMap((job) => [
+          job.source,
+          ...(Array.isArray(job.discovered_via) ? job.discovered_via : [])
+        ]).filter(Boolean)
+      )
+    ].sort(),
     [feed.jobs]
   )
 
@@ -146,7 +153,8 @@ function App() {
         return false
       }
       if (loc && !jobLocation.includes(loc)) return false
-      if (normalizedSource !== 'all' && job.source !== normalizedSource) return false
+      const discoveredVia = Array.isArray(job.discovered_via) ? job.discovered_via : []
+      if (normalizedSource !== 'all' && job.source !== normalizedSource && !discoveredVia.includes(normalizedSource)) return false
       if (normalizedCategory !== 'all' && job.category !== normalizedCategory) return false
       if (normalizedSkill !== 'all' && !skills.includes(normalizedSkill)) return false
       if (!experienceMatches(job, normalizedExperience)) return false
@@ -334,6 +342,9 @@ function App() {
                 <div className="job-card-top">
                   <div className="badges">
                     <div className="source-badge">{prettySource(job.source)}</div>
+                    {(job.discovered_via || []).map((via) => (
+                      <div className="discovery-badge" key={via}>via {prettySource(via)}</div>
+                    ))}
                     {job.category && <div className="category-badge">{job.category}</div>}
                   </div>
                   <span className="published">{formatDate(job.published)}</span>
