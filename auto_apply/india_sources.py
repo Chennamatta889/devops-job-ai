@@ -4,7 +4,7 @@ from urllib.request import Request, urlopen
 from urllib.parse import quote, urlencode
 from concurrent.futures import ThreadPoolExecutor
 INDIA = re.compile(r"\b(india|hyderabad|secunderabad|bengaluru|bangalore|pune|mumbai|navi mumbai|chennai|gurgaon|gurugram|noida|delhi|kolkata|ahmedabad|kochi|cochin|trivandrum|thiruvananthapuram|coimbatore|mysore|mysuru|indore|jaipur|chandigarh|mohali|bhubaneswar|visakhapatnam|vizag|vadodara|nagpur|lucknow|surat|greater noida|telangana|karnataka|maharashtra|tamil nadu|kerala|gujarat|haryana|uttar pradesh|west bengal|andhra pradesh)\b",re.I)
-ROLE = re.compile(r"\b(dev[- ]?ops|devsecops|site reliability|sre|cloud[- ]?ops|cloud (?:engineer|platform|infrastructure|operations|support|administrator)|platform (?:engineer|operations)|(?:it |cloud )?infrastructure (?:engineer|specialist|analyst)|(?:build|release|deployment|production support|production|systems|linux|automation|observability|kubernetes) engineer|ci/cd engineer)\b",re.I)
+ROLE = re.compile(r"\b(dev[- ]?ops|devsecops|site reliability|sre|cloud[- ]?ops|cloud (?:engineer|platform|infrastructure|operations|support|administrator)|platform (?:engineer|operations)|(?:it |cloud )?infrastructure (?:engineer|specialist|analyst)|(?:build|release|deployment|production support|production|systems|linux|observability|kubernetes) engineer|(?:devops|cloud|infrastructure) automation engineer|ci/cd engineer)\b",re.I)
 def india_location(value):
     return bool(INDIA.search(str(value or "")))
 def relevant_role(value):
