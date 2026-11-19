@@ -20,6 +20,32 @@ def clean(s):
     return unescape(re.sub(r"<[^>]+>", " ", str(s or ""))).lower()
 def has(s, term):
     return bool(re.search(r"(?<![\w])"+re.escape(term)+r"(?![\w])", s))
+def extract_experience_requirement(text):
+    """Return a conservative min/max years requirement from public job text."""
+    body=clean(text)
+    patterns=(
+        (r"\b(\d{1,2})\s*(?:-|–|—|to)\s*(\d{1,2})\s*(?:years|yrs)\b", "range"),
+        (r"\b(\d{1,2})\s*\+\s*(?:years|yrs)\b", "plus"),
+        (r"\b(?:minimum|min\.?|at least)\s*(?:of\s*)?(\d{1,2})\s*(?:years|yrs)\b", "plus"),
+        (r"\b(\d{1,2})\s*(?:years|yrs)\s+(?:of\s+)?(?:relevant\s+|professional\s+|overall\s+|total\s+)?experience\b", "exact"),
+    )
+    for pattern,kind in patterns:
+        m=re.search(pattern,body,re.I)
+        if not m:
+            continue
+        lo=int(m.group(1))
+        if lo>20:
+            continue
+        if kind=="range":
+            hi=int(m.group(2))
+            if hi<lo or hi>30:
+                continue
+            return {"min":lo,"max":hi,"label":f"{lo}-{hi} years"}
+        if kind=="plus":
+            return {"min":lo,"max":None,"label":f"{lo}+ years"}
+        return {"min":lo,"max":lo,"label":f"{lo} years"}
+    return {"min":None,"max":None,"label":"Not specified"}
+
 def match(job, profile):
     title, body, loc = map(clean, (job.get("title"),job.get("description"),job.get("location")))
     if not relevant_role(title) or re.search(r"\b(senior|sr\.?|lead|principal|staff|manager|architect|intern|director|head)\b",title):
