@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-11-19T19:14:47.030465+00:00",
-  "count": 658,
+  "generated_at_utc": "2026-11-19T19:15:59.073531+00:00",
+  "count": 659,
   "jobs": [
     {
       "id": "2ca41557e0bb6292",
@@ -693,14 +693,14 @@
       "experience_label": "9+ years"
     },
     {
-      "id": "1f00f9a52b5be313",
+      "id": "ea62a8f0a4e578ae",
       "title": "Staff Software Engineer - Ingestion",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T13:02:56+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8201686002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8200692002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -718,14 +718,14 @@
       "experience_label": "15+ years"
     },
     {
-      "id": "ea62a8f0a4e578ae",
+      "id": "1f00f9a52b5be313",
       "title": "Staff Software Engineer - Ingestion",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T13:02:56+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8200692002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8201686002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -1436,14 +1436,14 @@
       "experience_label": "15+ years"
     },
     {
-      "id": "2edf017d930c8996",
+      "id": "c6354ec907864c79",
       "title": "Senior Staff Software Engineer (Backend)",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T13:02:56+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651326002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651345002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -1458,14 +1458,14 @@
       "experience_label": "15+ years"
     },
     {
-      "id": "c6354ec907864c79",
+      "id": "2edf017d930c8996",
       "title": "Senior Staff Software Engineer (Backend)",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T13:02:56+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651345002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651326002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -11824,6 +11824,30 @@
       "experience_min": 7,
       "experience_max": null,
       "experience_label": "7+ years"
+    },
+    {
+      "id": "f4b57c99228daa53",
+      "title": "Principal Solution Engineer - Google",
+      "company": "ttecdigital",
+      "location": "Hyderabad",
+      "source": "lever",
+      "category": "Product / Technical",
+      "published": "2026-11-09T10:47:38.273000+00:00",
+      "url": "https://jobs.lever.co/ttecdigital/6a0c5b4c-2b1e-4072-9800-ac52285d2a87",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "gcp",
+        "splunk",
+        "datadog"
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
     },
     {
       "id": "a2149f7d46e6b308",
