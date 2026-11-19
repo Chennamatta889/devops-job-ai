@@ -167,7 +167,7 @@ def ashby_submit_signal(payload):
     result=action.get("applicationFormResult")
     if not isinstance(result,dict): return ""
     typename=str(result.get("__typename") or "")
-    if typename=="FormSubmitSuccess" or "_" in result:
+    if typename=="FormSubmitSuccess":
         return "success"
     if typename=="FormRender" or "id" in result:
         return "validation"
