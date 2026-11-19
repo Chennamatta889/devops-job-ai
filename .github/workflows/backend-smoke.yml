@@ -1,0 +1,47 @@
+name: Backend smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'requirements.txt'
+      - '.github/workflows/backend-smoke.yml'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      DATA_DIR: /tmp/devops-job-ai-data
+      AUTO_APPLY_PRIVATE_MODE: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install backend dependencies
+        run: pip install -r requirements.txt
+      - name: Import backend and verify Auto Apply routes
+        run: |
+          python - <<'PY'
+          from app.main import app
+          from app.services.application_submitter import auto_submit_supported
+          paths={route.path for route in app.routes}
+          required={
+              "/auto-apply/profile",
+              "/auto-apply/resumes",
+              "/auto-apply/enable",
+              "/auto-apply/disable",
+              "/auto-apply/status",
+              "/auto-apply/run",
+          }
+          missing=required-paths
+          assert not missing, f"Missing routes: {sorted(missing)}"
+          assert auto_submit_supported("https://jobs.lever.co/example/123")
+          assert auto_submit_supported("https://jobs.ashbyhq.com/example/123")
+          assert auto_submit_supported("https://job-boards.greenhouse.io/example/jobs/123")
+          assert not auto_submit_supported("https://www.linkedin.com/jobs/view/123")
+          print("Backend smoke test passed")
+          PY
