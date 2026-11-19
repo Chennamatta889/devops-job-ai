@@ -23,6 +23,13 @@ function prettyCompany(value = '') {
     .replace(/\b\w/g, (letter) => letter.toUpperCase())
 }
 
+function daysSince(value) {
+  if (!value) return Infinity
+  const time = new Date(value).getTime()
+  if (Number.isNaN(time)) return Infinity
+  return (Date.now() - time) / 86400000
+}
+
 function formatDate(value) {
   if (!value) return 'Recently discovered'
   const date = new Date(value)
@@ -63,6 +70,9 @@ function App() {
   const [source, setSource] = useState('all')
   const [skill, setSkill] = useState('all')
   const [experience, setExperience] = useState('all')
+  const [category, setCategory] = useState('all')
+  const [postedWithin, setPostedWithin] = useState('30')
+  const [visibleCount, setVisibleCount] = useState(40)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [copiedId, setCopiedId] = useState('')
@@ -95,6 +105,11 @@ function App() {
     [feed.jobs]
   )
 
+  const categoryOptions = useMemo(
+    () => [...new Set(feed.jobs.map((job) => job.category).filter(Boolean))].sort(),
+    [feed.jobs]
+  )
+
   const skillOptions = useMemo(
     () =>
       [...new Set(feed.jobs.flatMap((job) => (Array.isArray(job.skills) ? job.skills : [])))]
@@ -108,6 +123,12 @@ function App() {
   const normalizedExperience = EXPERIENCE_OPTIONS.some((item) => item.value === experience)
     ? experience
     : 'all'
+  const normalizedCategory = category === 'all' || categoryOptions.includes(category) ? category : 'all'
+  const normalizedPosted = ['1', '3', '7', '14', '30'].includes(postedWithin) ? postedWithin : '30'
+
+  useEffect(() => {
+    setVisibleCount(40)
+  }, [query, location, normalizedSource, normalizedSkill, normalizedExperience, normalizedCategory, normalizedPosted])
 
   const filteredJobs = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -124,11 +145,15 @@ function App() {
       }
       if (loc && !jobLocation.includes(loc)) return false
       if (normalizedSource !== 'all' && job.source !== normalizedSource) return false
+      if (normalizedCategory !== 'all' && job.category !== normalizedCategory) return false
       if (normalizedSkill !== 'all' && !skills.includes(normalizedSkill)) return false
       if (!experienceMatches(job, normalizedExperience)) return false
+      if (daysSince(job.published) > Number(normalizedPosted)) return false
       return true
     })
-  }, [feed.jobs, query, location, normalizedSource, normalizedSkill, normalizedExperience])
+  }, [feed.jobs, query, location, normalizedSource, normalizedCategory, normalizedSkill, normalizedExperience, normalizedPosted])
+
+  const visibleJobs = filteredJobs.slice(0, visibleCount)
 
   async function copyLink(job) {
     try {
@@ -164,18 +189,18 @@ function App() {
         </nav>
 
         <div className="hero-copy">
-          <div className="eyebrow">DEVOPS · CLOUD · SRE · PLATFORM</div>
-          <h1>Find relevant jobs without searching dozens of career sites.</h1>
+          <div className="eyebrow">SOFTWARE · DATA/AI · QA · SECURITY · CLOUD · IT</div>
+          <h1>One place to discover fresh technology jobs across India.</h1>
           <p>
-            Our agent continuously discovers roles from supported employer job boards.
-            Search the live feed and apply on the company&apos;s original application page.
+            Our agent continuously discovers technology roles posted or updated in the last 30 days.
+            Search by role, skill, category, location and experience, then apply on the employer&apos;s original page.
           </p>
         </div>
 
         <div className="stats">
           <div>
             <strong>{feed.count}</strong>
-            <span>jobs in feed</span>
+            <span>technology jobs · last 30 days</span>
           </div>
           <div>
             <strong>{filteredJobs.length}</strong>
@@ -195,7 +220,7 @@ function App() {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="DevOps, AWS, Kubernetes, SRE…"
+              placeholder="Java, .NET, Python, React, QA, AI, AWS…"
             />
           </div>
 
@@ -209,6 +234,16 @@ function App() {
           </div>
 
           <div className="field">
+            <label>Category</label>
+            <select value={normalizedCategory} onChange={(event) => setCategory(event.target.value)}>
+              <option value="all">All technology</option>
+              {categoryOptions.map((item) => (
+                <option value={item} key={item}>{item}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="field">
             <label>Source</label>
             <select value={normalizedSource} onChange={(event) => setSource(event.target.value)}>
               <option value="all">All sources</option>
@@ -217,6 +252,7 @@ function App() {
               ))}
             </select>
           </div>
+
 
           <div className="field">
             <label>Skill</label>
@@ -236,6 +272,18 @@ function App() {
               ))}
             </select>
           </div>
+
+
+          <div className="field">
+            <label>Posted within</label>
+            <select value={normalizedPosted} onChange={(event) => setPostedWithin(event.target.value)}>
+              <option value="1">Last 24 hours</option>
+              <option value="3">Last 3 days</option>
+              <option value="7">Last 7 days</option>
+              <option value="14">Last 14 days</option>
+              <option value="30">Last 30 days</option>
+            </select>
+          </div>
         </section>
 
         <div className="feed-meta">
@@ -243,15 +291,17 @@ function App() {
             <h2>Live job feed</h2>
             <p>Last feed change: {updatedText}</p>
           </div>
-          {(query.trim() || location.trim() || normalizedSource !== 'all' || normalizedSkill !== 'all' || normalizedExperience !== 'all') && (
+          {(query.trim() || location.trim() || normalizedSource !== 'all' || normalizedCategory !== 'all' || normalizedSkill !== 'all' || normalizedExperience !== 'all' || normalizedPosted !== '30') && (
             <button
               className="text-button"
               onClick={() => {
                 setQuery('')
                 setLocation('')
                 setSource('all')
+                setCategory('all')
                 setSkill('all')
                 setExperience('all')
+                setPostedWithin('30')
               }}
             >
               Clear filters
@@ -272,10 +322,13 @@ function App() {
           </div>
         ) : (
           <section className="job-grid">
-            {filteredJobs.map((job) => (
+            {visibleJobs.map((job) => (
               <article className="job-card" key={job.id || job.url}>
                 <div className="job-card-top">
-                  <div className="source-badge">{prettySource(job.source)}</div>
+                  <div className="badges">
+                    <div className="source-badge">{prettySource(job.source)}</div>
+                    {job.category && <div className="category-badge">{job.category}</div>}
+                  </div>
                   <span className="published">{formatDate(job.published)}</span>
                 </div>
 
@@ -310,15 +363,23 @@ function App() {
           </section>
         )}
 
+        {visibleJobs.length < filteredJobs.length && (
+          <div className="load-more-wrap">
+            <button className="secondary-button load-more" onClick={() => setVisibleCount((count) => count + 40)}>
+              Load more jobs ({filteredJobs.length - visibleJobs.length} remaining)
+            </button>
+          </div>
+        )}
+
         <section className="trust-card">
           <div>
             <div className="eyebrow dark">HOW IT WORKS</div>
             <h2>The agent finds jobs. You stay in control.</h2>
           </div>
           <p>
-            DraftflowAI Jobs does not claim to be the employer and does not guarantee hiring.
-            Job links open the original employer or ATS page so users can review the full
-            description and submit their own application.
+            DraftflowAI Jobs indexes recent public technology openings from supported employer career systems.
+            Job links open the original employer or ATS page so users can review the full description,
+            confirm availability and submit their own application.
           </p>
         </section>
       </main>
