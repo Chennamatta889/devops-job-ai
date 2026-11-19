@@ -44,7 +44,7 @@ def smart(board):
             jobs.append(dict(company=(j.get("company") or {}).get("name",board),title=j["name"],location=" | ".join([str(loc.get("city","")),str(loc.get("region","")),"India"]),description=body,url="https://jobs.smartrecruiters.com/"+quote(board)+"/"+quote(ident),published=j.get("releasedDate",""),source="smartrecruiters"))
     return jobs
 def discover():
-    boards=[("ashby",b) for b in ("buspatrol","gradera","openobserve-careers","sarvam","encord","opendr","outmarket","uptimeai","dehazelabs","playpowerlabs","apas")]+[("smartrecruiters",b) for b in ("BoschGroup","Experian","ServiceNow","Nagarro1","ifs1","Sia","NielsenIQ","Eurofins","Xplor")]
+    boards=[("ashby",b) for b in ("buspatrol","gradera","openobserve-careers","sarvam","encord","opendr","outmarket","uptimeai","dehazelabs","playpowerlabs","apas","demandbase","plane")]+[("smartrecruiters",b) for b in ("BoschGroup","Experian","ServiceNow","Nagarro1","ifs1","Sia","NielsenIQ","Eurofins","Xplor")]
     def run(item):
         kind,board=item
         try:
