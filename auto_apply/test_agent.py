@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from portal import candidate_data, portal_enabled
 from agent import match, key
+from job_alerts import parse_alert, platform
 from india_sources import india_location, relevant_role
 class AgentTests(unittest.TestCase):
     def setUp(self):
@@ -40,4 +41,16 @@ class IndiaTests(unittest.TestCase):
         self.assertTrue(relevant_role("Cloud Support Engineer"))
         self.assertTrue(relevant_role("Build Engineer"))
         self.assertFalse(relevant_role("Java Developer"))
+class AlertTests(unittest.TestCase):
+    def test_linkedin(self):
+        html='<a href="https://www.linkedin.com/jobs/view/devops-engineer-12345?tracking=abc">DevOps Engineer</a>'
+        rows=parse_alert(html,"Jobs in India","linkedin_alert")
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]["location"],"Unverified location")
+        self.assertNotIn("?",rows[0]["url"])
+    def test_naukri(self):
+        html='<a href="https://www.naukri.com/job-listings-cloud-engineer-company-hyderabad-123">Cloud Engineer Hyderabad</a>'
+        self.assertEqual(len(parse_alert(html,"Jobs","naukri_alert")),1)
+    def test_reject_lookalike(self):
+        self.assertEqual(platform("https://linkedin.com.evil.example/jobs/view/123"),"")
 if __name__=="__main__": unittest.main()
