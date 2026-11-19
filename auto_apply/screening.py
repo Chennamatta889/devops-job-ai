@@ -17,12 +17,12 @@ def answer_for(question, profile):
         (r"^(?:your )?email(?: address)?$","email"),
         (r"^(?:your )?(?:phone|mobile)(?: number)?$","phone"),
         (r"^(?:what is your )?(?:preferred location|preferred city|preferred work location)$","preferred_location"),
-        (r"^(?:are you )?willing to relocate(?: within india)?$","willing_to_relocate"),
+        (r"^(?:are you )?(?:willing to relocate(?: within india)?|open to relocation(?: for this role)?)$","willing_to_relocate"),
         (r"^(?:what is your )?current (?:ctc|annual salary) (?:inr|in inr|in rupees)$","current_ctc_inr"),
         (r"^(?:what is your )?expected (?:ctc|annual salary) (?:inr|in inr|in rupees)$","expected_ctc_inr"),
         (r"^(?:what is your )?current ctc (?:in )?lpa$","current_ctc_lpa"),
         (r"^(?:what is your )?expected ctc (?:in )?lpa$","expected_ctc_lpa"),
-        (r"^(?:why are you interested in (?:this role|this position|this opportunity)|why do you want to join us|why are you interested|why this company)$","interest_statement"),
+        (r"^(?:why are you interested in (?:this role|this position|this opportunity)|why do you want to join us|why are you interested|why this company|what interests you about [a-z0-9 ]+)$","interest_statement"),
         (r"^(?:what is your )?(?:current (?:company|employer|organization)|company name)$","current_company"),
         (r"^(?:what is your )?(?:current location|current city|city of residence|location|city)$","current_location"),
         (r"^(?:what is your )?(?:notice period in days|notice period days|how many days is your notice period)$","notice_period_days"),
@@ -45,7 +45,9 @@ def field_question(field):
         const aria=ids.map(id=>document.getElementById(id)?.innerText||'');
         const group=el.closest('fieldset');
         const legend=group?.querySelector('legend')?.innerText||'';
-        return (el.getAttribute('aria-label')||aria.join(' ').trim()||labels.join(' ').trim()||legend||el.getAttribute('placeholder')||'').trim();
+        const lever=el.closest(".application-question,.application-field,.custom-question");
+        const prompt=lever?.querySelector(".application-label,.application-question-label,.question-label")?.innerText||"";
+        return (el.getAttribute('aria-label')||aria.join(' ').trim()||labels.join(' ').trim()||legend||prompt||el.getAttribute('placeholder')||'').trim();
     }""")
 def fill_screening(page,profile):
     fields=page.locator('input:visible:not([type=hidden]):not([type=submit]):not([type=button]):not([type=file]):not([type=checkbox]):not([type=radio]), textarea:visible, select:visible')
