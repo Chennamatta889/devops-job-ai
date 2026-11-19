@@ -82,6 +82,7 @@ function App() {
   const [copiedId, setCopiedId] = useState('')
   const [autoBusy, setAutoBusy] = useState(false)
   const [autoMessage, setAutoMessage] = useState('')
+  const [testMatchCount, setTestMatchCount] = useState(null)
   const [autoConsent, setAutoConsent] = useState(false)
   const [resumeFile, setResumeFile] = useState(null)
   const [autoProfile, setAutoProfile] = useState({
@@ -182,6 +183,66 @@ function App() {
 
   const visibleJobs = filteredJobs.slice(0, visibleCount)
 
+  function saveResumeInBrowser(file) {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('draftflowai-test', 1)
+      request.onupgradeneeded = () => {
+        const db = request.result
+        if (!db.objectStoreNames.contains('resumes')) db.createObjectStore('resumes')
+      }
+      request.onerror = () => reject(request.error)
+      request.onsuccess = () => {
+        const db = request.result
+        const tx = db.transaction('resumes', 'readwrite')
+        tx.objectStore('resumes').put(file, 'active-resume')
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => {
+          db.close()
+          reject(tx.error)
+        }
+      }
+    })
+  }
+
+  function previewMatchCount(profile) {
+    const roles = String(profile.target_roles || '')
+      .split(',')
+      .map((item) => item.trim().toLowerCase())
+      .filter(Boolean)
+    const skills = new Set(
+      String(profile.skills || '')
+        .split(',')
+        .map((item) => item.trim().toLowerCase())
+        .filter(Boolean)
+    )
+    const years = Number(profile.years_experience || 0)
+    const threshold = Number(profile.minimum_match_score || 80)
+
+    return feed.jobs.filter((job) => {
+      if (!job.auto_apply_supported) return false
+      const title = String(job.title || '').toLowerCase()
+      const roleMatch = roles.some((role) => {
+        if (title.includes(role) || role.includes(title)) return true
+        const roleTokens = new Set(role.split(/\s+/).filter((token) => token.length > 2))
+        const titleTokens = new Set(title.split(/\s+/).filter((token) => token.length > 2))
+        const overlap = [...roleTokens].filter((token) => titleTokens.has(token)).length
+        return roleTokens.size > 0 && overlap / roleTokens.size >= 0.5
+      })
+      if (!roleMatch) return false
+
+      if (Number.isFinite(job.experience_min) && Number(job.experience_min) > years + 0.5) return false
+
+      const jobSkills = (job.skills || []).map((item) => String(item).toLowerCase())
+      const matchedSkills = jobSkills.filter((item) => skills.has(item)).length
+      const skillScore = jobSkills.length ? Math.round((matchedSkills / jobSkills.length) * 35) : 12
+      const score = Math.min(100, 45 + skillScore + 15 + 5)
+      return score >= threshold
+    }).length
+  }
+
   function updateAutoProfile(field, value) {
     setAutoProfile((current) => ({ ...current, [field]: value }))
   }
@@ -189,10 +250,6 @@ function App() {
   async function enableAutoApply(event) {
     event.preventDefault()
     setAutoMessage('')
-    if (!AUTO_APPLY_API_URL) {
-      setAutoMessage('Secure Auto Apply backend is not connected yet. Your resume was not uploaded.')
-      return
-    }
     if (!resumeFile) {
       setAutoMessage('Choose a PDF resume first.')
       return
@@ -202,8 +259,28 @@ function App() {
       return
     }
 
+    if (resumeFile.type !== 'application/pdf' && !resumeFile.name.toLowerCase().endsWith('.pdf')) {
+      setAutoMessage('Please choose a PDF resume.')
+      return
+    }
+    if (resumeFile.size > 6 * 1024 * 1024) {
+      setAutoMessage('Resume must be 6 MB or smaller.')
+      return
+    }
+
     setAutoBusy(true)
     try {
+      if (!AUTO_APPLY_API_URL) {
+        await saveResumeInBrowser(resumeFile)
+        localStorage.setItem('draftflowai-test-profile', JSON.stringify(autoProfile))
+        const matches = previewMatchCount(autoProfile)
+        setTestMatchCount(matches)
+        setAutoMessage(
+          `Test resume saved privately in this browser only. ${matches} current jobs meet your Auto Apply test criteria. No application was submitted.`
+        )
+        return
+      }
+
       const profileResponse = await fetch(AUTO_APPLY_API_URL + '/auto-apply/profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -492,8 +569,8 @@ function App() {
                 respects your daily limit and stops when a required question needs your input.
               </p>
             </div>
-            <div className={AUTO_APPLY_API_URL ? 'backend-status ready' : 'backend-status'}>
-              {AUTO_APPLY_API_URL ? 'Secure backend connected' : 'Secure backend required'}
+            <div className={AUTO_APPLY_API_URL ? 'backend-status ready' : 'backend-status test'}>
+              {AUTO_APPLY_API_URL ? 'Secure backend connected' : 'Browser-only test mode'}
             </div>
           </div>
 
@@ -564,13 +641,19 @@ function App() {
             </label>
 
             <div className="upgrade-actions">
-              <button className="primary-button" type="submit" disabled={autoBusy || !AUTO_APPLY_API_URL}>
-                {autoBusy ? 'Enabling…' : 'Enable Auto Apply'}
+              <button className="primary-button" type="submit" disabled={autoBusy}>
+                {autoBusy ? 'Saving…' : (AUTO_APPLY_API_URL ? 'Enable Auto Apply' : 'Save & Test Resume')}
               </button>
               {!AUTO_APPLY_API_URL && (
-                <span className="upgrade-note">The public site is showing the upgrade UI, but resume upload stays disabled until private authenticated storage is connected.</span>
+                <span className="upgrade-note">Test mode keeps the PDF only in this browser. It is not uploaded to GitHub or any server, and no applications are submitted.</span>
               )}
             </div>
+            {testMatchCount !== null && !AUTO_APPLY_API_URL && (
+              <div className="test-result">
+                <strong>{testMatchCount}</strong>
+                <span>current jobs match your test Auto Apply criteria</span>
+              </div>
+            )}
             {autoMessage && <div className="upgrade-message">{autoMessage}</div>}
           </form>
         </section>
