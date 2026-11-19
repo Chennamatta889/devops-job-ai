@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 from portal import candidate_data, portal_enabled
-from agent import match, key, extract_experience_requirement, known_direct_apply_url
+from agent import match, key, extract_experience_requirement, known_direct_apply_url, aggregator_jobs
 from job_alerts import parse_alert, platform
 from india_sources import india_location, relevant_role, technology_category, technology_role
 class AgentTests(unittest.TestCase):
