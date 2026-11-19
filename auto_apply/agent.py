@@ -366,17 +366,19 @@ def publish_public_feed(jobs):
         for skill in SKILLS:
             if any(has(body,t) for t in [skill]+aliases.get(skill,[])):
                 skills.append(skill)
+        source=str(j.get("source","career_site")).strip() or "career_site"
+        direct_apply=bool(direct_apply_url) or source in {"greenhouse","lever","ashby","smartrecruiters"}
         public.append({
             "id":hashlib.sha256("|".join(identity).encode()).hexdigest()[:16],
             "title":title,
             "company":str(j.get("company","")).strip() or "Company",
             "location":location,
-            "source":str(j.get("source","career_site")).strip() or "career_site",
+            "source":source,
             "category":category,
             "published":published,
             "url":url,
             "listing_url":listing_url or url,
-            "direct_apply":bool(direct_apply_url),
+            "direct_apply":direct_apply,
             "listing_url":str(j.get("listing_url") or "").strip(),
             "direct_apply":bool(j.get("direct_apply", j.get("source") in ("greenhouse","lever","ashby","smartrecruiters"))),
             "skills":skills[:12],
