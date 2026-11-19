@@ -9,47 +9,81 @@ def india_location(value):
     return bool(INDIA.search(str(value or "")))
 def relevant_role(value):
     return bool(ROLE.search(str(value or "")))
+
+def technology_category(value):
+    title=str(value or "")
+    for name,pattern in TECH_CATEGORIES:
+        if pattern.search(title):
+            return name
+    return ""
+
+def technology_role(value):
+    return bool(technology_category(value))
 def read(url):
     with urlopen(Request(url,headers={"User-Agent":"IndiaJobAgent/1.0","Accept":"application/json"}),timeout=18) as r:
         return json.load(r)
-def ashby(board):
+def ashby(board, all_tech=False):
     data=read("https://api.ashbyhq.com/posting-api/job-board/"+quote(board))
     jobs=[]
     for j in data.get("jobs",[]):
         loc=" | ".join([str(j.get("location",""))]+[str(x.get("location","")) for x in j.get("secondaryLocations",[])])
         country=str((j.get("address") or {}).get("postalAddress",{}).get("addressCountry",""))
         if country.lower() in ("in","india"): loc+=" | India"
-        if not india_location(loc) or not relevant_role(j.get("title")) or j.get("isListed") is False: continue
+        if not india_location(loc) or j.get("isListed") is False: continue
+        if (technology_role(j.get("title")) if all_tech else relevant_role(j.get("title"))) is False: continue
         jobs.append(dict(company=board,title=j["title"],location=loc,description=j.get("descriptionPlain") or j.get("descriptionHtml",""),url=j.get("jobUrl",""),apply_url=j.get("applyUrl",""),published=j.get("publishedAt",""),source="ashby"))
     return jobs
-def smart(board):
+def smart(board, all_tech=False):
     base="https://api.smartrecruiters.com/v1/companies/"+quote(board)+"/postings"
     jobs=[]; seen=set()
-    for q in ("DevOps","Cloud Engineer","Site Reliability","Platform Engineer","Infrastructure Engineer","Release Engineer"):
+    if all_tech:
+        queries=(None,)
+    else:
+        queries=("DevOps","Cloud Engineer","Site Reliability","Platform Engineer","Infrastructure Engineer","Release Engineer")
+    for q in queries:
         try:
-            items=read(base+"?"+urlencode({"country":"in","q":q,"limit":25})).get("content",[])
-        except Exception: continue
+            params={"country":"in","limit":100}
+            if q: params["q"]=q
+            items=read(base+"?"+urlencode(params)).get("content",[])
+        except Exception:
+            continue
         for j in items:
             ident=str(j.get("id",""))
-            if not ident or ident in seen or not relevant_role(j.get("name")): continue
+            title=str(j.get("name",""))
+            if not ident or ident in seen:
+                continue
+            if (technology_role(title) if all_tech else relevant_role(title)) is False:
+                continue
             seen.add(ident)
             loc=j.get("location") or {}
-            if str(loc.get("country","")).lower() not in ("in","india") and not india_location(" ".join(str(loc.get(k,"")) for k in ("city","region"))): continue
+            if str(loc.get("country","")).lower() not in ("in","india") and not india_location(" ".join(str(loc.get(k,"")) for k in ("city","region"))):
+                continue
             try:
                 detail=read(base+"/"+quote(ident))
-            except Exception: continue
+            except Exception:
+                continue
             sections=(detail.get("jobAd") or {}).get("sections") or {}
             body=" ".join(str(sections.get(k,{}).get("text","")) for k in ("jobDescription","qualifications","additionalInformation"))
-            if not body.strip(): continue
-            jobs.append(dict(company=(j.get("company") or {}).get("name",board),title=j["name"],location=" | ".join([str(loc.get("city","")),str(loc.get("region","")),"India"]),description=body,url="https://jobs.smartrecruiters.com/"+quote(board)+"/"+quote(ident),published=j.get("releasedDate",""),source="smartrecruiters"))
+            if not body.strip():
+                continue
+            jobs.append(dict(
+                company=(j.get("company") or {}).get("name",board),
+                title=title,
+                location=" | ".join([str(loc.get("city","")),str(loc.get("region","")),"India"]),
+                description=body,
+                url="https://jobs.smartrecruiters.com/"+quote(board)+"/"+quote(ident),
+                published=j.get("releasedDate",""),
+                source="smartrecruiters",
+            ))
     return jobs
-def discover():
+
+def discover(all_tech=False):
     boards=[("ashby",b) for b in ("buspatrol","gradera","openobserve-careers","sarvam","encord","opendr","outmarket","uptimeai","dehazelabs","playpowerlabs","apas","demandbase","plane","sophos","triomics","ema","redis")]+[("smartrecruiters",b) for b in ("BoschGroup","Experian","ServiceNow","Nagarro1","ifs1","Sia","NielsenIQ","Eurofins","Xplor")]
     def run(item):
         kind,board=item
         try:
-            rows=(ashby if kind=="ashby" else smart)(board)
-            print("India source:",kind,board,"target jobs:",len(rows))
+            rows=(ashby if kind=="ashby" else smart)(board,all_tech=all_tech)
+            print("India source:",kind,board,("technology jobs:" if all_tech else "target jobs:"),len(rows))
             return rows
         except Exception as exc:
             print("India source unavailable:",kind,board,type(exc).__name__)
