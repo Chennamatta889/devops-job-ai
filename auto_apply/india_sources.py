@@ -50,6 +50,7 @@ def read(url):
 def recruitee(board, all_tech=False):
     data=read("https://"+quote(board)+".recruitee.com/api/offers/")
     offers=data.get("offers",[]) if isinstance(data,dict) else (data if isinstance(data,list) else [])
+    print("Recruitee board:",board,"offers:",len(offers),"sample_keys:",sorted((offers[0] if offers and isinstance(offers[0],dict) else {}).keys())[:30])
     jobs=[]
     for j in offers:
         if not isinstance(j,dict):
