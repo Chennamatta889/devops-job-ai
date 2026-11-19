@@ -232,7 +232,9 @@ a { color: inherit; }
 .source-badge,
 .category-badge,
 .discovery-badge,
-.auto-badge {
+.auto-badge,
+.verification-badge,
+.verification-unknown-badge {
   border-radius: 999px;
   padding: 6px 9px;
   font-size: 11px;
@@ -255,8 +257,18 @@ a { color: inherit; }
 }
 
 .auto-badge {
-  background: #eff8ff;
-  color: #175cd3;
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.verification-badge {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.verification-unknown-badge {
+  background: #f2f4f7;
+  color: #475467;
 }
 
 .published { color: #98a2b3; font-size: 11px; }
