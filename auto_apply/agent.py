@@ -30,7 +30,7 @@ def match(job, profile):
     score = round(100*len(matched)/len(required)) if len(required)>=3 else 0
     return score, matched, missing, "matched" if years else "experience unclear"
 def get_jobs():
-    jobs = json.loads(os.getenv("JOB_FEED_JSON","[]"))
+    jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
     if not isinstance(jobs,list): raise ValueError("JOB_FEED_JSON must be an array")
     for board in os.getenv("GREENHOUSE_BOARDS","").split(","):
         if not re.fullmatch(r"[a-zA-Z0-9_-]+",board.strip()): continue
@@ -40,6 +40,7 @@ def get_jobs():
             for j in data["jobs"]:
                 jobs.append(dict(id=str(j["id"]),company=board,title=j["title"],description=j.get("content",""),location=j.get("location",{}).get("name",""),url=j.get("absolute_url",""),source="greenhouse"))
         except Exception as e: print("Board unavailable:",board,type(e).__name__,file=sys.stderr)
+    if not jobs: print("No jobs discovered. Configure GREENHOUSE_BOARDS or JOB_FEED_JSON.")
     return jobs
 def key(j):
     identity = str(j.get("company","")).strip().lower()+"|"+str(j.get("title","")).strip().lower()+"|"+str(j.get("location","")).strip().lower()
