@@ -102,7 +102,7 @@ def candidate_data(profile, pdf):
             data["linkedin"]=link if link.startswith("http") else "https://"+link
         companies=set(m.strip() for m in re.findall(r"(?im)^\s*current\s+(?:company|employer)\s*:\s*([^\n]{2,100})",text))
         if len(companies)==1 and not data.get("current_company"): data["current_company"]=companies.pop()
-    if not data.get("linkedin"):
+    if not data.get("linkedin") and os.getenv("ALLOW_PRIVATE_MAIL_LOOKUP","").strip().lower()=="true":
         private_link=linkedin_from_sent_mail(data.get("name",""))
         if private_link: data["linkedin"]=private_link
     print("Candidate LinkedIn available:",bool(data.get("linkedin")))
