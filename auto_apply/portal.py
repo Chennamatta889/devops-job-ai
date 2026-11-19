@@ -17,17 +17,31 @@ def candidate_data(profile, pdf):
     data.setdefault("email",os.getenv("SMTP_USER",""))
     if not data.get("phone") or not data.get("linkedin") or not data.get("current_company"):
         # Parse only unambiguous, explicitly identifiable resume facts.
+        annotation_urls=set()
         try:
             from pypdf import PdfReader
-            text="\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(pdf)).pages[:2])
+            reader=PdfReader(io.BytesIO(pdf))
+            pages=reader.pages[:2]
+            text="\n".join(page.extract_text() or "" for page in pages)
+            for page in pages:
+                for ref in page.get("/Annots",[]) or []:
+                    try:
+                        annot=ref.get_object()
+                        action=annot.get("/A")
+                        uri=action.get("/URI") if action else None
+                        if isinstance(uri,str) and uri.startswith(("http://","https://")):
+                            annotation_urls.add(uri)
+                    except Exception:
+                        pass
         except Exception:
             text=""
         matches=set(re.sub(r"[^0-9+]","",m) for m in re.findall(r"(?<!\d)(?:\+91[\s-]*)?[6-9]\d{4}[\s-]?\d{5}(?!\d)",text))
         normalized={"+91"+m[-10:] for m in matches}
         if len(normalized)==1 and not data.get("phone"): data["phone"]=normalized.pop()
         urls=set(re.findall(r"(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+",text,re.I))
+        urls.update(u for u in annotation_urls if re.match(r"https?://(?:www\.)?linkedin\.com/in/",u,re.I))
         if len(urls)==1 and not data.get("linkedin"):
-            link=urls.pop().rstrip(".")
+            link=urls.pop().rstrip(".,);")
             data["linkedin"]=link if link.startswith("http") else "https://"+link
         companies=set(m.strip() for m in re.findall(r"(?im)^\s*current\s+(?:company|employer)\s*:\s*([^\n]{2,100})",text))
         if len(companies)==1 and not data.get("current_company"): data["current_company"]=companies.pop()
