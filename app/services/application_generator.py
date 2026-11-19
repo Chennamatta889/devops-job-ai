@@ -1,6 +1,6 @@
 import json
 
-from app.services.ai_matcher import client
+from app.services.ai_matcher import _client
 
 
 def _parse_json(text: str) -> dict:
@@ -48,7 +48,7 @@ Return ONLY valid JSON with exactly this structure:
 }}
 """
 
-    response = client.models.generate_content(
+    response = _client().models.generate_content(
         model="gemini-3.5-flash-lite",
         contents=prompt,
     )
