@@ -25,9 +25,16 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="DevOps Job AI", version="0.5.0")
 
+cors_origins=[
+    "https://chennamatta889.github.io",
+    "http://localhost:5173",
+]
+extra_origins=[x.strip() for x in os.getenv("CORS_ORIGINS","").split(",") if x.strip()]
+cors_origins.extend(extra_origins)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://50.17.126.62:8080"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
