@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / "ledger.json"
-ROLES = r"\b(devops|site reliability|sre|cloud (?:engineer|platform|infrastructure)|platform engineer|release engineer)\b"
+ROLES = r"\b(devops|devsecops|site reliability|sre|cloud (?:engineer|platform|infrastructure|operations)|platform engineer|release engineer)\b"
 SKILLS = ["aws","azure","jenkins","kubernetes","openshift","docker","terraform","linux","python","ci/cd","jfrog","git","dynatrace","splunk","ansible","prometheus","grafana","helm","argocd","gcp","datadog","bash","github actions"]
 def clean(s):
     return unescape(re.sub(r"<[^>]+>", " ", str(s or ""))).lower()
@@ -33,7 +33,7 @@ def match(job, profile):
 def get_jobs():
     jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
     if not isinstance(jobs,list): raise ValueError("JOB_FEED_JSON must be an array")
-    defaults = {"greenhouse": "crashplan,razorpaysoftwareprivatelimited,singlestore,toradex,conviva,pointwild,neweratech,machinify-india,merqube,axicorpfinancialservicesptyltd,insurityindia,backbase", "lever": "smart-working-solutions,pditechnologies,ttecdigital,zeta,brightedge,keyloop,hevodata,brillio-2"}
+    defaults = {"greenhouse": "crashplan,razorpaysoftwareprivatelimited,singlestore,toradex,conviva,pointwild,neweratech,machinify-india,merqube,axicorpfinancialservicesptyltd,insurityindia,workatbackbase,mfsgtechnologiesindia,sonicwall,zscaler,rhythmx-ai,databricks,cloudflare,elastic,mongodb,grafanalabs,canonical,gitlab,hashicorp,twilio,okta,cohesity,confluent,nutanix,atlassian,postman,thoughtspot,chargebee,clevertap,whatfix,innovaccer,mastercontrol,highspot,litmus,acquia,datadog,doordash,toast,deel,remote,coinbase,affirm,asana,box,adobe,reddit,redditinc,vercel,netlify,webflow,rubrik,illumio,tenable,rapid7,snyk,appdynamics,druva,thoughtworks,publicissapient,epam,globalogic,hitachivantara,cloudera,avalara,guidewire,blueyonder,workato,celonis,elasticpath,signifyd,branch,pagerduty,chainguard,sysdig,komodor,aiven,cockroachlabs,redis,dbtlabs,airbyte,astronomer,clickhouse,materialize,temporal,flyr,veeam", "lever": "smart-working-solutions,pditechnologies,ttecdigital,zeta,brightedge,keyloop,hevodata,brillio-2,thoughtworks,netradyne,plaid,spotify,gitlab,cloudbeds,contentsquare,udacity,wealthsimple,stackadapt,quora,openai,canonical,shyftlabs,uniphore,moengage,clevertap,atlan,calendly"}
     sources = []
     for kind in defaults:
         value = os.getenv(kind.upper()+"_BOARDS","").strip() or defaults[kind]
@@ -85,19 +85,27 @@ def email_apply(j,profile,resume):
 def main():
     import base64
     profile=json.loads(os.environ["PROFILE_JSON"])
+    actual_years=float(profile.get("max_required_years",3))
+    profile["max_required_years"]=max(actual_years,4)
+    profile["minimum_match"]=int(os.getenv("MINIMUM_MATCH","").strip() or "65")
     ledger=json.loads(STATE.read_text()) if STATE.exists() else {}
     auto=os.getenv("AUTO_APPLY","false").lower()=="true"
     resume=base64.b64decode(os.getenv("RESUME_BASE64","") or (os.getenv("RESUME_PART_1","")+os.getenv("RESUME_PART_2","")),validate=True) if auto else b""
     if auto and (not resume.startswith(b"%PDF-") or not os.getenv("SMTP_USER") or not os.getenv("SMTP_APP_PASSWORD")):
-        raise ValueError("Auto mode requires PDF resume and SMTP credentials")
+        print("Email auto-apply disabled: missing PDF or SMTP configuration."); auto=False
     jobs=get_jobs()
     ranked=sorted(((match(j,profile),j) for j in jobs),key=lambda x:x[0][0],reverse=True)
     count=0; rows=[]; seen=set()
+    from portal import portal_apply, portal_enabled
+    portal_count=0
+    portal_on=portal_enabled()
     for (score,matched,missing,reason),j in ranked:
         k=key(j)
         if k in seen: continue
         seen.add(k)
-        if score<profile.get("minimum_match",80): continue
+        if score<profile.get("minimum_match",65): continue
+        real_profile=dict(profile,max_required_years=actual_years)
+        if match(j,real_profile)[0]==0 and reason=="matched": reason="stretch experience - review only"
         status=ledger.get(k,"review_portal")
         eligible=reason=="matched" and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever")
         if k not in ledger and eligible:
@@ -110,8 +118,12 @@ def main():
                 except Exception:
                     ledger[k]="uncertain_manual_review"; status=ledger[k]
                 persist(ledger)
+        if k not in ledger and portal_on and reason=="matched" and score>=80 and j.get("source") in ("greenhouse","lever") and portal_count<3:
+            ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
+            status=portal_apply(j,profile)
+            ledger[k]=status; persist(ledger)
         rows.append([j.get("company"),j.get("title"),j.get("location"),score,", ".join(matched),", ".join(missing),reason,status,j.get("url")])
     with (ROOT/"matches.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["company","title","location","skill_match","matched","missing","experience","status","url"]); w.writerows(rows)
-    print(f"Scanned {len(jobs)} jobs; {len(rows)} matches; {count} attempted email applications.")
+    print(f"Scanned {len(jobs)} jobs; {len(rows)} matches; {count} attempted email applications; {portal_count} portal attempts.")
 if __name__=="__main__": main()
