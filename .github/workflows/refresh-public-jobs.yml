@@ -1,0 +1,40 @@
+name: Refresh public technology jobs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-public-technology-jobs
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run public discovery tests
+        run: python -m unittest discover -s auto_apply -p 'test_*.py'
+
+      - name: Configure git
+        run: |
+          git config user.name "job-feed[bot]"
+          git config user.email "job-feed@users.noreply.github.com"
+
+      - name: Refresh public technology feed
+        env:
+          PUBLIC_FEED_ONLY: 'true'
+        run: python auto_apply/agent.py
