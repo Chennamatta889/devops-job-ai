@@ -190,4 +190,8 @@ class PrivateLinkedInFallbackTests(unittest.TestCase):
         from portal import candidate_data
         d=candidate_data({"name":"Matta Chenna Rao","phone":"+919876543210","current_company":"Example Ltd"},b"%PDF-invalid")
         self.assertEqual(d["linkedin"],"https://www.linkedin.com/in/chenna123")
+class PlaneLinkedInLabelTests(unittest.TestCase):
+    def test_plane_linkedin_label(self):
+        from screening import answer_for
+        self.assertEqual(answer_for("Your Linkedin profile link.",{"linkedin":"https://www.linkedin.com/in/example"}),"https://www.linkedin.com/in/example")
 if __name__=="__main__": unittest.main()
