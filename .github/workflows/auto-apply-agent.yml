@@ -46,6 +46,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: matched-jobs
-          path: auto_apply/matches.csv
+          path: |
+            auto_apply/matches.csv
+            auto_apply/platform-alerts.csv
           if-no-files-found: ignore
           retention-days: 3
