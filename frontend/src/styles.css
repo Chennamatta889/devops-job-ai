@@ -473,8 +473,14 @@ a { color: inherit; }
   font-size: 13px;
 }
 
-.test-result {
+.test-results {
   grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.test-result {
   display: flex;
   align-items: baseline;
   gap: 9px;
@@ -550,6 +556,7 @@ footer strong { color: #344054; }
   .upgrade-card { padding: 20px; }
   .upgrade-heading { flex-direction: column; }
   .upgrade-form { grid-template-columns: 1fr; }
+  .test-results { grid-template-columns: 1fr; }
   .upgrade-form .field-wide, .consent-row, .upgrade-actions, .upgrade-message { grid-column: auto; }
   .trust-card { grid-template-columns: 1fr; gap: 18px; padding: 25px; }
   footer { display: block; text-align: center; }
