@@ -82,7 +82,7 @@ function App() {
   const [copiedId, setCopiedId] = useState('')
   const [autoBusy, setAutoBusy] = useState(false)
   const [autoMessage, setAutoMessage] = useState('')
-  const [testMatchCount, setTestMatchCount] = useState(null)
+  const [testMatchSummary, setTestMatchSummary] = useState(null)
   const [autoConsent, setAutoConsent] = useState(false)
   const [resumeFile, setResumeFile] = useState(null)
   const [autoProfile, setAutoProfile] = useState({
@@ -207,7 +207,7 @@ function App() {
     })
   }
 
-  function previewMatchCount(profile) {
+  function previewMatchSummary(profile) {
     const roles = String(profile.target_roles || '')
       .split(',')
       .map((item) => item.trim().toLowerCase())
@@ -220,27 +220,51 @@ function App() {
     )
     const years = Number(profile.years_experience || 0)
     const threshold = Number(profile.minimum_match_score || 80)
+    const seniorTitle = /\b(senior|sr\.?|staff|lead|principal|manager|architect|director|head)\b/i
 
-    return feed.jobs.filter((job) => {
-      if (!job.auto_apply_supported) return false
+    const cloudTerms = ['cloud', 'devops', 'sre', 'site reliability', 'platform', 'infrastructure', 'kubernetes', 'release', 'build']
+    const wantsCloudFamily = roles.some((role) => cloudTerms.some((term) => role.includes(term) || term.includes(role)))
+
+    function roleMatches(job) {
       const title = String(job.title || '').toLowerCase()
-      const roleMatch = roles.some((role) => {
+      const category = String(job.category || '').toLowerCase()
+
+      if (wantsCloudFamily && category === 'cloud / devops / sre') return true
+
+      return roles.some((role) => {
         if (title.includes(role) || role.includes(title)) return true
         const roleTokens = new Set(role.split(/\s+/).filter((token) => token.length > 2))
         const titleTokens = new Set(title.split(/\s+/).filter((token) => token.length > 2))
         const overlap = [...roleTokens].filter((token) => titleTokens.has(token)).length
         return roleTokens.size > 0 && overlap / roleTokens.size >= 0.5
       })
-      if (!roleMatch) return false
+    }
 
-      if (Number.isFinite(job.experience_min) && Number(job.experience_min) > years + 0.5) return false
+    function experienceFits(job) {
+      if (!Number.isFinite(job.experience_min)) return true
+      return Number(job.experience_min) <= years + 0.5
+    }
 
+    const relevant = feed.jobs.filter((job) => {
+      if (!roleMatches(job) || !experienceFits(job)) return false
+      if (years < 4 && seniorTitle.test(String(job.title || ''))) return false
+      return true
+    })
+
+    const scored = relevant.map((job) => {
       const jobSkills = (job.skills || []).map((item) => String(item).toLowerCase())
       const matchedSkills = jobSkills.filter((item) => skills.has(item)).length
       const skillScore = jobSkills.length ? Math.round((matchedSkills / jobSkills.length) * 35) : 12
-      const score = Math.min(100, 45 + skillScore + 15 + 5)
-      return score >= threshold
-    }).length
+      const experienceScore = Number.isFinite(job.experience_min) && Number(job.experience_min) > years ? 10 : 15
+      const score = Math.min(100, 45 + skillScore + experienceScore + 5)
+      return { job, score }
+    })
+
+    return {
+      relevant: relevant.length,
+      strong: scored.filter(({ score }) => score >= threshold).length,
+      autoEligible: scored.filter(({ job, score }) => job.auto_apply_supported && score >= threshold).length
+    }
   }
 
   function updateAutoProfile(field, value) {
@@ -273,10 +297,10 @@ function App() {
       if (!AUTO_APPLY_API_URL) {
         await saveResumeInBrowser(resumeFile)
         localStorage.setItem('draftflowai-test-profile', JSON.stringify(autoProfile))
-        const matches = previewMatchCount(autoProfile)
-        setTestMatchCount(matches)
+        const summary = previewMatchSummary(autoProfile)
+        setTestMatchSummary(summary)
         setAutoMessage(
-          `Test resume saved privately in this browser only. ${matches} current jobs meet your Auto Apply test criteria. No application was submitted.`
+          `Test resume saved privately in this browser only. Found ${summary.relevant} relevant jobs, ${summary.strong} strong matches, and ${summary.autoEligible} currently auto-apply eligible jobs. No application was submitted.`
         )
         return
       }
@@ -648,10 +672,20 @@ function App() {
                 <span className="upgrade-note">Test mode keeps the PDF only in this browser. It is not uploaded to GitHub or any server, and no applications are submitted.</span>
               )}
             </div>
-            {testMatchCount !== null && !AUTO_APPLY_API_URL && (
-              <div className="test-result">
-                <strong>{testMatchCount}</strong>
-                <span>current jobs match your test Auto Apply criteria</span>
+            {testMatchSummary && !AUTO_APPLY_API_URL && (
+              <div className="test-results">
+                <div className="test-result">
+                  <strong>{testMatchSummary.relevant}</strong>
+                  <span>relevant jobs for your role + experience</span>
+                </div>
+                <div className="test-result">
+                  <strong>{testMatchSummary.strong}</strong>
+                  <span>strong matches at your selected score</span>
+                </div>
+                <div className="test-result">
+                  <strong>{testMatchSummary.autoEligible}</strong>
+                  <span>currently auto-apply eligible</span>
+                </div>
               </div>
             )}
             {autoMessage && <div className="upgrade-message">{autoMessage}</div>}
