@@ -1,11 +1,51 @@
 """Conservative applicant-side browser adapter; never bypass challenges."""
-import os, json, base64, re, io
+import os, json, base64, re, io, imaplib, email, ssl
 from urllib.parse import urlparse, parse_qs
 from screening import fill_screening, unanswered_required, field_question
 
 HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
 def portal_enabled(profile, pdf):
     return os.getenv("PORTAL_AUTO_APPLY","").strip().lower()!="false" and pdf.startswith(b"%PDF-")
+def extract_candidate_linkedin(text, name):
+    urls=set(re.findall(r"https?://(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+/?",str(text or ""),re.I))
+    tokens=[normalize for normalize in re.findall(r"[a-z0-9]+",str(name or "").lower()) if len(normalize)>=4]
+    matched=[]
+    for url in urls:
+        slug=url.rstrip("/").rsplit("/",1)[-1].lower()
+        if not tokens or any(token in slug for token in tokens):
+            matched.append(url.rstrip("/"))
+    matched=sorted(set(matched))
+    return matched[0] if len(matched)==1 else ""
+
+def linkedin_from_sent_mail(name):
+    user=os.getenv("SMTP_USER",""); password=os.getenv("SMTP_APP_PASSWORD","")
+    if not user or not password or not name: return ""
+    found=set()
+    try:
+        with imaplib.IMAP4_SSL("imap.gmail.com",993,ssl_context=ssl.create_default_context(),timeout=20) as box:
+            box.login(user,password.replace(" ",""))
+            status,_=box.select('"[Gmail]/All Mail"',readonly=True)
+            if status!="OK": return ""
+            typ,ids=box.uid("search",None,"FROM",'"'+user+'"')
+            if typ!="OK": return ""
+            for uid in (ids[0] or b"").split()[-120:]:
+                typ,parts=box.uid("fetch",uid,"(BODY.PEEK[])")
+                if typ!="OK": continue
+                for item in parts:
+                    if not isinstance(item,tuple): continue
+                    msg=email.message_from_bytes(item[1])
+                    chunks=[]
+                    for part in msg.walk():
+                        if part.get_content_maintype()=="multipart" or part.get_content_disposition()=="attachment": continue
+                        if part.get_content_type() not in ("text/plain","text/html"): continue
+                        raw=part.get_payload(decode=True)
+                        if raw: chunks.append(raw.decode(part.get_content_charset() or "utf-8","ignore"))
+                    link=extract_candidate_linkedin("\n".join(chunks),name)
+                    if link: found.add(link)
+        return next(iter(found)) if len(found)==1 else ""
+    except Exception:
+        return ""
+
 def candidate_data(profile, pdf):
     data=dict(profile)
     if os.getenv("PORTAL_PROFILE_JSON","").strip():
@@ -43,6 +83,9 @@ def candidate_data(profile, pdf):
         if len(urls)==1 and not data.get("linkedin"):
             link=urls.pop().rstrip(".,);")
             data["linkedin"]=link if link.startswith("http") else "https://"+link
+    if not data.get("linkedin"):
+        private_link=linkedin_from_sent_mail(data.get("name",""))
+        if private_link: data["linkedin"]=private_link
         companies=set(m.strip() for m in re.findall(r"(?im)^\s*current\s+(?:company|employer)\s*:\s*([^\n]{2,100})",text))
         if len(companies)==1 and not data.get("current_company"): data["current_company"]=companies.pop()
     for target,aliases in {"current_location":("city","location"),"education":("qualification","highest_qualification"),"notice_period_days":("notice_days",),"experience_years":("total_experience_years",),"current_company":("employer",),"preferred_location":("preferred_city",)}.items():
