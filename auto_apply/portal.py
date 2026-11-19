@@ -78,28 +78,47 @@ def candidate_data(profile, pdf):
         try:
             from pypdf import PdfReader
             reader=PdfReader(io.BytesIO(pdf))
-            pages=reader.pages[:2]
+            pages=reader.pages
             text="\n".join(page.extract_text() or "" for page in pages)
+
+            # Hyperlinks in PDFs are often stored as annotations rather than visible text.
             for page in pages:
-                for ref in page.get("/Annots",[]) or []:
+                annots=page.get("/Annots",[]) or []
+                for ref in annots:
                     try:
-                        annot=ref.get_object()
-                        action=annot.get("/A")
-                        uri=action.get("/URI") if action else None
-                        if isinstance(uri,str) and uri.startswith(("http://","https://")):
-                            annotation_urls.add(uri)
+                        annot=ref.get_object() if hasattr(ref,"get_object") else ref
+                        action=annot.get("/A") if hasattr(annot,"get") else None
+                        action=action.get_object() if hasattr(action,"get_object") else action
+                        uri=action.get("/URI") if hasattr(action,"get") else None
+                        if isinstance(uri,str):
+                            annotation_urls.add(uri.strip())
                     except Exception:
                         pass
+
+            # Some PDF generators embed URI strings in the raw PDF object stream.
+            try:
+                raw_pdf=pdf.decode("latin1","ignore")
+                for match in re.findall(r"(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+/?",raw_pdf,re.I):
+                    annotation_urls.add(match)
+            except Exception:
+                pass
         except Exception:
             text=""
         matches=set(re.sub(r"[^0-9+]","",m) for m in re.findall(r"(?<!\d)(?:\+91[\s-]*)?[6-9]\d{4}[\s-]?\d{5}(?!\d)",text))
         normalized={"+91"+m[-10:] for m in matches}
         if len(normalized)==1 and not data.get("phone"): data["phone"]=normalized.pop()
-        urls=set(re.findall(r"(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+",text,re.I))
-        urls.update(u for u in annotation_urls if re.match(r"https?://(?:www\.)?linkedin\.com/in/",u,re.I))
-        if len(urls)==1 and not data.get("linkedin"):
-            link=urls.pop().rstrip(".,);")
-            data["linkedin"]=link if link.startswith("http") else "https://"+link
+        urls=set(re.findall(r"(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+/?",text,re.I))
+        for value in annotation_urls:
+            value=str(value or "").strip()
+            match=re.search(r"(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+/?",value,re.I)
+            if match:
+                urls.add(match.group(0))
+        normalized_urls=set()
+        for link in urls:
+            link=str(link).rstrip(".,);/")
+            normalized_urls.add(link if link.startswith("http") else "https://"+link)
+        if len(normalized_urls)==1 and not data.get("linkedin"):
+            data["linkedin"]=normalized_urls.pop()
         companies=set(m.strip() for m in re.findall(r"(?im)^\s*current\s+(?:company|employer)\s*:\s*([^\n]{2,100})",text))
         if len(companies)==1 and not data.get("current_company"): data["current_company"]=companies.pop()
     if not data.get("linkedin") and os.getenv("ALLOW_PRIVATE_MAIL_LOOKUP","").strip().lower()=="true":
