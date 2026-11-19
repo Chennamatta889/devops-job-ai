@@ -47,6 +47,56 @@ def recent_posting(value,days=30):
 def read(url):
     with urlopen(Request(url,headers={"User-Agent":"IndiaJobAgent/1.0","Accept":"application/json"}),timeout=18) as r:
         return json.load(r)
+def recruitee(board, all_tech=False):
+    data=read("https://"+quote(board)+".recruitee.com/api/offers/")
+    offers=data.get("offers",[]) if isinstance(data,dict) else (data if isinstance(data,list) else [])
+    jobs=[]
+    for j in offers:
+        if not isinstance(j,dict):
+            continue
+        title=str(j.get("title") or "").strip()
+        if not title:
+            continue
+        if (technology_role(title) if all_tech else relevant_role(title)) is False:
+            continue
+        locations=j.get("locations") or j.get("location") or []
+        if isinstance(locations,(str,dict)):
+            locations=[locations]
+        loc_bits=[]
+        for loc in locations:
+            if isinstance(loc,str):
+                loc_bits.append(loc)
+                continue
+            if not isinstance(loc,dict):
+                continue
+            for key in ("full_address","name","city","state_name","country","country_code"):
+                value=str(loc.get(key) or "").strip()
+                if value and value not in loc_bits:
+                    loc_bits.append(value)
+        location=" | ".join(loc_bits)
+        if not india_location(location):
+            continue
+        published=j.get("published_at") or j.get("created_at") or j.get("updated_at") or ""
+        if all_tech and not recent_posting(published,30):
+            continue
+        slug=str(j.get("slug") or "").strip()
+        careers_url=str(j.get("careers_url") or (("https://"+board+".recruitee.com/o/"+slug) if slug else "")).strip()
+        apply_url=str(j.get("careers_apply_url") or ((careers_url+"/c/new") if careers_url else "")).strip()
+        if not careers_url:
+            continue
+        description=" ".join(str(j.get(k) or "") for k in ("description","requirements","description_text"))
+        jobs.append(dict(
+            company=str(j.get("company_name") or board).strip(),
+            title=title,
+            location=location,
+            description=description,
+            url=careers_url,
+            apply_url=apply_url,
+            published=published,
+            source="recruitee",
+        ))
+    return jobs
+
 def ashby(board, all_tech=False):
     data=read("https://api.ashbyhq.com/posting-api/job-board/"+quote(board))
     jobs=[]
@@ -106,11 +156,16 @@ def smart(board, all_tech=False):
     return jobs
 
 def discover(all_tech=False):
-    boards=[("ashby",b) for b in ("buspatrol","gradera","openobserve-careers","sarvam","encord","opendr","outmarket","uptimeai","dehazelabs","playpowerlabs","apas","demandbase","plane","sophos","triomics","ema","redis")]+[("smartrecruiters",b) for b in ("BoschGroup","Experian","ServiceNow","Nagarro1","ifs1","Sia","NielsenIQ","Eurofins","Xplor")]
+    boards=(
+        [("ashby",b) for b in ("buspatrol","gradera","openobserve-careers","sarvam","encord","opendr","outmarket","uptimeai","dehazelabs","playpowerlabs","apas","demandbase","plane","sophos","triomics","ema","redis")]
+        +[("smartrecruiters",b) for b in ("BoschGroup","Experian","ServiceNow","Nagarro1","ifs1","Sia","NielsenIQ","Eurofins","Xplor")]
+        +[("recruitee",b) for b in ("metyisag","gsbsolutions1","brainsquare","deephealth","kcoverseaseducation","qualifyzegmbh","sgbindia","infoprolearning")]
+    )
     def run(item):
         kind,board=item
         try:
-            rows=(ashby if kind=="ashby" else smart)(board,all_tech=all_tech)
+            fetcher={"ashby":ashby,"smartrecruiters":smart,"recruitee":recruitee}[kind]
+            rows=fetcher(board,all_tech=all_tech)
             print("India source:",kind,board,("technology jobs:" if all_tech else "target jobs:"),len(rows))
             return rows
         except Exception as exc:
