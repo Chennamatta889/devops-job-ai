@@ -158,7 +158,7 @@ def main():
     # Retry legacy pre-submission failures once using the improved checks.
     # Never retry unknown outcomes or reservations automatically.
     if portal_on:
-        ledger={k:v for k,v in ledger.items() if v not in ("portal_review_candidate_error","portal_review_human_verification","portal_review_choices","portal_review_unanswered_select","portal_review_unanswered_fields","portal_review_missing_screening_v3","portal_review_resume_sync","portal_review_no_submit_operation","portal_uncertain_server_accepted")}
+        ledger={k:v for k,v in ledger.items() if v not in ("portal_review_candidate_error","portal_review_human_verification","portal_review_choices","portal_review_unanswered_select","portal_review_unanswered_fields","portal_review_missing_screening_v3","portal_review_resume_sync","portal_review_form_sync_busy","portal_review_no_submit_operation","portal_uncertain_server_accepted")}
     print("Email enabled:",auto,"Portal enabled:",portal_on)
     print("Filter outcomes:",dict(Counter(reason for (score,matched,missing,reason),j in ranked)))
     confirmed=0
