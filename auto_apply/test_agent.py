@@ -155,7 +155,7 @@ class TargetingAndOptionTests(unittest.TestCase):
         self.assertTrue(relevant_role("Infrastructure Automation Engineer"))
     def test_location_option_prefix(self):
         from screening import option_match
-        self.assertTrue(option_match("Current location","Hyderabad","Hyderabad, Telangana, India"))
-        self.assertFalse(option_match("Current location","Hyderabad","Hyderabad, Sindh, Pakistan"))
+        self.assertTrue(option_match("Current location","Hyderabad","Hyderabad, Telangana, India",{"country":"India"}))
+        self.assertFalse(option_match("Current location","Hyderabad","Hyderabad, Sindh, Pakistan",{"country":"India"}))
         self.assertFalse(option_match("Expected CTC","11","11 LPA"))
 if __name__=="__main__": unittest.main()
