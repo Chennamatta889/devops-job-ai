@@ -1,0 +1,40 @@
+name: Job application agent
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 4,12 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: auto-apply-agent
+  cancel-in-progress: false
+jobs:
+  match:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s auto_apply -p 'test_*.py'
+      - run: |
+          git config user.name "job-agent[bot]"
+          git config user.email "job-agent@users.noreply.github.com"
+      - name: Discover and match
+        if: ${{ env.PROFILE_JSON != '' }}
+        env:
+          PROFILE_JSON: ${{ secrets.PROFILE_JSON }}
+          GREENHOUSE_BOARDS: ${{ secrets.GREENHOUSE_BOARDS }}
+          JOB_FEED_JSON: ${{ secrets.JOB_FEED_JSON }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
+          RESUME_BASE64: ${{ secrets.RESUME_BASE64 }}
+          AUTO_APPLY: ${{ vars.AUTO_APPLY }}
+        run: python auto_apply/agent.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: matched-jobs
+          path: auto_apply/matches.csv
+          if-no-files-found: ignore
+          retention-days: 3
