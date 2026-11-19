@@ -133,10 +133,12 @@ def verification_required(page):
         if selectors.nth(i).is_visible(): return True
     return False
 
+ASHBY_SUBMIT_OPS={"ApiSubmitSingleApplicationFormAction","ApiSubmitMultipleFormsAction"}
 def ashby_submit_signal(payload):
     """Return only a safe submit classification; never return applicant data."""
     if not isinstance(payload,dict): return ""
-    action=(payload.get("data") or {}).get("submitMultipleFormsAction")
+    data=payload.get("data") or {}
+    action=data.get("submitApplicationFormAction") or data.get("submitMultipleFormsAction")
     if not isinstance(action,dict): return ""
     messages=action.get("messages") or {}
     if isinstance(messages,dict) and messages.get("blockMessageForCandidateHtml"):
@@ -225,7 +227,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 }
                 if operation:
                     entry["operation"]=operation
-                if u.hostname=="jobs.ashbyhq.com" and operation=="ApiSubmitMultipleFormsAction" and response.status==200:
+                if u.hostname=="jobs.ashbyhq.com" and operation in ASHBY_SUBMIT_OPS and response.status==200:
                     try:
                         signal=ashby_submit_signal(response.json())
                     except Exception:
@@ -290,7 +292,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             diagnostic["visible_alert_count"]=page.get_by_role("alert").count()
             diagnostic["final_host"]=urlparse(page.url).hostname
             diagnostic["final_path"]=(urlparse(page.url).path or "/")[:240]
-            submit_responses=[x for x in responses if x.get("operation")=="ApiSubmitMultipleFormsAction"] if u.hostname=="jobs.ashbyhq.com" else responses
+            submit_responses=[x for x in responses if x.get("operation") in ASHBY_SUBMIT_OPS] if u.hostname=="jobs.ashbyhq.com" else responses
             codes=[x["status"] for x in submit_responses]
             if "success" in ashby_signals:
                 diagnostic["confirmation"]="ashby_form_submit_success"
