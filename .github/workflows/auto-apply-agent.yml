@@ -29,6 +29,8 @@ jobs:
           JOB_FEED_JSON: ${{ secrets.JOB_FEED_JSON }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
+          RESUME_PART_1: ${{ secrets.RESUME_PART_1 }}
+          RESUME_PART_2: ${{ secrets.RESUME_PART_2 }}
           RESUME_BASE64: ${{ secrets.RESUME_BASE64 }}
           AUTO_APPLY: ${{ vars.AUTO_APPLY }}
         run: python auto_apply/agent.py
