@@ -182,7 +182,7 @@ class AshbySubmitTests(unittest.TestCase):
 class PrivateLinkedInFallbackTests(unittest.TestCase):
     def test_extract_candidate_linkedin(self):
         from portal import extract_candidate_linkedin
-        body="LinkedIn: https://www.linkedin.com/in/chenna123/ recruiter https://www.linkedin.com/in/other-person/"
+        body="LinkedIn: https://www.linkedin.com/in/chenna123/\nRecruiter: https://www.linkedin.com/in/other-person/"
         self.assertEqual(extract_candidate_linkedin(body,"Matta Chenna Rao"),"https://www.linkedin.com/in/chenna123")
     @patch("portal.linkedin_from_sent_mail",return_value="https://www.linkedin.com/in/chenna123")
     @patch.dict("os.environ", {"SMTP_USER":"candidate@example.com","PORTAL_PROFILE_JSON":""})
