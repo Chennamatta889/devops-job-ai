@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from portal import candidate_data, portal_enabled
 from agent import match, key
+from india_sources import india_location, relevant_role
 class AgentTests(unittest.TestCase):
     def setUp(self):
         self.p={"locations":["india"],"skills":["aws","jenkins","docker"],"max_required_years":3}
@@ -29,4 +30,14 @@ class PortalTests(unittest.TestCase):
     @patch.dict("os.environ", {"PORTAL_AUTO_APPLY":"false"})
     def test_opt_out(self):
         self.assertFalse(portal_enabled({},b"%PDF-test"))
+class IndiaTests(unittest.TestCase):
+    def test_locations(self):
+        self.assertTrue(india_location("Remote - India"))
+        self.assertTrue(india_location("Kochi"))
+        self.assertFalse(india_location("Remote - US"))
+        self.assertFalse(india_location("Indianapolis"))
+    def test_roles(self):
+        self.assertTrue(relevant_role("Cloud Support Engineer"))
+        self.assertTrue(relevant_role("Build Engineer"))
+        self.assertFalse(relevant_role("Java Developer"))
 if __name__=="__main__": unittest.main()
