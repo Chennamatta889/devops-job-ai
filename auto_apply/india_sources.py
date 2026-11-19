@@ -1,5 +1,6 @@
 """India-focused public career discovery. No authentication or paid API."""
 import json, re
+from datetime import datetime, timezone, timedelta
 from urllib.request import Request, urlopen
 from urllib.parse import quote, urlencode
 from concurrent.futures import ThreadPoolExecutor
@@ -30,6 +31,19 @@ def technology_category(value):
 
 def technology_role(value):
     return bool(technology_category(value))
+def recent_posting(value,days=30):
+    if not value:
+        return False
+    try:
+        raw=str(value).strip().replace("Z","+00:00")
+        dt=datetime.fromisoformat(raw)
+        if dt.tzinfo is None:
+            dt=dt.replace(tzinfo=timezone.utc)
+        now=datetime.now(timezone.utc)
+        return now-timedelta(days=days) <= dt.astimezone(timezone.utc) <= now+timedelta(hours=6)
+    except Exception:
+        return False
+
 def read(url):
     with urlopen(Request(url,headers={"User-Agent":"IndiaJobAgent/1.0","Accept":"application/json"}),timeout=18) as r:
         return json.load(r)
@@ -42,6 +56,7 @@ def ashby(board, all_tech=False):
         if country.lower() in ("in","india"): loc+=" | India"
         if not india_location(loc) or j.get("isListed") is False: continue
         if (technology_role(j.get("title")) if all_tech else relevant_role(j.get("title"))) is False: continue
+        if all_tech and not recent_posting(j.get("publishedAt",""),30): continue
         jobs.append(dict(company=board,title=j["title"],location=loc,description=j.get("descriptionPlain") or j.get("descriptionHtml",""),url=j.get("jobUrl",""),apply_url=j.get("applyUrl",""),published=j.get("publishedAt",""),source="ashby"))
     return jobs
 def smart(board, all_tech=False):
@@ -64,6 +79,8 @@ def smart(board, all_tech=False):
             if not ident or ident in seen:
                 continue
             if (technology_role(title) if all_tech else relevant_role(title)) is False:
+                continue
+            if all_tech and not recent_posting(j.get("releasedDate",""),30):
                 continue
             seen.add(ident)
             loc=j.get("location") or {}
