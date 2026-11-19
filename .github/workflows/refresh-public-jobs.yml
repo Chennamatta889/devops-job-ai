@@ -45,4 +45,5 @@ jobs:
         env:
           PUBLIC_FEED_ONLY: 'true'
           AGGREGATOR_JOB_FEED_JSON: ${{ secrets.AGGREGATOR_JOB_FEED_JSON }}
+          AGGREGATOR_JOB_FEED_URLS: ${{ vars.AGGREGATOR_JOB_FEED_URLS }}
         run: python auto_apply/agent.py
