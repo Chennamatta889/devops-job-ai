@@ -67,6 +67,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
     try:
         if not pdf.startswith(b"%PDF-"): return "portal_review_invalid_resume"
         data=candidate_data(profile,pdf)
+        data.setdefault("application_source","Company careers page")
         data.setdefault("interest_statement","I am interested in this "+str(job.get("title","")).strip()+" opportunity because it aligns with my interest in cloud infrastructure, automation and reliable software delivery.")
         if not all(data.get(x) for x in ("first_name","last_name","email","phone")):
             return "portal_review_contact"
