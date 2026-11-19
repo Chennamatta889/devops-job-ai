@@ -55,6 +55,7 @@ def candidate_data(profile, pdf):
         data.setdefault("first_name",name.split()[0])
         data.setdefault("last_name"," ".join(name.split()[1:]))
     data.setdefault("email",os.getenv("SMTP_USER",""))
+    text=""
     if not data.get("phone") or not data.get("linkedin") or not data.get("current_company"):
         # Parse only unambiguous, explicitly identifiable resume facts.
         annotation_urls=set()
@@ -83,11 +84,11 @@ def candidate_data(profile, pdf):
         if len(urls)==1 and not data.get("linkedin"):
             link=urls.pop().rstrip(".,);")
             data["linkedin"]=link if link.startswith("http") else "https://"+link
+        companies=set(m.strip() for m in re.findall(r"(?im)^\s*current\s+(?:company|employer)\s*:\s*([^\n]{2,100})",text))
+        if len(companies)==1 and not data.get("current_company"): data["current_company"]=companies.pop()
     if not data.get("linkedin"):
         private_link=linkedin_from_sent_mail(data.get("name",""))
         if private_link: data["linkedin"]=private_link
-        companies=set(m.strip() for m in re.findall(r"(?im)^\s*current\s+(?:company|employer)\s*:\s*([^\n]{2,100})",text))
-        if len(companies)==1 and not data.get("current_company"): data["current_company"]=companies.pop()
     for target,aliases in {"current_location":("city","location"),"education":("qualification","highest_qualification"),"notice_period_days":("notice_days",),"experience_years":("total_experience_years",),"current_company":("employer",),"preferred_location":("preferred_city",)}.items():
         if not data.get(target):
             for alias in aliases:
