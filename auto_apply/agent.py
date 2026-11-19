@@ -232,19 +232,127 @@ def match(job, profile):
     weights={"aws":3,"azure":3,"kubernetes":3,"openshift":3,"jenkins":3,"ci/cd":3,"terraform":3,"docker":2,"linux":2,"python":2,"gcp":3,"ansible":2,"prometheus":2,"grafana":2}
     score = round(100*sum(weights.get(s,1) for s in matched)/sum(weights.get(s,1) for s in required)) if len(required)>=3 else 0
     return score, matched, missing, "matched" if years else "experience unclear"
+AGGREGATOR_SOURCES={"linkedin","indeed","naukri","foundit"}
+
+def _normalized_words(value):
+    text=clean(value)
+    text=re.sub(r"\b(private|pvt|limited|ltd|incorporated|inc|llc|llp|corp|corporation|company|co)\b"," ",text)
+    return [w for w in re.findall(r"[a-z0-9+#.]+",text) if len(w)>1]
+
+def _company_key(value):
+    return " ".join(_normalized_words(value))
+
+def _title_tokens(value):
+    stop={"senior","sr","junior","jr","lead","principal","staff","i","ii","iii","iv","engineer","developer"}
+    return {w for w in _normalized_words(value) if w not in stop}
+
+def _location_tokens(value):
+    generic={"india","remote","hybrid","office","location"}
+    return {w for w in _normalized_words(value) if w not in generic}
+
+def direct_match_score(signal,direct):
+    """Conservative aggregator-to-employer match score (0-100)."""
+    sc=_company_key(signal.get("company"))
+    dc=_company_key(direct.get("company"))
+    if not sc or sc in {"company","confidential","unknown"} or not dc:
+        return 0
+    if sc==dc:
+        company_score=45
+    elif sc in dc or dc in sc:
+        company_score=38
+    else:
+        return 0
+
+    st=_title_tokens(signal.get("title"))
+    dt=_title_tokens(direct.get("title"))
+    if not st or not dt:
+        return 0
+    overlap=len(st & dt)
+    union=len(st | dt)
+    similarity=overlap/union if union else 0
+    if similarity < 0.45:
+        return 0
+    title_score=round(45*similarity)
+
+    sl=_location_tokens(signal.get("location"))
+    dl=_location_tokens(direct.get("location"))
+    location_score=10 if (not sl or not dl or sl & dl) else 0
+    return company_score+title_score+location_score
+
+def resolve_aggregator_signals(direct_jobs,signals):
+    """
+    Match aggregator discovery signals to already discovered employer/ATS jobs.
+    Resolved signals annotate the direct job instead of creating duplicate cards.
+    """
+    direct=[dict(j) for j in direct_jobs]
+    unresolved=[]
+    resolved=0
+    for signal in signals:
+        source=str(signal.get("source","")).lower()
+        supplied=known_direct_apply_url(signal.get("direct_apply_url"))
+        if supplied:
+            row=dict(signal)
+            row["direct_apply_url"]=supplied
+            row["resolution"]="provided_direct_url"
+            unresolved.append(row)
+            resolved+=1
+            continue
+
+        best_index=None
+        best_score=0
+        for index,candidate in enumerate(direct):
+            score=direct_match_score(signal,candidate)
+            if score>best_score:
+                best_index=index
+                best_score=score
+        if best_index is not None and best_score>=75:
+            candidate=direct[best_index]
+            via=list(candidate.get("discovered_via") or [])
+            if source and source not in via:
+                via.append(source)
+            candidate["discovered_via"]=via
+            listings=dict(candidate.get("source_listings") or {})
+            if source and signal.get("listing_url"):
+                listings[source]=signal["listing_url"]
+            candidate["source_listings"]=listings
+            candidate["resolution_score"]=max(int(candidate.get("resolution_score") or 0),best_score)
+            resolved+=1
+        else:
+            row=dict(signal)
+            row["resolution"]="listing_only"
+            unresolved.append(row)
+    print("Aggregator signals resolved to direct employer jobs:",resolved)
+    print("Aggregator signals left as listing-only:",len(unresolved))
+    return direct+unresolved
+
 def aggregator_jobs():
-    """Load optional approved aggregator/partner feed rows without accessing email."""
+    """Load approved aggregator/partner discovery feeds without accessing email."""
+    rows=[]
     raw=os.getenv("AGGREGATOR_JOB_FEED_JSON","").strip()
-    if not raw:
-        return []
-    try:
-        rows=json.loads(raw)
-    except Exception:
-        print("AGGREGATOR_JOB_FEED_JSON is invalid JSON",file=sys.stderr)
-        return []
-    if not isinstance(rows,list):
-        return []
-    allowed={"linkedin","indeed","naukri","foundit"}
+    if raw:
+        try:
+            parsed=json.loads(raw)
+            if isinstance(parsed,list):
+                rows.extend(parsed)
+        except Exception:
+            print("AGGREGATOR_JOB_FEED_JSON is invalid JSON",file=sys.stderr)
+
+    urls=[u.strip() for u in re.split(r"[,;\n]+",os.getenv("AGGREGATOR_JOB_FEED_URLS","")) if u.strip()]
+    for feed_url in urls[:10]:
+        try:
+            parsed=urlparse(feed_url)
+            if parsed.scheme!="https" or not parsed.hostname:
+                continue
+            req=Request(feed_url,headers={"User-Agent":"DraftflowAIJobs/1.0","Accept":"application/json"})
+            with urlopen(req,timeout=15) as response:
+                payload=json.load(response)
+            feed_rows=payload.get("jobs",[]) if isinstance(payload,dict) else payload
+            if isinstance(feed_rows,list):
+                rows.extend(feed_rows)
+        except Exception as exc:
+            print("Aggregator feed unavailable:",type(exc).__name__,file=sys.stderr)
+
+    allowed=AGGREGATOR_SOURCES
     jobs=[]
     for row in rows:
         if not isinstance(row,dict):
@@ -313,7 +421,8 @@ def get_jobs():
     print("Raw legacy board jobs:",len(jobs))
     jobs=[j for j in jobs if india_location(j.get("location")) and technology_role(j.get("title"))]
     jobs.extend(discover(all_tech=True))
-    jobs.extend(aggregator_jobs())
+    signals=aggregator_jobs()
+    jobs=resolve_aggregator_signals(jobs,signals)
     if not jobs: print("No India-based technology jobs discovered.")
     return jobs
 def key(j):
@@ -379,6 +488,9 @@ def publish_public_feed(jobs):
             "url":url,
             "listing_url":listing_url or url,
             "direct_apply":direct_apply,
+            "discovered_via":list(j.get("discovered_via") or []),
+            "source_listings":dict(j.get("source_listings") or {}),
+            "resolution":str(j.get("resolution") or ""),
             "listing_url":str(j.get("listing_url") or "").strip(),
             "direct_apply":bool(j.get("direct_apply", j.get("source") in ("greenhouse","lever","ashby","smartrecruiters"))),
             "skills":skills[:12],
