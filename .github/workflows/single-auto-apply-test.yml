@@ -38,10 +38,10 @@ jobs:
           RESUME_PART_2: ${{ secrets.RESUME_PART_2 }}
           RESUME_BASE64: ${{ secrets.RESUME_BASE64 }}
           ALLOW_PRIVATE_MAIL_LOOKUP: 'false'
-          TARGET_COMPANY: Sophos
-          TARGET_TITLE: Site Reliability Engineer /Cloud
+          TARGET_COMPANY: Plane
+          TARGET_TITLE: Software Engineer, DevOps
           TARGET_LOCATION: India
-          TARGET_URL: https://jobs.ashbyhq.com/sophos/46929d7f-2677-4837-a033-134d9fde79fe/application
+          TARGET_URL: https://jobs.ashbyhq.com/plane/0076054c-1df5-4f73-88b0-2af635e20f51/application
         run: python auto_apply/single_portal_test.py
 
       - uses: actions/upload-artifact@v4
