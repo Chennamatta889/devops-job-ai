@@ -7,6 +7,7 @@ from urllib.parse import quote, urlparse
 from html import unescape
 from concurrent.futures import ThreadPoolExecutor
 from collections import Counter
+from india_sources import india_location, relevant_role, discover
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / "ledger.json"
@@ -18,15 +19,17 @@ def has(s, term):
     return bool(re.search(r"(?<![\w])"+re.escape(term)+r"(?![\w])", s))
 def match(job, profile):
     title, body, loc = map(clean, (job.get("title"),job.get("description"),job.get("location")))
-    if not re.search(ROLES,title) or re.search(r"\b(senior|sr\.?|lead|principal|staff|manager|architect|intern)\b",title):
+    if not relevant_role(title) or re.search(r"\b(senior|sr\.?|lead|principal|staff|manager|architect|intern|director|head)\b",title):
         return 0, [], [], "role"
-    if not any(has(loc,x.lower()) for x in profile["locations"]):
+    if not india_location(loc):
         return 0, [], [], "location"
-    years = re.findall(r"(\d+)\s*(?:\+|[-–]\s*\d+)?\s*(?:years|yrs)\b",body)
+    years = re.findall(r"(\d+)\s*(?:\+|[-–—]\s*\d+)?\s*(?:years|yrs)\b",body)
     if years and max(map(int,years))>profile["max_required_years"]:
         return 0, [], [], "experience"
-    required = [s for s in SKILLS if has(body,s)]
-    own = set(x.lower() for x in profile["skills"])
+    aliases={"aws":["amazon web services"],"azure":["microsoft azure"],"kubernetes":["k8s","eks","aks"],"openshift":["ocp","red hat openshift"],"ci/cd":["cicd","ci cd","continuous integration","continuous delivery","continuous deployment"],"jfrog":["artifactory"],"gcp":["google cloud"],"argocd":["argo cd"]}
+    required = [s for s in SKILLS if any(has(body,t) for t in [s]+aliases.get(s,[]))]
+    own = set(str(x).lower() for x in profile["skills"])
+    own.update(s for s, terms in aliases.items() if any(t in own for t in terms))
     matched = [s for s in required if s in own]
     missing = [s for s in required if s not in own]
     score = round(100*len(matched)/len(required)) if len(required)>=3 else 0
@@ -59,7 +62,10 @@ def get_jobs():
     with ThreadPoolExecutor(max_workers=6) as pool:
         for found in pool.map(fetch,sources):
             jobs.extend(found)
-    if not jobs: print("No jobs discovered. Configure GREENHOUSE_BOARDS or JOB_FEED_JSON.")
+    print("Raw legacy board jobs:",len(jobs))
+    jobs=[j for j in jobs if india_location(j.get("location")) and relevant_role(j.get("title"))]
+    jobs.extend(discover())
+    if not jobs: print("No India-based target jobs discovered.")
     return jobs
 def key(j):
     identity = str(j.get("company","")).strip().lower()+"|"+str(j.get("title","")).strip().lower()+"|"+str(j.get("location","")).strip().lower()
@@ -115,7 +121,12 @@ def main():
         real_profile=dict(profile,max_required_years=actual_years)
         if match(j,real_profile)[0]==0 and reason=="matched": reason="stretch experience - review only"
         status=ledger.get(k,"review_portal")
-        eligible=reason=="matched" and score>=80 and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever")
+        if k not in ledger:
+            if reason!="matched": status="review_"+reason.replace(" ","_")
+            elif j.get("source")=="smartrecruiters": status="review_smartrecruiters_form"
+            elif not portal_on and not auto: status="review_application_disabled"
+            else: status="review_pending_channel"
+        eligible=reason=="matched" and score>=65 and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever","ashby","smartrecruiters")
         if k not in ledger and eligible:
             status="ready_email"
             if auto and count<min(int(profile.get("max_per_run",5)),10):
@@ -126,7 +137,7 @@ def main():
                 except Exception:
                     ledger[k]="uncertain_manual_review"; status=ledger[k]
                 persist(ledger)
-        if k not in ledger and portal_on and reason=="matched" and score>=80 and j.get("source") in ("greenhouse","lever") and portal_count<3:
+        if k not in ledger and portal_on and reason=="matched" and score>=80 and j.get("source") in ("greenhouse","lever","ashby") and portal_count<3:
             ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
             status=portal_apply(j,profile,resume)
             if status=="portal_confirmed": confirmed+=1
