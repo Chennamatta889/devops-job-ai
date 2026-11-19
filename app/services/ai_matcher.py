@@ -8,14 +8,11 @@ load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-if not GEMINI_API_KEY:
-    raise RuntimeError(
-        "GEMINI_API_KEY is not configured."
-    )
-
-client = genai.Client(
-    api_key=GEMINI_API_KEY
-)
+def _client():
+    key=os.getenv("GEMINI_API_KEY") or GEMINI_API_KEY
+    if not key:
+        raise RuntimeError("GEMINI_API_KEY is not configured.")
+    return genai.Client(api_key=key)
 
 
 def analyze_job(job, profile):
@@ -105,7 +102,7 @@ Rules:
 9. Return ONLY JSON.
 """
 
-    response = client.models.generate_content(
+    response = _client().models.generate_content(
         model="gemini-3.5-flash-lite",
         contents=prompt,
     )
