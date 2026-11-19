@@ -22,9 +22,9 @@ jobs:
           git config user.name "job-agent[bot]"
           git config user.email "job-agent@users.noreply.github.com"
       - name: Install browser for optional portal submissions
-        if: ${{ vars.PORTAL_AUTO_APPLY == 'true' }}
+        if: ${{ vars.PORTAL_AUTO_APPLY != 'false' }}
         run: |
-          pip install playwright
+          pip install playwright pypdf
           python -m playwright install --with-deps chromium
       - name: Discover and match
         if: ${{ env.PROFILE_JSON != '' }}
