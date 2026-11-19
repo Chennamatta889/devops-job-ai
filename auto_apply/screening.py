@@ -134,8 +134,14 @@ def fill_screening(page,profile):
             if labels.count()==1: question=labels.inner_text()
         answer=answer_for(question,profile)
         if answer is None: continue
-        options=group.get_by_role("radio",name=re.compile(r"^"+re.escape(as_text(answer))+r"$",re.I))
-        if options.count()==1 and options.is_enabled() and not options.is_checked():
+        names=[as_text(answer)]
+        if isinstance(answer,bool): names.extend(["True"] if answer else ["False"])
+        options=None
+        for candidate in names:
+            found=group.get_by_role("radio",name=re.compile(r"^"+re.escape(candidate)+r"$",re.I))
+            if found.count()==1:
+                options=found; break
+        if options is not None and options.is_enabled() and not options.is_checked():
             options.check()
             filled+=1
     checks=page.locator('input[type=checkbox]:visible')
