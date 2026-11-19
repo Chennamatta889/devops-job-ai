@@ -41,7 +41,7 @@ def match(job, profile):
 def get_jobs():
     jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
     if not isinstance(jobs,list): raise ValueError("JOB_FEED_JSON must be an array")
-    defaults = {"greenhouse":"crashplan,pointwild,conviva,toradex,razorpaysoftwareprivatelimited,singlestore,machinify-india,neweratech,workatbackbase,axicorpfinancialservicesptyltd,insurityindia,merqube,mfsgtechnologiesindia,rhythmx-ai,sonicwall,zscaler,cloudflare,grafanalabs,databricks,canonical,elastic,gitlab,mongodb,twilio,okta,mastercontrol,acquia,datadog,remote,toast,affirm,coinbase,asana,reddit,webflow,netlify,vercel,rubrik,druva,thoughtworks,branch,workato,celonis,pagerduty,cockroachlabs,chainguard,particle41llc","lever":"pditechnologies,smart-working-solutions,brightedge,zeta,ttecdigital,keyloop,hevodata,spotify,wealthsimple,contentsquare,brillio-2,shyftlabs,lingarogroup,mactores,zimperium"}
+    defaults = {"greenhouse":"crashplan,pointwild,conviva,toradex,razorpaysoftwareprivatelimited,singlestore,machinify-india,neweratech,workatbackbase,axicorpfinancialservicesptyltd,insurityindia,merqube,mfsgtechnologiesindia,rhythmx-ai,sonicwall,zscaler,cloudflare,grafanalabs,databricks,canonical,elastic,gitlab,mongodb,twilio,okta,mastercontrol,acquia,datadog,remote,toast,affirm,coinbase,asana,reddit,webflow,netlify,vercel,rubrik,druva,thoughtworks,branch,workato,celonis,pagerduty,cockroachlabs,chainguard,particle41llc,coherehealth","lever":"pditechnologies,smart-working-solutions,brightedge,zeta,ttecdigital,keyloop,hevodata,spotify,wealthsimple,contentsquare,brillio-2,shyftlabs,lingarogroup,mactores,zimperium"}
     sources = []
     for kind in defaults:
         value = os.getenv(kind.upper()+"_BOARDS","").strip() or defaults[kind]
