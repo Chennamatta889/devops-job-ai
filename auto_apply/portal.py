@@ -8,30 +8,36 @@ _PRIVATE_LINKEDIN_CACHE={}
 def portal_enabled(profile, pdf):
     return os.getenv("PORTAL_AUTO_APPLY","").strip().lower()!="false" and pdf.startswith(b"%PDF-")
 def extract_candidate_linkedin(text, name):
-    urls=set(re.findall(r"https?://(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+/?",str(text or ""),re.I))
-    tokens=[normalize for normalize in re.findall(r"[a-z0-9]+",str(name or "").lower()) if len(normalize)>=4]
+    raw=str(text or "")
+    strong=set(m.rstrip("/") for m in re.findall(r"(?is)linkedin.{0,400}?(https?://(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+/?)",raw))
+    if len(strong)==1:
+        return next(iter(strong))
+    urls=set(re.findall(r"https?://(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%.-]+/?",raw,re.I))
+    tokens=[token for token in re.findall(r"[a-z0-9]+",str(name or "").lower()) if len(token)>=4]
     matched=[]
     for url in urls:
         slug=url.rstrip("/").rsplit("/",1)[-1].lower()
-        if not tokens or any(token in slug for token in tokens):
+        if tokens and any(token in slug for token in tokens):
             matched.append(url.rstrip("/"))
     matched=sorted(set(matched))
     return matched[0] if len(matched)==1 else ""
 
 def linkedin_from_sent_mail(name):
     user=os.getenv("SMTP_USER",""); password=os.getenv("SMTP_APP_PASSWORD","")
-    if not user or not password or not name: return ""
+    if not user or not password: return ""
     cache_key=(user.lower(),str(name).strip().lower())
     if cache_key in _PRIVATE_LINKEDIN_CACHE: return _PRIVATE_LINKEDIN_CACHE[cache_key]
     found=set()
     try:
         with imaplib.IMAP4_SSL("imap.gmail.com",993,ssl_context=ssl.create_default_context(),timeout=20) as box:
             box.login(user,password.replace(" ",""))
-            status,_=box.select('"[Gmail]/All Mail"',readonly=True)
+            status,_=box.select('"[Gmail]/Sent Mail"',readonly=True)
+            if status!="OK":
+                status,_=box.select('"[Gmail]/All Mail"',readonly=True)
             if status!="OK": return ""
-            typ,ids=box.uid("search",None,"FROM",'"'+user+'"')
+            typ,ids=box.uid("search",None,"ALL")
             if typ!="OK": return ""
-            for uid in (ids[0] or b"").split()[-120:]:
+            for uid in (ids[0] or b"").split()[-150:]:
                 typ,parts=box.uid("fetch",uid,"(BODY.PEEK[])")
                 if typ!="OK": continue
                 for item in parts:
@@ -95,6 +101,7 @@ def candidate_data(profile, pdf):
     if not data.get("linkedin"):
         private_link=linkedin_from_sent_mail(data.get("name",""))
         if private_link: data["linkedin"]=private_link
+    print("Candidate LinkedIn available:",bool(data.get("linkedin")))
     for target,aliases in {"current_location":("city","location"),"education":("qualification","highest_qualification"),"notice_period_days":("notice_days",),"experience_years":("total_experience_years",),"current_company":("employer",),"preferred_location":("preferred_city",)}.items():
         if not data.get(target):
             for alias in aliases:
