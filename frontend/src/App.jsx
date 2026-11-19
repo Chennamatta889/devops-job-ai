@@ -10,6 +10,7 @@ function prettySource(value = '') {
     lever: 'Lever',
     ashby: 'Ashby',
     smartrecruiters: 'SmartRecruiters',
+    recruitee: 'Recruitee',
     linkedin_alert: 'LinkedIn',
     naukri_alert: 'Naukri',
     indeed_alert: 'Indeed',
