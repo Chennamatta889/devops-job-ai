@@ -1,6 +1,7 @@
 """Conservative applicant-side browser adapter; never bypass challenges."""
 import os, json, base64, re, io
 from urllib.parse import urlparse
+from screening import fill_screening
 
 HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
 def portal_enabled(profile, pdf):
@@ -46,7 +47,7 @@ def portal_apply(job, profile, pdf):
                 if link.count()==1 and link.is_visible(): link.click(timeout=10000)
             if urlparse(page.url).hostname not in HOSTS: return "portal_review_redirect"
             page.wait_for_timeout(2000)
-            if page.locator('iframe[src*="captcha"], iframe[src*="challenge"]').count(): return "portal_review_challenge"
+            if page.locator('iframe[src*="captcha"], iframe[src*="challenge"]').count(): return "portal_review_human_verification"
             stage="contact_fields"
             fields={"first_name":data.get("first_name"),"last_name":data.get("last_name"),"name":data.get("name"),"email":data.get("email"),"phone":data.get("phone"),"org":data.get("current_company"),"urls[LinkedIn]":data.get("linkedin"),"urls[GitHub]":data.get("github")}
             for key,val in fields.items():
@@ -63,7 +64,11 @@ def portal_apply(job, profile, pdf):
                 files=page.get_by_label(re.compile(r"resume|curriculum vitae",re.I)).and_(page.locator("input[type=file]"))
             if files.count()!=1: return "portal_review_resume_field"
             stage="screening"
-            if page.locator('select:visible[required], [role=combobox]:visible[aria-required=true], input[type=checkbox]:visible[required], input[type=radio]:visible[required]').count(): return "portal_review_choices"
+            print("Screening fields filled:",fill_screening(page,data))
+            if page.locator('[role=combobox]:visible[aria-required=true]:not(select), input[type=checkbox]:visible[required], input[type=radio]:visible[required]').count(): return "portal_review_choices"
+            selects=page.locator("select:visible[required], select:visible[aria-required=true]")
+            for i in range(selects.count()):
+                if not selects.nth(i).input_value(): return "portal_review_unanswered_select"
             unknown=page.locator('input:visible:not([type=hidden]):not([type=submit]):not([type=button]):not([type=file]), textarea:visible')
             for i in range(unknown.count()):
                 field=unknown.nth(i)
