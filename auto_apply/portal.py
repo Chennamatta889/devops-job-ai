@@ -58,7 +58,7 @@ def portal_apply(job, profile, pdf):
         with sync_playwright() as p:
             browser=p.chromium.launch()
             page=browser.new_page(accept_downloads=False)
-            page.route("**/*", lambda route: route.abort() if route.request.is_navigation_request() and urlparse(route.request.url).hostname not in HOSTS else route.continue_())
+            page.route("**/*", lambda route: route.abort() if route.request.is_navigation_request() and route.request.frame==page.main_frame and urlparse(route.request.url).hostname not in HOSTS else route.continue_())
             stage="navigation"
             page.goto(url,wait_until="domcontentloaded",timeout=45000)
             if u.hostname in ("job-boards.greenhouse.io","boards.greenhouse.io"):
