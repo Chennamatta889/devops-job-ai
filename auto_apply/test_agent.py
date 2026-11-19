@@ -23,6 +23,14 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(extract_experience_requirement("Minimum 3 years experience required"),{"min":3,"max":None,"label":"3+ years"})
         self.assertEqual(extract_experience_requirement("5+ years in cloud operations"),{"min":5,"max":None,"label":"5+ years"})
         self.assertEqual(extract_experience_requirement("Strong AWS and Kubernetes skills"),{"min":None,"max":None,"label":"Not specified"})
+class AggregatorFeedTests(unittest.TestCase):
+    @patch.dict("os.environ", {"AGGREGATOR_JOB_FEED_JSON": """[{"source":"indeed","title":"Java Developer","company":"Example","location":"Hyderabad, India","published":"2026-11-19T10:00:00Z","listing_url":"https://in.indeed.com/viewjob?jk=0123456789abcdef","direct_apply_url":"https://jobs.example.com/java"}]"""})
+    def test_approved_aggregator_feed(self):
+        rows=aggregator_jobs()
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]["source"],"indeed")
+        self.assertEqual(rows[0]["direct_apply_url"],"https://jobs.example.com/java")
+
 class PortalTests(unittest.TestCase):
     @patch.dict("os.environ", {"SMTP_USER":"candidate@example.com","PORTAL_PROFILE_JSON":"","PORTAL_AUTO_APPLY":""})
     def test_existing_secrets(self):
