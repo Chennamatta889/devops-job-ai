@@ -91,4 +91,31 @@ class ReconciliationTests(unittest.TestCase):
         self.assertFalse(ack_matches("Application confirmation","ExampleCo: Thank you for applying to Cloud Engineer.","jobs@ashbyhq.com",job))
         self.assertFalse(ack_matches("Application confirmation","ExampleCo: Thank you for applying to DevOps Engineer.","someone@gmail.com",job))
         self.assertFalse(ack_matches("Application confirmation","ExampleCo: Failed to submit. Your application received an error for DevOps Engineer.","jobs@ashbyhq.com",job))
+class ExpandedProfileTests(unittest.TestCase):
+    def test_profile_variants(self):
+        from screening import answer_for
+        profile={"current_location":"Example City","current_company":"Example Ltd","preferred_location":"Example City","willing_to_relocate":True,"immediate_joiner":False,"notice_period_days":30,"experience_years":2.9,"experience_months":34,"current_ctc_inr":500000,"expected_ctc_lpa":11,"education":"B.Tech","graduation_year":2023,"open_to_hybrid":True,"reason_for_change":"Career growth"}
+        for question,expected in [
+            ("Please enter your current location", "Example City"),
+            ("Current employer name", "Example Ltd"),
+            ("Preferred work city", "Example City"),
+            ("Are you willing to relocate for this role?", True),
+            ("Are you an immediate joiner?", False),
+            ("Notice period in days", 30),
+            ("Overall experience in months", 34),
+            ("Total experience in years", 2.9),
+            ("Current CTC in INR", 500000),
+            ("Expected CTC in LPA", 11),
+            ("Highest qualification", "B.Tech"),
+            ("Year of graduation", 2023),
+            ("Are you open to work in hybrid model?", True),
+            ("Reason for change", "Career growth"),
+        ]:
+            with self.subTest(question=question):
+                self.assertEqual(answer_for(question,profile),expected)
+    def test_no_guessed_facts(self):
+        from screening import answer_for
+        profile={"experience_years":2.9,"willing_to_relocate":True}
+        for question in ("AWS experience in years","Are you authorized to work in the US?","Do you have a security clearance?","Current CTC","Expected joining date"):
+            self.assertIsNone(answer_for(question,profile))
 if __name__=="__main__": unittest.main()
