@@ -3,7 +3,7 @@ import csv, hashlib, json, os, re, smtplib, ssl, subprocess, sys, io
 from datetime import datetime, timezone, timedelta
 from email.message import EmailMessage
 from pathlib import Path
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 from urllib.parse import quote, urlparse
 from html import unescape
 from concurrent.futures import ThreadPoolExecutor
@@ -58,6 +58,136 @@ def published_within_days(value,days=30):
         return False
     now=datetime.now(timezone.utc)
     return now-timedelta(days=days) <= dt <= now+timedelta(hours=6)
+
+ATS_DOMAINS=(
+    "greenhouse.io","lever.co","ashbyhq.com","smartrecruiters.com","myworkdayjobs.com","workdayjobs.com",
+    "icims.com","taleo.net","successfactors.com","oraclecloud.com","eightfold.ai","jobvite.com",
+    "recruitee.com","workable.com","bamboohr.com","freshteam.com","phenompeople.com"
+)
+PORTAL_DOMAINS=("linkedin.com","indeed.com","naukri.com","foundit.in","foundit.com")
+
+def host_matches(host,domain):
+    host=str(host or "").lower()
+    return host==domain or host.endswith("."+domain)
+
+def known_direct_apply_url(url):
+    try:
+        u=urlparse(unescape(str(url or "")).replace("&amp;","&"))
+    except Exception:
+        return ""
+    if u.scheme!="https" or not u.hostname:
+        return ""
+    host=u.hostname.lower()
+    if any(host_matches(host,d) for d in PORTAL_DOMAINS):
+        return ""
+    if any(host_matches(host,d) for d in ATS_DOMAINS):
+        return u.geturl()
+    return ""
+
+def _jsonld_job(value):
+    if isinstance(value,dict):
+        kind=value.get("@type")
+        kinds=kind if isinstance(kind,list) else [kind]
+        if "JobPosting" in kinds:
+            return value
+        for nested in value.values():
+            found=_jsonld_job(nested)
+            if found:
+                return found
+    elif isinstance(value,list):
+        for nested in value:
+            found=_jsonld_job(nested)
+            if found:
+                return found
+    return None
+
+def enrich_alert_job(job):
+    """Verify a portal-alert job and resolve a direct ATS URL when exposed publicly."""
+    original=str(job.get("listing_url") or job.get("url") or "").strip()
+    if not original:
+        return None
+    try:
+        req=Request(original,headers={
+            "User-Agent":"Mozilla/5.0 (compatible; DraftflowAIJobs/1.0)",
+            "Accept":"text/html,application/xhtml+xml",
+        })
+        with urlopen(req,timeout=12) as response:
+            html=response.read(1_500_000).decode("utf-8","ignore")
+            final_url=response.geturl()
+    except Exception:
+        return None
+    found=None
+    for raw in re.findall(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',html,re.I|re.S):
+        try:
+            parsed=json.loads(unescape(raw).strip())
+        except Exception:
+            continue
+        found=_jsonld_job(parsed)
+        if found:
+            break
+    enriched=dict(job)
+    if found:
+        title=str(found.get("title") or enriched.get("title") or "").strip()
+        company_obj=found.get("hiringOrganization") or {}
+        company=str(company_obj.get("name") if isinstance(company_obj,dict) else "").strip()
+        locations=found.get("jobLocation") or []
+        if isinstance(locations,dict):
+            locations=[locations]
+        bits=[]
+        for loc in locations:
+            if not isinstance(loc,dict):
+                continue
+            addr=loc.get("address") or {}
+            if isinstance(addr,dict):
+                bits.extend(str(addr.get(k) or "").strip() for k in ("addressLocality","addressRegion","addressCountry"))
+        location=" | ".join(x for x in bits if x)
+        description=str(found.get("description") or "").strip()
+        published=normalize_published(found.get("datePosted") or enriched.get("published"))
+        if title:
+            enriched["title"]=title
+        if company:
+            enriched["company"]=company
+        if location:
+            enriched["location"]=location
+        if description:
+            enriched["description"]=description
+        if published:
+            enriched["published"]=published
+    candidates=[final_url]
+    candidates.extend(re.findall(r'href=["\']([^"\']+)["\']',html,re.I))
+    direct=""
+    for candidate in candidates:
+        direct=known_direct_apply_url(candidate)
+        if direct:
+            break
+        try:
+            u=urlparse(unescape(candidate).replace("&amp;","&"))
+            from urllib.parse import parse_qs
+            for key in ("url","redirectUrl","redirect","target","destination","applyUrl"):
+                for nested in parse_qs(u.query).get(key,[]):
+                    direct=known_direct_apply_url(nested)
+                    if direct:
+                        break
+                if direct:
+                    break
+        except Exception:
+            pass
+        if direct:
+            break
+    enriched["listing_url"]=original
+    if direct:
+        enriched["url"]=direct
+        enriched["direct_apply"]=True
+    else:
+        enriched["url"]=original
+        enriched["direct_apply"]=False
+    if not technology_role(enriched.get("title")):
+        return None
+    if not india_location(enriched.get("location")):
+        return None
+    if not published_within_days(enriched.get("published"),30):
+        return None
+    return enriched
 
 def extract_experience_requirement(text):
     """Return a conservative min/max years requirement from public job text."""
@@ -193,6 +323,8 @@ def publish_public_feed(jobs):
             "category":category,
             "published":published,
             "url":url,
+            "listing_url":str(j.get("listing_url") or "").strip(),
+            "direct_apply":bool(j.get("direct_apply", j.get("source") in ("greenhouse","lever","ashby","smartrecruiters"))),
             "skills":skills[:12],
             "experience_min":experience["min"],
             "experience_max":experience["max"],
@@ -269,8 +401,14 @@ def main():
     if auto and (not resume.startswith(b"%PDF-") or not os.getenv("SMTP_USER") or not os.getenv("SMTP_APP_PASSWORD")):
         print("Email auto-apply disabled: missing PDF or SMTP configuration."); auto=False
     jobs=get_jobs()
-    publish_public_feed(jobs)
     alerts=discover_alerts()
+    enriched_alerts=[]
+    for alert in alerts:
+        enriched=enrich_alert_job(alert)
+        if enriched:
+            enriched_alerts.append(enriched)
+    print("Verified portal alert jobs added to public feed:",len(enriched_alerts))
+    publish_public_feed(jobs+enriched_alerts)
     with (ROOT/"platform-alerts.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["source","title","location","status","url"])
         seen_alerts=set()
