@@ -1,6 +1,6 @@
 """Conservative applicant-side browser adapter; never bypass challenges."""
 import os, json, base64, re, io
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from screening import fill_screening, unanswered_required, field_question
 
 HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
@@ -59,6 +59,23 @@ def verification_required(page):
     for i in range(min(selectors.count(),20)):
         if selectors.nth(i).is_visible(): return True
     return False
+
+def ashby_submit_signal(payload):
+    """Return only a safe submit classification; never return applicant data."""
+    if not isinstance(payload,dict): return ""
+    action=(payload.get("data") or {}).get("submitMultipleFormsAction")
+    if not isinstance(action,dict): return ""
+    messages=action.get("messages") or {}
+    if isinstance(messages,dict) and messages.get("blockMessageForCandidateHtml"):
+        return "blocked"
+    result=action.get("applicationFormResult")
+    if not isinstance(result,dict): return ""
+    typename=str(result.get("__typename") or "")
+    if typename=="FormSubmitSuccess" or "_" in result:
+        return "success"
+    if typename=="FormRender" or "id" in result:
+        return "validation"
+    return ""
 
 def portal_apply(job, profile, pdf, diagnostic=None):
     diagnostic=diagnostic if diagnostic is not None else {}
@@ -127,16 +144,29 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if not buttons.is_enabled(): return "portal_review_submit_disabled"
             stage="submit"
             responses=[]
+            ashby_signals=[]
             def capture(response):
                 u=urlparse(response.url)
                 if response.request.method!="POST" or u.hostname not in HOSTS|{"api.ashbyhq.com","api.lever.co","boards-api.greenhouse.io"}: return
-                # No payloads, query parameters, cookies, or applicant data in reports.
-                responses.append({
+                operation=parse_qs(u.query).get("op",[""])[0][:120]
+                entry={
                     "host":u.hostname,
                     "path":(u.path or "/")[:240],
                     "status":response.status,
                     "content_type":(response.headers.get("content-type","").split(";")[0])[:80]
-                })
+                }
+                if operation:
+                    entry["operation"]=operation
+                if u.hostname=="jobs.ashbyhq.com" and operation=="ApiSubmitMultipleFormsAction" and response.status==200:
+                    try:
+                        signal=ashby_submit_signal(response.json())
+                    except Exception:
+                        signal=""
+                    if signal:
+                        entry["submit_result"]=signal
+                        ashby_signals.append(signal)
+                # Never persist request bodies, response bodies, cookies, query parameters or applicant values.
+                responses.append(entry)
             page.on("response",capture)
             success=page.get_by_text(re.compile(r"^(?:thank you for applying|thanks for applying|(?:your )?application (?:has been )?(?:successfully )?(?:submitted|received))[.!]?$",re.I))
             def visible_success():
@@ -147,6 +177,15 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             buttons.click(timeout=10000)
             stage="confirmation"
             for _ in range(30):
+                if "success" in ashby_signals:
+                    diagnostic["confirmation"]="ashby_form_submit_success"
+                    return "portal_confirmed"
+                if "blocked" in ashby_signals:
+                    diagnostic["confirmation"]="ashby_submit_blocked"
+                    return "portal_review_submit_blocked"
+                if "validation" in ashby_signals:
+                    diagnostic["confirmation"]="ashby_form_render_validation"
+                    return "portal_review_server_validation"
                 if not already_visible and visible_success():
                     diagnostic["confirmation"]="new_visible_success_message"
                     return "portal_confirmed"
@@ -166,6 +205,15 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             diagnostic["final_host"]=urlparse(page.url).hostname
             diagnostic["final_path"]=(urlparse(page.url).path or "/")[:240]
             codes=[x["status"] for x in responses]
+            if "success" in ashby_signals:
+                diagnostic["confirmation"]="ashby_form_submit_success"
+                return "portal_confirmed"
+            if "blocked" in ashby_signals:
+                diagnostic["confirmation"]="ashby_submit_blocked"
+                return "portal_review_submit_blocked"
+            if "validation" in ashby_signals:
+                diagnostic["confirmation"]="ashby_form_render_validation"
+                return "portal_review_server_validation"
             if invalid.count():
                 return "portal_review_validation_failed"
             if any(x==409 for x in codes):
