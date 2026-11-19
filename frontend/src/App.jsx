@@ -4,6 +4,8 @@ const FEED_URL =
   import.meta.env.VITE_JOB_FEED_URL ||
   'https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/jobs.json'
 
+const AUTO_APPLY_API_URL = (import.meta.env.VITE_AUTO_APPLY_API_URL || '').replace(/\/$/, '')
+
 function prettySource(value = '') {
   const names = {
     greenhouse: 'Greenhouse',
@@ -78,6 +80,21 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [copiedId, setCopiedId] = useState('')
+  const [autoBusy, setAutoBusy] = useState(false)
+  const [autoMessage, setAutoMessage] = useState('')
+  const [autoConsent, setAutoConsent] = useState(false)
+  const [resumeFile, setResumeFile] = useState(null)
+  const [autoProfile, setAutoProfile] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    years_experience: '3',
+    target_roles: '',
+    skills: '',
+    preferred_locations: 'India',
+    minimum_match_score: '80',
+    daily_application_limit: '10'
+  })
 
   async function loadJobs() {
     setLoading(true)
@@ -165,6 +182,66 @@ function App() {
 
   const visibleJobs = filteredJobs.slice(0, visibleCount)
 
+  function updateAutoProfile(field, value) {
+    setAutoProfile((current) => ({ ...current, [field]: value }))
+  }
+
+  async function enableAutoApply(event) {
+    event.preventDefault()
+    setAutoMessage('')
+    if (!AUTO_APPLY_API_URL) {
+      setAutoMessage('Secure Auto Apply backend is not connected yet. Your resume was not uploaded.')
+      return
+    }
+    if (!resumeFile) {
+      setAutoMessage('Choose a PDF resume first.')
+      return
+    }
+    if (!autoConsent) {
+      setAutoMessage('Please authorize automatic submission before enabling Auto Apply.')
+      return
+    }
+
+    setAutoBusy(true)
+    try {
+      const profileResponse = await fetch(AUTO_APPLY_API_URL + '/auto-apply/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...autoProfile,
+          years_experience: Number(autoProfile.years_experience),
+          minimum_match_score: Number(autoProfile.minimum_match_score),
+          daily_application_limit: Number(autoProfile.daily_application_limit)
+        })
+      })
+      if (!profileResponse.ok) throw new Error((await profileResponse.json()).detail || 'Could not save profile')
+
+      const resumeData = new FormData()
+      resumeData.append('file', resumeFile)
+      resumeData.append('target_roles', autoProfile.target_roles)
+      resumeData.append('skills', autoProfile.skills)
+      resumeData.append('years_experience', autoProfile.years_experience)
+      const resumeResponse = await fetch(AUTO_APPLY_API_URL + '/auto-apply/resumes', {
+        method: 'POST',
+        body: resumeData
+      })
+      if (!resumeResponse.ok) throw new Error((await resumeResponse.json()).detail || 'Could not upload resume')
+
+      const enableResponse = await fetch(AUTO_APPLY_API_URL + '/auto-apply/enable', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ authorize: true })
+      })
+      if (!enableResponse.ok) throw new Error((await enableResponse.json()).detail || 'Could not enable Auto Apply')
+
+      setAutoMessage('Auto Apply enabled. Matching supported ATS jobs can now be submitted automatically within your daily limit.')
+    } catch (err) {
+      setAutoMessage(err.message || 'Could not enable Auto Apply.')
+    } finally {
+      setAutoBusy(false)
+    }
+  }
+
   async function copyLink(job) {
     try {
       await navigator.clipboard.writeText(job.url)
@@ -198,9 +275,12 @@ function App() {
               <span>Live role discovery</span>
             </div>
           </div>
-          <button className="ghost-button" onClick={loadJobs} disabled={loading}>
-            {loading ? 'Refreshing…' : 'Refresh jobs'}
-          </button>
+          <div className="nav-actions">
+            <a className="ghost-link" href="#auto-apply">Auto Apply Upgrade</a>
+            <button className="ghost-button" onClick={loadJobs} disabled={loading}>
+              {loading ? 'Refreshing…' : 'Refresh jobs'}
+            </button>
+          </div>
         </nav>
 
         <div className="hero-copy">
@@ -345,6 +425,7 @@ function App() {
                     {(job.discovered_via || []).map((via) => (
                       <div className="discovery-badge" key={via}>via {prettySource(via)}</div>
                     ))}
+                    {job.auto_apply_supported && <div className="auto-badge">Auto-apply eligible</div>}
                     {job.category && <div className="category-badge">{job.category}</div>}
                   </div>
                   <span className="published">{formatDate(job.published)}</span>
@@ -399,6 +480,100 @@ function App() {
             </button>
           </div>
         )}
+
+        <section className="upgrade-card" id="auto-apply">
+          <div className="upgrade-heading">
+            <div>
+              <div className="eyebrow dark">AUTO APPLY UPGRADE</div>
+              <h2>Upload the right resume and let matching supported jobs apply automatically.</h2>
+              <p>
+                Set the role, skills, experience and locations that this resume represents.
+                DraftflowAI ranks matching jobs, chooses the best resume variant, avoids duplicates,
+                respects your daily limit and stops when a required question needs your input.
+              </p>
+            </div>
+            <div className={AUTO_APPLY_API_URL ? 'backend-status ready' : 'backend-status'}>
+              {AUTO_APPLY_API_URL ? 'Secure backend connected' : 'Secure backend required'}
+            </div>
+          </div>
+
+          <form className="upgrade-form" onSubmit={enableAutoApply}>
+            <div className="field">
+              <label>Name</label>
+              <input value={autoProfile.name} onChange={(event) => updateAutoProfile('name', event.target.value)} required />
+            </div>
+            <div className="field">
+              <label>Email</label>
+              <input type="email" value={autoProfile.email} onChange={(event) => updateAutoProfile('email', event.target.value)} required />
+            </div>
+            <div className="field">
+              <label>Phone</label>
+              <input value={autoProfile.phone} onChange={(event) => updateAutoProfile('phone', event.target.value)} />
+            </div>
+            <div className="field">
+              <label>Experience (years)</label>
+              <input type="number" min="0" max="50" step="0.1" value={autoProfile.years_experience} onChange={(event) => updateAutoProfile('years_experience', event.target.value)} required />
+            </div>
+            <div className="field field-wide">
+              <label>Target roles</label>
+              <input value={autoProfile.target_roles} onChange={(event) => updateAutoProfile('target_roles', event.target.value)} placeholder="Java Developer, .NET Developer, DevOps Engineer" required />
+            </div>
+            <div className="field field-wide">
+              <label>Skills for this resume</label>
+              <input value={autoProfile.skills} onChange={(event) => updateAutoProfile('skills', event.target.value)} placeholder="Java, Spring Boot, AWS, SQL" required />
+            </div>
+            <div className="field">
+              <label>Preferred locations</label>
+              <input value={autoProfile.preferred_locations} onChange={(event) => updateAutoProfile('preferred_locations', event.target.value)} placeholder="India, Hyderabad, Bengaluru" />
+            </div>
+            <div className="field">
+              <label>Minimum match</label>
+              <select value={autoProfile.minimum_match_score} onChange={(event) => updateAutoProfile('minimum_match_score', event.target.value)}>
+                <option value="70">70%</option>
+                <option value="75">75%</option>
+                <option value="80">80%</option>
+                <option value="85">85%</option>
+                <option value="90">90%</option>
+              </select>
+            </div>
+            <div className="field">
+              <label>Daily application limit</label>
+              <select value={autoProfile.daily_application_limit} onChange={(event) => updateAutoProfile('daily_application_limit', event.target.value)}>
+                <option value="5">5 per day</option>
+                <option value="10">10 per day</option>
+                <option value="20">20 per day</option>
+                <option value="30">30 per day</option>
+              </select>
+            </div>
+            <div className="field field-wide">
+              <label>Resume PDF</label>
+              <input
+                type="file"
+                accept="application/pdf,.pdf"
+                onChange={(event) => setResumeFile(event.target.files?.[0] || null)}
+                required
+              />
+              <small>PDF only. Resume files must be stored in private backend storage, never in the public job-feed repository.</small>
+            </div>
+
+            <label className="consent-row">
+              <input type="checkbox" checked={autoConsent} onChange={(event) => setAutoConsent(event.target.checked)} />
+              <span>
+                I authorize DraftflowAI to submit applications automatically to matching supported employer ATS jobs using this profile and resume, up to my daily limit. Jobs requiring unknown mandatory answers, login, CAPTCHA or human verification must stop for manual action.
+              </span>
+            </label>
+
+            <div className="upgrade-actions">
+              <button className="primary-button" type="submit" disabled={autoBusy || !AUTO_APPLY_API_URL}>
+                {autoBusy ? 'Enabling…' : 'Enable Auto Apply'}
+              </button>
+              {!AUTO_APPLY_API_URL && (
+                <span className="upgrade-note">The public site is showing the upgrade UI, but resume upload stays disabled until private authenticated storage is connected.</span>
+              )}
+            </div>
+            {autoMessage && <div className="upgrade-message">{autoMessage}</div>}
+          </form>
+        </section>
 
         <section className="trust-card">
           <div>
