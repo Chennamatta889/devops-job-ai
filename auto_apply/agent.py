@@ -69,7 +69,7 @@ def main():
     profile=json.loads(os.environ["PROFILE_JSON"])
     ledger=json.loads(STATE.read_text()) if STATE.exists() else {}
     auto=os.getenv("AUTO_APPLY","false").lower()=="true"
-    resume=base64.b64decode(os.getenv("RESUME_BASE64",""),validate=True) if auto else b""
+    resume=base64.b64decode(os.getenv("RESUME_BASE64","") or (os.getenv("RESUME_PART_1","")+os.getenv("RESUME_PART_2","")),validate=True) if auto else b""
     if auto and (not resume.startswith(b"%PDF-") or not os.getenv("SMTP_USER") or not os.getenv("SMTP_APP_PASSWORD")):
         raise ValueError("Auto mode requires PDF resume and SMTP credentials")
     jobs=get_jobs()
