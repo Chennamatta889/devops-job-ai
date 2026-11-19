@@ -12,6 +12,11 @@ def answer_for(question, profile):
                 return value
     q=re.sub(r"^(?:please (?:enter|provide|specify|share|select) (?:your )?|what (?:is|are) your )","",q)
     q=re.sub(r" (?:required|optional)$","",q)
+    if q in ("what is the earliest you would want to start","earliest start date","when can you start","when would you be available to start"):
+        if profile.get("earliest_start_date"): return profile["earliest_start_date"]
+        days=profile.get("notice_period_days")
+        if type(days) is int and days>=0:
+            return f"Available after my {days}-day notice period."
     fields=(
         (r"^(?:current|present) (?:work |job |residential )?(?:location|city)(?: in india)?$","current_location"),
         (r"^(?:current|present) (?:company|employer|organization)(?: name)?$|^name of (?:your )?(?:current|present) (?:company|employer|organization)$","current_company"),
@@ -86,6 +91,7 @@ def fill_screening(page,profile):
         answer=answer_for(question,profile)
         if answer is None: continue
         value=as_text(answer)
+        if field.get_attribute("type")=="date" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}",value): continue
         if tag=="select":
             options=field.locator("option").evaluate_all("els => els.map(e => ({label:e.textContent.trim(), value:e.value, disabled:e.disabled}))")
             choices=[o for o in options if not o["disabled"] and o["value"] and normalize(o["label"])==normalize(value)]
