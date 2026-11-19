@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from collections import Counter
 from india_sources import india_location, relevant_role, discover
 from job_alerts import discover_alerts
+from reconcile import read_acknowledgments, ack_matches
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / "ledger.json"
@@ -150,6 +151,8 @@ def main():
     print("Email enabled:",auto,"Portal enabled:",portal_on)
     print("Filter outcomes:",dict(Counter(reason for (score,matched,missing,reason),j in ranked)))
     confirmed=0
+    reconciled=0
+    acknowledgments=read_acknowledgments() if any(str(v).startswith(('portal_uncertain','portal_reserved')) for v in ledger.values()) else []
     email_sent=0
     audit=[]
     def audit_row(j,score,matched,missing,reason,status):
@@ -165,6 +168,8 @@ def main():
         if match(j,real_profile)[3]=="experience" and reason=="matched": reason="stretch experience"
         can_apply=reason in ("matched","stretch experience","experience unclear")
         status=ledger.get(k,"review_portal")
+        if str(status).startswith(("portal_uncertain","portal_reserved")) and any(ack_matches(*message,j) for message in acknowledgments):
+            status="portal_confirmed_email"; ledger[k]=status; persist(ledger); reconciled+=1
         if k not in ledger:
             if not can_apply: status="review_"+reason.replace(" ","_")
             elif j.get("source")=="smartrecruiters": status="review_smartrecruiters_form"
@@ -186,7 +191,7 @@ def main():
             ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
             diagnostic={}
             status=portal_apply(j,profile,resume,diagnostic)
-            screening_report.append({"company":j.get("company"),"title":j.get("title"),"url":j.get("url"),"status":status,"missing_fields":diagnostic.get("missing_fields",[]),"stage":diagnostic.get("stage","")})
+            screening_report.append({"company":j.get("company"),"title":j.get("title"),"url":j.get("url"),"status":status,"missing_fields":diagnostic.get("missing_fields",[]),"stage":diagnostic.get("stage",""),"attempted_at_utc":diagnostic.get("attempted_at_utc"),"post_responses":diagnostic.get("post_responses",[]),"confirmation":diagnostic.get("confirmation"),"invalid_field_count":diagnostic.get("invalid_field_count"),"visible_alert_count":diagnostic.get("visible_alert_count")})
             if status=="portal_confirmed": confirmed+=1
             print("Portal outcome:",status)
             ledger[k]=status; persist(ledger)
@@ -200,8 +205,9 @@ def main():
     with (ROOT/"matches.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["company","title","location","skill_match","matched","missing","experience","status","url"]); w.writerows([cell(v) for v in row] for row in rows)
     (ROOT/"screening-review.json").write_text(json.dumps(screening_report,indent=2,ensure_ascii=False))
-    summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),"target_jobs":len(jobs),"matches":len(rows),"email_attempts":count,"portal_attempts":portal_count,"email_accepted":email_sent,"portal_confirmed":confirmed,"alert_links":len(seen_alerts),"decisions":dict(Counter(row[8] for row in audit)),"sources":dict(Counter(j.get("source","feed") for j in jobs))}
+    summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),"target_jobs":len(jobs),"matches":len(rows),"email_attempts":count,"portal_attempts":portal_count,"email_accepted":email_sent,"portal_confirmed":confirmed,"email_reconciled":reconciled,"alert_links":len(seen_alerts),"decisions":dict(Counter(row[8] for row in audit)),"sources":dict(Counter(j.get("source","feed") for j in jobs))}
     (ROOT/"run-summary.json").write_text(json.dumps(summary,indent=2))
+    print("Gmail reconciled applications:",reconciled)
     print("Decision outcomes:",summary["decisions"])
     print(f"Scanned {len(jobs)} jobs; {len(rows)} matches; {count} attempted email applications; {portal_count} portal attempts; {email_sent} emails accepted by SMTP; {confirmed} portal confirmations.")
 if __name__=="__main__": main()
