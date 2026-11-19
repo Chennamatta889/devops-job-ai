@@ -128,4 +128,24 @@ class IndeedAlertTests(unittest.TestCase):
     def test_reject_invalid_links(self):
         self.assertEqual(platform("https://indeed.com.evil.example/viewjob?jk=0123456789abcdef"),"")
         self.assertEqual(platform("https://in.indeed.com/viewjob?jk=invalid"),"")
+class LiveLeverQuestionTests(unittest.TestCase):
+    def test_known_lever_questions(self):
+        from screening import answer_for
+        p={"current_location":"Hyderabad","willing_to_relocate":True,"notice_period_days":30,"current_ctc_inr":500000,"expected_ctc_inr":1100000,"experience_years":2.9,"willing_to_work_in_shifts":True,"open_to_onsite":True}
+        cases=[
+            ("What is your Current Annual Salary?",500000),
+            ("What is your Expected Annual Salary ?",1100000),
+            ("What is your notice period?",30),
+            ("What is your current CTC",500000),
+            ("What is your expected CTC",1100000),
+            ("How many years of relevant experience do you have?",2.9),
+            ("Are you currently living in Hyderabad?",True),
+            ("If not, will you be comfortable relocating to Hyderabad?",True),
+            ("This is a work from office role and would require you to work in rotational shifts, including nights, weekends and public holidays, is that okay with you ?",True),
+        ]
+        for q,expected in cases:
+            with self.subTest(q=q): self.assertEqual(answer_for(q,p),expected)
+    def test_visa_not_inferred(self):
+        from screening import answer_for
+        self.assertIsNone(answer_for("Will you now or in the future require sponsorship for employment visa status to work legally in the United States?",{"country":"India"}))
 if __name__=="__main__": unittest.main()
