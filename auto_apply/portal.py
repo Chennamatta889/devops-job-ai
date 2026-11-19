@@ -211,11 +211,6 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             buttons=page.get_by_role("button",name=re.compile(r"^(submit application|submit|apply for this job)$",re.I))
             if buttons.count()!=1: return "portal_review_submit_button"
             if verification_required(page): return "portal_review_human_verification_v2"
-            stage="resume_upload"
-            files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":pdf})
-            if verification_required(page): return "portal_review_human_verification_v2"
-            if not buttons.is_enabled(): return "portal_review_submit_disabled"
-            stage="submit"
             responses=[]
             ashby_signals=[]
             def capture(response):
@@ -241,6 +236,24 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 # Never persist request bodies, response bodies, cookies, query parameters or applicant values.
                 responses.append(entry)
             page.on("response",capture)
+            stage="resume_upload"
+            files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":pdf})
+            if u.hostname=="jobs.ashbyhq.com":
+                synced=False
+                for _ in range(20):
+                    if any(x.get("operation")=="ApiSetFormValueToFile" and 200<=x["status"]<300 for x in responses):
+                        synced=True; break
+                    if verification_required(page): return "portal_review_human_verification_v2"
+                    page.wait_for_timeout(500)
+                if not synced: return "portal_review_resume_sync"
+            else:
+                page.wait_for_timeout(1000)
+            if verification_required(page): return "portal_review_human_verification_v2"
+            for _ in range(20):
+                if buttons.is_enabled(): break
+                page.wait_for_timeout(500)
+            if not buttons.is_enabled(): return "portal_review_submit_disabled"
+            stage="submit"
             success=page.get_by_text(re.compile(r"^(?:thank you for applying|thanks for applying|(?:your )?application (?:has been )?(?:successfully )?(?:submitted|received))[.!]?$",re.I))
             def visible_success():
                 return any(success.nth(i).is_visible() for i in range(min(success.count(),10)))
@@ -277,7 +290,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             diagnostic["visible_alert_count"]=page.get_by_role("alert").count()
             diagnostic["final_host"]=urlparse(page.url).hostname
             diagnostic["final_path"]=(urlparse(page.url).path or "/")[:240]
-            codes=[x["status"] for x in responses]
+            submit_responses=[x for x in responses if x.get("operation")=="ApiSubmitMultipleFormsAction"] if u.hostname=="jobs.ashbyhq.com" else responses
+            codes=[x["status"] for x in submit_responses]
             if "success" in ashby_signals:
                 diagnostic["confirmation"]="ashby_form_submit_success"
                 return "portal_confirmed"
@@ -289,6 +303,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 return "portal_review_server_validation"
             if invalid.count():
                 return "portal_review_validation_failed"
+            if u.hostname=="jobs.ashbyhq.com" and not submit_responses:
+                return "portal_review_no_submit_operation"
             if any(x==409 for x in codes):
                 return "portal_review_duplicate_possible"
             if any(x in (400,422) for x in codes):
@@ -300,7 +316,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if any(x>=500 for x in codes):
                 return "portal_review_server_error"
             if any(200<=x<300 for x in codes):
-                return "portal_uncertain_server_accepted"
+                return "portal_uncertain_submit_response"
             return "portal_uncertain_no_submission_response"
     except Exception as exc:
         print("Portal diagnostic:",stage,type(exc).__name__)
