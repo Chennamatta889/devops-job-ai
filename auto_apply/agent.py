@@ -95,7 +95,7 @@ def email_apply(j,profile,resume):
 def main():
     import base64
     profile=json.loads(os.environ["PROFILE_JSON"])
-    actual_years=float(profile.get("max_required_years",3))
+    actual_years=float(profile.get("experience_years",profile.get("max_required_years",3)))
     profile["max_required_years"]=max(actual_years,4)
     profile["minimum_match"]=0  # Skill score ranks jobs; never rejects them.
     ledger=json.loads(STATE.read_text()) if STATE.exists() else {}
@@ -140,11 +140,13 @@ def main():
     count=0; rows=[]; seen=set()
     from portal import portal_apply, portal_enabled
     portal_count=0
+    portal_limit=max(1,min(int(profile.get("max_portal_per_run",10)),20))
+    screening_report=[]
     portal_on=portal_enabled(profile,resume)
     # Retry legacy pre-submission failures once using the improved checks.
     # Never retry unknown outcomes or reservations automatically.
     if portal_on:
-        ledger={k:v for k,v in ledger.items() if v not in ("portal_review_candidate_error","portal_review_human_verification")}
+        ledger={k:v for k,v in ledger.items() if v not in ("portal_review_candidate_error","portal_review_human_verification","portal_review_choices","portal_review_unanswered_select","portal_review_unanswered_fields")}
     print("Email enabled:",auto,"Portal enabled:",portal_on)
     print("Filter outcomes:",dict(Counter(reason for (score,matched,missing,reason),j in ranked)))
     confirmed=0
@@ -160,15 +162,16 @@ def main():
         if reason in ("role","location","experience"):
             audit_row(j,score,matched,missing,reason,"filtered_"+reason); continue
         real_profile=dict(profile,max_required_years=actual_years)
-        if match(j,real_profile)[3]=="experience" and reason=="matched": reason="stretch experience - review only"
+        if match(j,real_profile)[3]=="experience" and reason=="matched": reason="stretch experience"
+        can_apply=reason in ("matched","stretch experience","experience unclear")
         status=ledger.get(k,"review_portal")
         if k not in ledger:
-            if reason!="matched": status="review_"+reason.replace(" ","_")
+            if not can_apply: status="review_"+reason.replace(" ","_")
             elif j.get("source")=="smartrecruiters": status="review_smartrecruiters_form"
             elif not portal_on and not auto: status="review_application_disabled"
             elif j.get("source") in ("greenhouse","lever","ashby") and portal_on: status="portal_eligible_waiting_limit"
             else: status="review_no_supported_application_channel"
-        eligible=reason=="matched" and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever","ashby","smartrecruiters")
+        eligible=can_apply and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever","ashby","smartrecruiters")
         if k not in ledger and eligible:
             status="ready_email"
             if auto and count<min(int(profile.get("max_per_run",5)),10):
@@ -179,9 +182,11 @@ def main():
                 except Exception:
                     ledger[k]="uncertain_manual_review"; status=ledger[k]
                 persist(ledger)
-        if k not in ledger and portal_on and reason=="matched" and j.get("source") in ("greenhouse","lever","ashby") and portal_count<3:
+        if k not in ledger and portal_on and can_apply and j.get("source") in ("greenhouse","lever","ashby") and portal_count<portal_limit:
             ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
-            status=portal_apply(j,profile,resume)
+            diagnostic={}
+            status=portal_apply(j,profile,resume,diagnostic)
+            screening_report.append({"company":j.get("company"),"title":j.get("title"),"url":j.get("url"),"status":status,"missing_fields":diagnostic.get("missing_fields",[]),"stage":diagnostic.get("stage","")})
             if status=="portal_confirmed": confirmed+=1
             print("Portal outcome:",status)
             ledger[k]=status; persist(ledger)
@@ -194,6 +199,7 @@ def main():
         w=csv.writer(f); w.writerow(["source","company","title","location","skill_match","matched","missing","experience","decision","published","url"]); w.writerows([cell(v) for v in row] for row in audit)
     with (ROOT/"matches.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["company","title","location","skill_match","matched","missing","experience","status","url"]); w.writerows([cell(v) for v in row] for row in rows)
+    (ROOT/"screening-review.json").write_text(json.dumps(screening_report,indent=2,ensure_ascii=False))
     summary={"timestamp_utc":datetime.now(timezone.utc).isoformat(),"target_jobs":len(jobs),"matches":len(rows),"email_attempts":count,"portal_attempts":portal_count,"email_accepted":email_sent,"portal_confirmed":confirmed,"alert_links":len(seen_alerts),"decisions":dict(Counter(row[8] for row in audit)),"sources":dict(Counter(j.get("source","feed") for j in jobs))}
     (ROOT/"run-summary.json").write_text(json.dumps(summary,indent=2))
     print("Decision outcomes:",summary["decisions"])
