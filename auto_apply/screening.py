@@ -19,6 +19,8 @@ def answer_for(question, profile):
     relocate_city=re.fullmatch(r"(?:if not )?(?:will|would) you be (?:comfortable|willing|open to) relocat(?:e|ing) to ([a-z0-9 ]+)",q)
     if relocate_city and profile.get("willing_to_relocate") is not None:
         return bool(profile["willing_to_relocate"])
+    if ("relocate to hyderabad" in q and "work from the office" in q) and profile.get("willing_to_relocate") is not None and profile.get("open_to_onsite") is not None:
+        return bool(profile["willing_to_relocate"]) and bool(profile["open_to_onsite"])
     if ("rotational shift" in q or "night shift" in q or "work in shifts" in q) and profile.get("willing_to_work_in_shifts") is not None:
         if ("work from office" in q or "work from office role" in q) and profile.get("open_to_onsite") is not None:
             return bool(profile["willing_to_work_in_shifts"]) and bool(profile["open_to_onsite"])
@@ -69,7 +71,7 @@ def answer_for(question, profile):
         (r"^(?:your )?(?:phone|mobile)(?: number)?$","phone"),
         (r"^(?:what is your )?(?:preferred location|preferred city|preferred work location)$","preferred_location"),
         (r"^(?:are you )?(?:willing to relocate(?: within india)?|open to relocation(?: for this role)?)$","willing_to_relocate"),
-        (r"^(?:what is your )?(?:current (?:ctc|annual salary|salary)|current annual salary)$","current_ctc_inr"),
+                (r"^(?:what is your )?(?:current (?:ctc|annual salary|salary)|current annual salary|current ctc last drawn ctc)$","current_ctc_inr"),
         (r"^(?:what is your )?current (?:ctc|annual salary) (?:inr|in inr|in rupees|in rs|rs)$","current_ctc_inr"),
         (r"^(?:what is your )?(?:expected (?:ctc|annual salary|salary)|expected annual salary)$","expected_ctc_inr"),
         (r"^(?:what is your )?expected (?:ctc|annual salary) (?:inr|in inr|in rupees|in rs|rs)$","expected_ctc_inr"),
@@ -79,7 +81,7 @@ def answer_for(question, profile):
         (r"^(?:what is your )?(?:current (?:company|employer|organization)|company name)$","current_company"),
         (r"^(?:what is your )?(?:current location|current city|city of residence|location|city)$","current_location"),
         (r"^(?:what is your )?(?:notice period|notice period in days|notice period days|how many days is your notice period)$","notice_period_days"),
-        (r"^(?:how many years of )?relevant (?:work |professional )?experience(?: do you have| in years)?$","experience_years"),
+                (r"^(?:how many years of )?relevant (?:work |professional )?experience(?: do you have| in years)?$|^(?:what is your )?total work experience in a similar role capacity$","experience_years"),
         (r"^(?:what is your )?(?:total (?:work |professional )?experience in years|total years of experience|years of professional experience|how many years of (?:total |professional |work )?experience do you have)$","experience_years"),
         (r"^(?:what is your )?(?:linkedin profile|linkedin profile url|linkedin profile link|linkedin url)$","linkedin"),
         (r"^(?:what is your )?(?:github profile|github profile url|github url)$","github"),
