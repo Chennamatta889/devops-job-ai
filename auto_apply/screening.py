@@ -12,6 +12,17 @@ def answer_for(question, profile):
                 return value
     q=re.sub(r"^(?:please (?:enter|provide|specify|share|select) (?:your )?|what (?:is|are) your )","",q)
     q=re.sub(r" (?:required|optional)$","",q)
+    city_match=re.fullmatch(r"(?:are you )?(?:currently )?(?:living|located|based|residing) in ([a-z0-9 ]+)",q)
+    if city_match and profile.get("current_location"):
+        city=normalize(city_match.group(1))
+        return city in normalize(profile["current_location"])
+    relocate_city=re.fullmatch(r"(?:if not )?(?:will|would) you be (?:comfortable|willing|open to) relocat(?:e|ing) to ([a-z0-9 ]+)",q)
+    if relocate_city and profile.get("willing_to_relocate") is not None:
+        return bool(profile["willing_to_relocate"])
+    if ("rotational shift" in q or "night shift" in q or "work in shifts" in q) and profile.get("willing_to_work_in_shifts") is not None:
+        if ("work from office" in q or "work from office role" in q) and profile.get("open_to_onsite") is not None:
+            return bool(profile["willing_to_work_in_shifts"]) and bool(profile["open_to_onsite"])
+        return bool(profile["willing_to_work_in_shifts"])
     if q in ("what is the earliest you would want to start","earliest start date","when can you start","when would you be available to start"):
         if profile.get("earliest_start_date"): return profile["earliest_start_date"]
         days=profile.get("notice_period_days")
@@ -47,14 +58,17 @@ def answer_for(question, profile):
         (r"^(?:your )?(?:phone|mobile)(?: number)?$","phone"),
         (r"^(?:what is your )?(?:preferred location|preferred city|preferred work location)$","preferred_location"),
         (r"^(?:are you )?(?:willing to relocate(?: within india)?|open to relocation(?: for this role)?)$","willing_to_relocate"),
+        (r"^(?:what is your )?(?:current (?:ctc|annual salary|salary)|current annual salary)$","current_ctc_inr"),
         (r"^(?:what is your )?current (?:ctc|annual salary) (?:inr|in inr|in rupees|in rs|rs)$","current_ctc_inr"),
+        (r"^(?:what is your )?(?:expected (?:ctc|annual salary|salary)|expected annual salary)$","expected_ctc_inr"),
         (r"^(?:what is your )?expected (?:ctc|annual salary) (?:inr|in inr|in rupees|in rs|rs)$","expected_ctc_inr"),
         (r"^(?:what is your )?current ctc (?:in )?lpa$","current_ctc_lpa"),
         (r"^(?:what is your )?expected ctc (?:in )?lpa$","expected_ctc_lpa"),
         (r"^(?:why are you interested in (?:this role|this position|this opportunity)|why do you want to join us|why are you interested|why this company|what interests you about [a-z0-9 ]+)$","interest_statement"),
         (r"^(?:what is your )?(?:current (?:company|employer|organization)|company name)$","current_company"),
         (r"^(?:what is your )?(?:current location|current city|city of residence|location|city)$","current_location"),
-        (r"^(?:what is your )?(?:notice period in days|notice period days|how many days is your notice period)$","notice_period_days"),
+        (r"^(?:what is your )?(?:notice period|notice period in days|notice period days|how many days is your notice period)$","notice_period_days"),
+        (r"^(?:how many years of )?relevant (?:work |professional )?experience(?: do you have| in years)?$","experience_years"),
         (r"^(?:what is your )?(?:total (?:work |professional )?experience in years|total years of experience|years of professional experience|how many years of (?:total |professional |work )?experience do you have)$","experience_years"),
         (r"^(?:what is your )?(?:linkedin profile|linkedin profile url|linkedin url)$","linkedin"),
         (r"^(?:what is your )?(?:github profile|github profile url|github url)$","github"),
