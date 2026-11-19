@@ -394,9 +394,9 @@ function App() {
             <h2>The agent finds jobs. You stay in control.</h2>
           </div>
           <p>
-            DraftflowAI Jobs indexes recent public technology openings from supported employer career systems.
-            Job links open the original employer or ATS page so users can review the full description,
-            confirm availability and submit their own application.
+            DraftflowAI Jobs indexes recent public technology openings from supported employer career systems
+            and approved job-platform feeds. When a verified employer or ATS application URL is available,
+            the primary button opens that company application page; otherwise it opens the original listing.
           </p>
         </section>
       </main>
