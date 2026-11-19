@@ -1,13 +1,13 @@
-"""Read only recent LinkedIn/Naukri/Indeed job-alert emails from Gmail."""
+"""Read only recent LinkedIn/Naukri/Indeed/Foundit job-alert emails from Gmail."""
 import os, re, imaplib, email, ssl
 from email import policy
 from email.utils import parseaddr
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, urlunsplit, parse_qs, unquote
 from datetime import datetime, timedelta, timezone
-from india_sources import relevant_role, india_location
+from india_sources import technology_role, india_location
 
-DOMAINS=("linkedin.com","naukri.com","indeed.com")
+DOMAINS=("linkedin.com","naukri.com","indeed.com","foundit.in","foundit.com")
 def domain_matches(host, domain):
     return host==domain or host.endswith("."+domain)
 def platform(url):
@@ -20,6 +20,8 @@ def platform(url):
         return "naukri_alert"
     if domain_matches(host,"indeed.com") and u.path.rstrip("/") in ("/viewjob","/rc/clk","/pagead/clk") and re.fullmatch(r"[a-fA-F0-9]{16}",parse_qs(u.query).get("jk",[""])[0]):
         return "indeed_alert"
+    if (domain_matches(host,"foundit.in") or domain_matches(host,"foundit.com")) and re.search(r"/(?:job|jobs|search)/",u.path,re.I):
+        return "foundit_alert"
     return ""
 class Links(HTMLParser):
     def __init__(self):
@@ -34,7 +36,7 @@ class Links(HTMLParser):
         if tag=="a" and self.current:
             self.rows.append((self.current[0]," ".join(self.current[1])))
             self.current=None
-def parse_alert(content, subject, origin):
+def parse_alert(content, subject, origin, published=""):
     p=Links()
     p.feed(content)
     jobs=[]; seen=set()
@@ -50,9 +52,9 @@ def parse_alert(content, subject, origin):
         except ValueError: continue
         if src!=origin: continue
         title=" ".join(label.split())
-        if not relevant_role(title):
+        if not technology_role(title):
             slug=urlsplit(url).path.rsplit("/",1)[-1].replace("-"," ")
-            if not relevant_role(slug): continue
+            if not technology_role(slug): continue
             title=slug[:180]
         if len(title)>200: continue
         u=urlsplit(url)
@@ -63,7 +65,7 @@ def parse_alert(content, subject, origin):
         seen.add(canonical)
         # Do not infer exact location or skill requirements from an email's subject/search criteria.
         location=title if india_location(title) else "Unverified location"
-        jobs.append(dict(company="",title=title,location=location,description="",url=canonical,source=src))
+        jobs.append(dict(company="",title=title,location=location,description="",url=canonical,listing_url=canonical,published=published,source=src,direct_apply=False))
     return jobs
 def discover_alerts():
     user=os.getenv("SMTP_USER",""); password=os.getenv("SMTP_APP_PASSWORD","")
@@ -74,8 +76,8 @@ def discover_alerts():
             box.login(user,password.replace(" ",""))
             status,_=box.select('"[Gmail]/All Mail"',readonly=True)
             if status!="OK": return []
-            since=(datetime.now(timezone.utc)-timedelta(days=7)).strftime("%d-%b-%Y")
-            for domain,origin in [("linkedin.com","linkedin_alert"),("naukri.com","naukri_alert"),("indeed.com","indeed_alert")]:
+            since=(datetime.now(timezone.utc)-timedelta(days=30)).strftime("%d-%b-%Y")
+            for domain,origin in [("linkedin.com","linkedin_alert"),("naukri.com","naukri_alert"),("indeed.com","indeed_alert"),("foundit.in","foundit_alert"),("foundit.com","foundit_alert")]:
                 typ,ids=box.uid("search",None,"SINCE",since,"FROM",'"'+domain+'"')
                 if typ!="OK": continue
                 selected=(ids[0] or b"").split()[-40:]
@@ -90,8 +92,13 @@ def discover_alerts():
                         if not domain_matches(sender,domain): continue
                         for part in message.walk():
                             if part.get_content_type()=="text/html" and part.get_content_disposition()!="attachment":
-                                results.extend(parse_alert(part.get_content(),str(message.get("Subject","")),origin))
+                                published=str(message.get("Date",""))
+                                try:
+                                    published=email.utils.parsedate_to_datetime(published).astimezone(timezone.utc).isoformat()
+                                except Exception:
+                                    published=""
+                                results.extend(parse_alert(part.get_content(),str(message.get("Subject","")),origin,published=published))
     except Exception as exc:
         print("Gmail job alerts unavailable:",type(exc).__name__)
-    print("LinkedIn/Naukri/Indeed alert links:",len(results))
+    print("LinkedIn/Naukri/Indeed/Foundit alert links:",len(results))
     return results
