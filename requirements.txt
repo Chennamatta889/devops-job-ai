@@ -6,3 +6,4 @@ google-genai
 requests
 playwright
 reportlab
+python-multipart\npypdf\n
