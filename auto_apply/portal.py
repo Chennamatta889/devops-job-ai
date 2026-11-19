@@ -2,7 +2,7 @@
 import os, json, base64, re, io
 from urllib.parse import urlparse
 
-HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co"}
+HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
 def portal_enabled(profile, pdf):
     return os.getenv("PORTAL_AUTO_APPLY","").strip().lower()!="false" and pdf.startswith(b"%PDF-")
 def candidate_data(profile, pdf):
@@ -27,7 +27,7 @@ def portal_apply(job, profile, pdf):
         data=candidate_data(profile,pdf)
         if not all(data.get(x) for x in ("first_name","last_name","email","phone")):
             return "portal_review_contact"
-        url=job.get("url","")
+        url=job.get("apply_url") or job.get("url","")
         u=urlparse(url)
         if u.scheme!="https" or u.hostname not in HOSTS or u.username or u.password: return "portal_review_unsupported_url"
         if u.hostname=="jobs.lever.co": url=url.split("?")[0].rstrip("/")+"/apply" if not url.split("?")[0].rstrip("/").endswith("/apply") else url.split("?")[0]
@@ -48,7 +48,13 @@ def portal_apply(job, profile, pdf):
                 if not val: continue
                 locator=page.locator('input[name="'+key+'"],input[id="'+key+'"]')
                 if locator.count()==1 and locator.is_visible(): locator.fill(str(val))
+            if u.hostname=="jobs.ashbyhq.com":
+                for label,value in [(r"^full name",data.get("name")),(r"^first name",data.get("first_name")),(r"^last name",data.get("last_name")),(r"^email",data.get("email")),(r"^phone",data.get("phone"))]:
+                    field=page.get_by_label(re.compile(label,re.I))
+                    if value and field.count()==1 and field.is_visible(): field.fill(str(value))
             files=page.locator('input[type=file][name="resume"], input[type=file][id="resume"], input[type=file][name="resumeFile"]')
+            if files.count()==0:
+                files=page.get_by_label(re.compile(r"resume|curriculum vitae",re.I)).and_(page.locator("input[type=file]"))
             if files.count()!=1: return "portal_review_resume_field"
             files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":pdf})
             if page.locator('select:visible, [role=combobox]:visible, input[type=checkbox]:visible, input[type=radio]:visible').count(): return "portal_review_choices"
