@@ -1,7 +1,7 @@
 """Conservative applicant-side browser adapter; never bypass challenges."""
 import os, json, base64, re, io
 from urllib.parse import urlparse
-from screening import fill_screening, unanswered_required
+from screening import fill_screening, unanswered_required, field_question
 
 HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
 def portal_enabled(profile, pdf):
@@ -130,7 +130,12 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 u=urlparse(response.url)
                 if response.request.method!="POST" or u.hostname not in HOSTS|{"api.ashbyhq.com","api.lever.co","boards-api.greenhouse.io"}: return
                 # No payloads, query parameters, cookies, or applicant data in reports.
-                responses.append({"host":u.hostname,"status":response.status})
+                responses.append({
+                    "host":u.hostname,
+                    "path":(u.path or "/")[:240],
+                    "status":response.status,
+                    "content_type":(response.headers.get("content-type","").split(";")[0])[:80]
+                })
             page.on("response",capture)
             success=page.get_by_text(re.compile(r"^(?:thank you for applying|thanks for applying|(?:your )?application (?:has been )?(?:successfully )?(?:submitted|received))[.!]?$",re.I))
             def visible_success():
@@ -148,10 +153,33 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 page.wait_for_timeout(1000)
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             diagnostic["invalid_field_count"]=invalid.count()
+            labels=[]
+            for i in range(min(invalid.count(),20)):
+                try:
+                    label=field_question(invalid.nth(i))
+                    if label and label not in labels: labels.append(label[:180])
+                except Exception:
+                    pass
+            diagnostic["invalid_fields"]=labels
             diagnostic["visible_alert_count"]=page.get_by_role("alert").count()
-            if any(x["status"]>=400 for x in responses):
-                return "portal_uncertain_http_error"
-            return "portal_uncertain_confirmation"
+            diagnostic["final_host"]=urlparse(page.url).hostname
+            diagnostic["final_path"]=(urlparse(page.url).path or "/")[:240]
+            codes=[x["status"] for x in responses]
+            if invalid.count():
+                return "portal_review_validation_failed"
+            if any(x==409 for x in codes):
+                return "portal_review_duplicate_possible"
+            if any(x in (400,422) for x in codes):
+                return "portal_review_server_validation"
+            if any(x in (401,403) for x in codes):
+                return "portal_review_access_denied"
+            if any(x==429 for x in codes):
+                return "portal_review_rate_limited"
+            if any(x>=500 for x in codes):
+                return "portal_review_server_error"
+            if any(200<=x<300 for x in codes):
+                return "portal_uncertain_server_accepted"
+            return "portal_uncertain_no_submission_response"
     except Exception as exc:
         print("Portal diagnostic:",stage,type(exc).__name__)
         return "portal_uncertain_"+stage if submitted else "portal_review_"+stage+"_error"
