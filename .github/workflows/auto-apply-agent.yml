@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   match:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
         if: ${{ vars.PORTAL_AUTO_APPLY != 'false' }}
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-1.51.0
+          key: playwright-ubuntu-24.04-${{ runner.arch }}-1.51.0
       - name: Install browser for optional portal submissions
         if: ${{ vars.PORTAL_AUTO_APPLY != 'false' }}
         run: |
