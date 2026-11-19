@@ -8,6 +8,7 @@ from html import unescape
 from concurrent.futures import ThreadPoolExecutor
 from collections import Counter
 from india_sources import india_location, relevant_role, discover
+from job_alerts import discover_alerts
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / "ledger.json"
@@ -104,6 +105,19 @@ def main():
     if auto and (not resume.startswith(b"%PDF-") or not os.getenv("SMTP_USER") or not os.getenv("SMTP_APP_PASSWORD")):
         print("Email auto-apply disabled: missing PDF or SMTP configuration."); auto=False
     jobs=get_jobs()
+    alerts=discover_alerts()
+    with (ROOT/"platform-alerts.csv").open("w",newline="",encoding="utf-8") as f:
+        w=csv.writer(f); w.writerow(["source","title","location","status","url"])
+        seen_alerts=set()
+        for j in alerts:
+            if j["url"] in seen_alerts: continue
+            seen_alerts.add(j["url"])
+            title=j["title"]
+            if title.startswith(("=","+","-","@","\t","\r")): title="'"+title
+            loc=j["location"]
+            if loc.startswith(("=","+","-","@","\t","\r")): loc="'"+loc
+            w.writerow([j["source"],title,loc,"review_full_job_description_and_apply",j["url"]])
+    print("Unique platform alert links for review:",len(seen_alerts))
     ranked=sorted(((match(j,profile),j) for j in jobs),key=lambda x:x[0][0],reverse=True)
     count=0; rows=[]; seen=set()
     from portal import portal_apply, portal_enabled
