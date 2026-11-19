@@ -6,6 +6,7 @@ from urllib.request import urlopen
 from urllib.parse import quote, urlparse
 from html import unescape
 from concurrent.futures import ThreadPoolExecutor
+from collections import Counter
 
 ROOT = Path(__file__).resolve().parent
 STATE = ROOT / "ledger.json"
@@ -33,7 +34,7 @@ def match(job, profile):
 def get_jobs():
     jobs = json.loads(os.getenv("JOB_FEED_JSON","").strip() or "[]")
     if not isinstance(jobs,list): raise ValueError("JOB_FEED_JSON must be an array")
-    defaults = {"greenhouse": "crashplan,razorpaysoftwareprivatelimited,singlestore,toradex,conviva,pointwild,neweratech,machinify-india,merqube,axicorpfinancialservicesptyltd,insurityindia,workatbackbase,mfsgtechnologiesindia,sonicwall,zscaler,rhythmx-ai,databricks,cloudflare,elastic,mongodb,grafanalabs,canonical,gitlab,hashicorp,twilio,okta,cohesity,confluent,nutanix,atlassian,postman,thoughtspot,chargebee,clevertap,whatfix,innovaccer,mastercontrol,highspot,litmus,acquia,datadog,doordash,toast,deel,remote,coinbase,affirm,asana,box,adobe,reddit,redditinc,vercel,netlify,webflow,rubrik,illumio,tenable,rapid7,snyk,appdynamics,druva,thoughtworks,publicissapient,epam,globalogic,hitachivantara,cloudera,avalara,guidewire,blueyonder,workato,celonis,elasticpath,signifyd,branch,pagerduty,chainguard,sysdig,komodor,aiven,cockroachlabs,redis,dbtlabs,airbyte,astronomer,clickhouse,materialize,temporal,flyr,veeam", "lever": "smart-working-solutions,pditechnologies,ttecdigital,zeta,brightedge,keyloop,hevodata,brillio-2,thoughtworks,netradyne,plaid,spotify,gitlab,cloudbeds,contentsquare,udacity,wealthsimple,stackadapt,quora,openai,canonical,shyftlabs,uniphore,moengage,clevertap,atlan,calendly"}
+    defaults = {"greenhouse":"crashplan,pointwild,conviva,toradex,razorpaysoftwareprivatelimited,singlestore,machinify-india,neweratech,workatbackbase,axicorpfinancialservicesptyltd,insurityindia,merqube,mfsgtechnologiesindia,rhythmx-ai,sonicwall,zscaler,cloudflare,grafanalabs,databricks,canonical,elastic,gitlab,mongodb,twilio,okta,mastercontrol,acquia,datadog,remote,toast,affirm,coinbase,asana,reddit,webflow,netlify,vercel,rubrik,druva,thoughtworks,branch,workato,celonis,pagerduty,cockroachlabs,chainguard","lever":"pditechnologies,smart-working-solutions,brightedge,zeta,ttecdigital,keyloop,hevodata,spotify,wealthsimple,contentsquare,brillio-2,shyftlabs"}
     sources = []
     for kind in defaults:
         value = os.getenv(kind.upper()+"_BOARDS","").strip() or defaults[kind]
@@ -89,8 +90,11 @@ def main():
     profile["max_required_years"]=max(actual_years,4)
     profile["minimum_match"]=int(os.getenv("MINIMUM_MATCH","").strip() or "65")
     ledger=json.loads(STATE.read_text()) if STATE.exists() else {}
-    auto=os.getenv("AUTO_APPLY","false").lower()=="true"
-    resume=base64.b64decode(os.getenv("RESUME_BASE64","") or (os.getenv("RESUME_PART_1","")+os.getenv("RESUME_PART_2","")),validate=True) if auto else b""
+    auto=os.getenv("AUTO_APPLY","").strip().lower()!="false"
+    raw=os.getenv("RESUME_BASE64","") or (os.getenv("RESUME_PART_1","")+os.getenv("RESUME_PART_2",""))
+    try: resume=base64.b64decode("".join(raw.split()),validate=True)
+    except Exception: resume=b""
+    print("Resume PDF header valid:", resume.startswith(b"%PDF-"))
     if auto and (not resume.startswith(b"%PDF-") or not os.getenv("SMTP_USER") or not os.getenv("SMTP_APP_PASSWORD")):
         print("Email auto-apply disabled: missing PDF or SMTP configuration."); auto=False
     jobs=get_jobs()
@@ -98,7 +102,11 @@ def main():
     count=0; rows=[]; seen=set()
     from portal import portal_apply, portal_enabled
     portal_count=0
-    portal_on=portal_enabled()
+    portal_on=portal_enabled(profile,resume)
+    print("Email enabled:",auto,"Portal enabled:",portal_on)
+    print("Filter outcomes:",dict(Counter(reason for (score,matched,missing,reason),j in ranked)))
+    confirmed=0
+    email_sent=0
     for (score,matched,missing,reason),j in ranked:
         k=key(j)
         if k in seen: continue
@@ -107,23 +115,25 @@ def main():
         real_profile=dict(profile,max_required_years=actual_years)
         if match(j,real_profile)[0]==0 and reason=="matched": reason="stretch experience - review only"
         status=ledger.get(k,"review_portal")
-        eligible=reason=="matched" and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever")
+        eligible=reason=="matched" and score>=80 and j.get("application_email") and j.get("email_application_authorized") is True and j.get("source") not in ("greenhouse","lever")
         if k not in ledger and eligible:
             status="ready_email"
             if auto and count<min(int(profile.get("max_per_run",5)),10):
                 ledger[k]="reserved"; persist(ledger); count+=1
                 try:
                     email_apply(j,profile,resume)
-                    ledger[k]="sent"; status="sent"
+                    ledger[k]="sent"; status="sent"; email_sent+=1
                 except Exception:
                     ledger[k]="uncertain_manual_review"; status=ledger[k]
                 persist(ledger)
         if k not in ledger and portal_on and reason=="matched" and score>=80 and j.get("source") in ("greenhouse","lever") and portal_count<3:
             ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
-            status=portal_apply(j,profile)
+            status=portal_apply(j,profile,resume)
+            if status=="portal_confirmed": confirmed+=1
+            print("Portal outcome:",status)
             ledger[k]=status; persist(ledger)
         rows.append([j.get("company"),j.get("title"),j.get("location"),score,", ".join(matched),", ".join(missing),reason,status,j.get("url")])
     with (ROOT/"matches.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["company","title","location","skill_match","matched","missing","experience","status","url"]); w.writerows(rows)
-    print(f"Scanned {len(jobs)} jobs; {len(rows)} matches; {count} attempted email applications; {portal_count} portal attempts.")
+    print(f"Scanned {len(jobs)} jobs; {len(rows)} matches; {count} attempted email applications; {portal_count} portal attempts; {email_sent} emails accepted by SMTP; {confirmed} portal confirmations.")
 if __name__=="__main__": main()
