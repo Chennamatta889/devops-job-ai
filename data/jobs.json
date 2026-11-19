@@ -1,7 +1,23 @@
 {
-  "generated_at_utc": "2026-11-19T18:42:27.579307+00:00",
-  "count": 581,
+  "generated_at_utc": "2026-11-19T18:44:33.504666+00:00",
+  "count": 582,
   "jobs": [
+    {
+      "id": "2ca41557e0bb6292",
+      "title": "Senior Staff Consultant (Ecommerce Product Manager)",
+      "company": "Nagarro",
+      "location": "Bengaluru |  | India",
+      "source": "smartrecruiters",
+      "category": "Product / Technical",
+      "published": "2026-11-19T18:43:55.405000+00:00",
+      "url": "https://jobs.smartrecruiters.com/Nagarro1/744000162584089",
+      "listing_url": "",
+      "direct_apply": true,
+      "skills": [],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
+    },
     {
       "id": "c4b757131cee5c75",
       "title": "Senior Software Development Engineer",
@@ -6411,6 +6427,32 @@
       "experience_label": "2-5 years"
     },
     {
+      "id": "3343a68d72d73a68",
+      "title": "Software Engineer 3",
+      "company": "mongodb",
+      "location": "Gurugram",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-16T14:27:51+00:00",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8239047",
+      "listing_url": "",
+      "direct_apply": true,
+      "skills": [
+        "java",
+        "spring boot",
+        "sql",
+        "mysql",
+        "mongodb",
+        "aws",
+        "azure",
+        "gcp",
+        "ci/cd"
+      ],
+      "experience_min": 3,
+      "experience_max": 4,
+      "experience_label": "3-4 years"
+    },
+    {
       "id": "ee697b2d7e602620",
       "title": "Software Engineer 3",
       "company": "mongodb",
@@ -6464,32 +6506,6 @@
       "experience_min": 4,
       "experience_max": null,
       "experience_label": "4+ years"
-    },
-    {
-      "id": "3343a68d72d73a68",
-      "title": "Software Engineer 3",
-      "company": "mongodb",
-      "location": "Gurugram",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-16T14:27:51+00:00",
-      "url": "https://www.mongodb.com/careers/job/?gh_jid=8239047",
-      "listing_url": "",
-      "direct_apply": true,
-      "skills": [
-        "java",
-        "spring boot",
-        "sql",
-        "mysql",
-        "mongodb",
-        "aws",
-        "azure",
-        "gcp",
-        "ci/cd"
-      ],
-      "experience_min": 3,
-      "experience_max": 4,
-      "experience_label": "3-4 years"
     },
     {
       "id": "741e4a9e663ea991",
