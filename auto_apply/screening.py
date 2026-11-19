@@ -10,7 +10,31 @@ def answer_for(question, profile):
         for key,value in answers.items():
             if normalize(key)==q and isinstance(value,(str,int,float,bool)):
                 return value
+    q=re.sub(r"^(?:please (?:enter|provide|specify|share|select) (?:your )?|what (?:is|are) your )","",q)
+    q=re.sub(r" (?:required|optional)$","",q)
     fields=(
+        (r"^(?:current|present) (?:work |job |residential )?(?:location|city)(?: in india)?$","current_location"),
+        (r"^(?:current|present) (?:company|employer|organization)(?: name)?$|^name of (?:your )?(?:current|present) (?:company|employer|organization)$","current_company"),
+        (r"^(?:preferred|desired) (?:job |work )?(?:location|city)(?: s)?$","preferred_location"),
+        (r"^(?:are you )?(?:willing|open|ready) to relocate(?: .+)?$","willing_to_relocate"),
+        (r"^(?:are you an? )?immediate joiner$","immediate_joiner"),
+        (r"^(?:are you )?(?:willing|available|open) to work (?:in )?(?:rotational |night |flexible )?shifts$","willing_to_work_in_shifts"),
+        (r"^(?:are you )?(?:willing|available|open) to (?:work|participate) (?:in )?on call(?: rotations?)?$","willing_to_work_on_call"),
+        (r"^(?:are you )?(?:open|willing) to work (?:in )?(?:a )?hybrid(?: model)?$","open_to_hybrid"),
+        (r"^(?:are you )?(?:open|willing) to work (?:in )?(?:a )?remote(?: model)?$","open_to_remote"),
+        (r"^(?:are you )?(?:open|willing) to work (?:in )?(?:a )?on site(?: model)?$","open_to_onsite"),
+        (r"^(?:country|country of residence)$","country"),
+        (r"^(?:state|state of residence)$","state"),
+        (r"^(?:nationality|citizenship)$","nationality"),
+        (r"^(?:gender)$","gender"),
+        (r"^(?:graduation year|year of graduation|year of passing|passing year)$","graduation_year"),
+        (r"^(?:degree|highest degree|educational qualification|qualification)$","education"),
+        (r"^(?:university|university name|college|college name)$","university"),
+        (r"^(?:degree specialization|field of study|major)$","degree_specialization"),
+        (r"^(?:total|overall) (?:work |professional )?experience(?: in)? years$","experience_years"),
+        (r"^(?:total|overall) (?:work |professional )?experience(?: in)? months$","experience_months"),
+        (r"^(?:reason for (?:job )?change|why are you looking for a change|why are you leaving your current (?:job|company))$","reason_for_change"),
+        (r"^(?:preferred employment type|employment type preference)$","preferred_employment_type"),
         (r"^(?:your |legal |full )?name$|^first and last name$","name"),
         (r"^(?:your |legal )?(?:first|given) name$","first_name"),
         (r"^(?:your |legal )?(?:last|family|sur) ?name$","last_name"),
@@ -18,8 +42,8 @@ def answer_for(question, profile):
         (r"^(?:your )?(?:phone|mobile)(?: number)?$","phone"),
         (r"^(?:what is your )?(?:preferred location|preferred city|preferred work location)$","preferred_location"),
         (r"^(?:are you )?(?:willing to relocate(?: within india)?|open to relocation(?: for this role)?)$","willing_to_relocate"),
-        (r"^(?:what is your )?current (?:ctc|annual salary) (?:inr|in inr|in rupees)$","current_ctc_inr"),
-        (r"^(?:what is your )?expected (?:ctc|annual salary) (?:inr|in inr|in rupees)$","expected_ctc_inr"),
+        (r"^(?:what is your )?current (?:ctc|annual salary) (?:inr|in inr|in rupees|in rs|rs)$","current_ctc_inr"),
+        (r"^(?:what is your )?expected (?:ctc|annual salary) (?:inr|in inr|in rupees|in rs|rs)$","expected_ctc_inr"),
         (r"^(?:what is your )?current ctc (?:in )?lpa$","current_ctc_lpa"),
         (r"^(?:what is your )?expected ctc (?:in )?lpa$","expected_ctc_lpa"),
         (r"^(?:why are you interested in (?:this role|this position|this opportunity)|why do you want to join us|why are you interested|why this company|what interests you about [a-z0-9 ]+)$","interest_statement"),
@@ -45,8 +69,8 @@ def field_question(field):
         const aria=ids.map(id=>document.getElementById(id)?.innerText||'');
         const group=el.closest('fieldset');
         const legend=group?.querySelector('legend')?.innerText||'';
-        const lever=el.closest(".application-question,.application-field,.custom-question");
-        const prompt=lever?.querySelector(".application-label,.application-question-label,.question-label")?.innerText||"";
+        const lever=el.closest(".application-question,.application-field,.custom-question,.application-question-container,.application-question-group,[data-field-id]");
+        const prompt=lever?.querySelector(".application-label,.application-question-label,.question-label,.application-question-title,legend,[role=heading]")?.innerText||"";
         return (el.getAttribute('aria-label')||aria.join(' ').trim()||labels.join(' ').trim()||legend||prompt||el.getAttribute('placeholder')||'').trim();
     }""")
 def fill_screening(page,profile):
@@ -57,6 +81,7 @@ def fill_screening(page,profile):
         if not field.is_enabled() or field.get_attribute("readonly") is not None: continue
         tag=field.evaluate("el => el.tagName.toLowerCase()")
         if field.input_value().strip() and tag!="select": continue
+        if field.get_attribute("role")=="combobox": continue
         question=field_question(field)
         answer=answer_for(question,profile)
         if answer is None: continue
@@ -69,12 +94,16 @@ def fill_screening(page,profile):
         else:
             field.fill(value)
         filled+=1
-    radios=page.locator('fieldset:visible')
+    radios=page.locator('fieldset:visible, [role=radiogroup]:visible, .application-question:visible, .application-field:visible')
     for i in range(radios.count()):
         group=radios.nth(i)
         legend=group.locator("legend")
-        if legend.count()!=1: continue
-        answer=answer_for(legend.inner_text(),profile)
+        if group.get_by_role("radio").count()==0: continue
+        question=legend.inner_text() if legend.count()==1 else field_question(group)
+        if not question:
+            labels=group.locator(".application-label,.application-question-label,.question-label,.application-question-title")
+            if labels.count()==1: question=labels.inner_text()
+        answer=answer_for(question,profile)
         if answer is None: continue
         options=group.get_by_role("radio",name=re.compile(r"^"+re.escape(as_text(answer))+r"$",re.I))
         if options.count()==1 and options.is_enabled() and not options.is_checked():
@@ -122,14 +151,16 @@ def unanswered_required(page):
                 const group=Array.from(document.querySelectorAll('input[type=radio]')).filter(x=>x.name===el.name&&x.form===el.form);
                 empty=!group.some(x=>x.checked);
             }else if(el.type==='checkbox') empty=!el.checked;
-            else if(el.getAttribute('role')==='combobox'&&el.tagName!=='SELECT') empty=!el.value && !el.getAttribute('aria-valuetext') && !(el.getAttribute('aria-activedescendant'));
+            else if(el.getAttribute('role')==='combobox'&&el.tagName!=='SELECT') empty=!el.value && !el.getAttribute('aria-valuetext') && !el.querySelector('[aria-selected=true]');
             else if('value' in el) empty=!String(el.value||'').trim();
             else empty=true;
             if(!empty) continue;
             const legend=el.closest('fieldset')?.querySelector('legend')?.innerText;
             const labels=Array.from(el.labels||[]).map(l=>l.innerText).join(' ');
             const aria=(el.getAttribute('aria-labelledby')||'').split(/\\s+/).map(id=>document.getElementById(id)?.innerText||'').join(' ');
-            const label=(legend||el.getAttribute('aria-label')||aria.trim()||labels||el.name||'Unlabeled required field').replace(/\\s+/g,' ').trim().slice(0,180);
+            const wrapper=el.closest('.application-question,.application-field,.custom-question,.application-question-container');
+            const prompt=wrapper?.querySelector('.application-label,.application-question-label,.question-label,.application-question-title')?.innerText;
+            const label=(legend||el.getAttribute('aria-label')||aria.trim()||labels||prompt||el.getAttribute('placeholder')||el.name||'Unlabeled required field').replace(/\\s+/g,' ').trim().slice(0,180);
             if(!visited.has(label)){visited.add(label);missing.push(label)}
         }
         return missing.slice(0,30);
