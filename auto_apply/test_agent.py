@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 from portal import candidate_data, portal_enabled
-from agent import match, key, extract_experience_requirement, known_direct_apply_url, aggregator_jobs
+from agent import match, key, extract_experience_requirement, known_direct_apply_url, aggregator_jobs, direct_match_score, resolve_aggregator_signals
 from job_alerts import parse_alert, platform
 from india_sources import india_location, relevant_role, technology_category, technology_role, recruitee
 class AgentTests(unittest.TestCase):
@@ -30,6 +30,49 @@ class AggregatorFeedTests(unittest.TestCase):
         self.assertEqual(len(rows),1)
         self.assertEqual(rows[0]["source"],"indeed")
         self.assertEqual(rows[0]["direct_apply_url"],"https://jobs.example.com/java")
+
+class AggregatorResolutionTests(unittest.TestCase):
+    def test_confident_signal_resolves_to_direct_job(self):
+        direct=[{
+            "source":"greenhouse",
+            "company":"Example Technologies Pvt Ltd",
+            "title":"Senior Java Backend Developer",
+            "location":"Hyderabad, India",
+            "url":"https://job-boards.greenhouse.io/example/jobs/123",
+            "published":"2026-11-19T10:00:00Z"
+        }]
+        signals=[{
+            "source":"indeed",
+            "company":"Example Technologies",
+            "title":"Java Backend Developer",
+            "location":"Hyderabad, India",
+            "listing_url":"https://in.indeed.com/viewjob?jk=0123456789abcdef",
+            "published":"2026-11-19T10:00:00Z"
+        }]
+        merged=resolve_aggregator_signals(direct,signals)
+        self.assertEqual(len(merged),1)
+        self.assertIn("indeed",merged[0]["discovered_via"])
+        self.assertEqual(merged[0]["source_listings"]["indeed"],signals[0]["listing_url"])
+
+    def test_different_company_does_not_resolve(self):
+        direct=[{
+            "source":"lever",
+            "company":"Alpha Labs",
+            "title":"Python Developer",
+            "location":"Bengaluru, India",
+            "url":"https://jobs.lever.co/alpha/123"
+        }]
+        signal={
+            "source":"linkedin",
+            "company":"Beta Labs",
+            "title":"Python Developer",
+            "location":"Bengaluru, India",
+            "listing_url":"https://www.linkedin.com/jobs/view/123"
+        }
+        self.assertEqual(direct_match_score(signal,direct[0]),0)
+        merged=resolve_aggregator_signals(direct,[signal])
+        self.assertEqual(len(merged),2)
+        self.assertEqual(merged[1]["resolution"],"listing_only")
 
 class PortalTests(unittest.TestCase):
     @patch.dict("os.environ", {"SMTP_USER":"candidate@example.com","PORTAL_PROFILE_JSON":"","PORTAL_AUTO_APPLY":""})
