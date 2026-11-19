@@ -31,10 +31,14 @@ jobs:
       - name: Install PDF validation dependency
         run: pip install pypdf
       - name: Install browser for optional portal submissions
+        id: browser
         if: ${{ vars.PORTAL_AUTO_APPLY != 'false' }}
+        continue-on-error: true
+        timeout-minutes: 5
         run: |
           pip install playwright==1.51.0
-          python -m playwright install --with-deps chromium
+          python -m playwright install chromium
+          python -c "from playwright.sync_api import sync_playwright; p=sync_playwright().start(); b=p.chromium.launch(); b.close(); p.stop()"
       - name: Discover and match
         if: ${{ env.PROFILE_JSON != '' }}
         env:
@@ -49,7 +53,7 @@ jobs:
           LEVER_BOARDS: ${{ secrets.LEVER_BOARDS }}
           MINIMUM_MATCH: ${{ vars.MINIMUM_MATCH }}
           PORTAL_PROFILE_JSON: ${{ secrets.PORTAL_PROFILE_JSON }}
-          PORTAL_AUTO_APPLY: ${{ vars.PORTAL_AUTO_APPLY }}
+          PORTAL_AUTO_APPLY: ${{ steps.browser.outcome == 'success' && vars.PORTAL_AUTO_APPLY != 'false' && 'true' || 'false' }}
           AUTO_APPLY: ${{ vars.AUTO_APPLY }}
         run: python auto_apply/agent.py
       - uses: actions/upload-artifact@v4
@@ -61,5 +65,6 @@ jobs:
             auto_apply/platform-alerts.csv
             auto_apply/job-decisions.csv
             auto_apply/run-summary.json
+            auto_apply/screening-review.json
           if-no-files-found: ignore
           retention-days: 3
