@@ -191,7 +191,7 @@ def main():
             ledger[k]="portal_reserved"; persist(ledger); portal_count+=1
             diagnostic={}
             status=portal_apply(j,profile,resume,diagnostic)
-            screening_report.append({"company":j.get("company"),"title":j.get("title"),"url":j.get("url"),"status":status,"missing_fields":diagnostic.get("missing_fields",[]),"stage":diagnostic.get("stage",""),"attempted_at_utc":diagnostic.get("attempted_at_utc"),"post_responses":diagnostic.get("post_responses",[]),"confirmation":diagnostic.get("confirmation"),"invalid_field_count":diagnostic.get("invalid_field_count"),"visible_alert_count":diagnostic.get("visible_alert_count")})
+            screening_report.append({"company":j.get("company"),"title":j.get("title"),"url":j.get("url"),"status":status,"missing_fields":diagnostic.get("missing_fields",[]),"stage":diagnostic.get("stage",""),"attempted_at_utc":diagnostic.get("attempted_at_utc"),"post_responses":diagnostic.get("post_responses",[]),"confirmation":diagnostic.get("confirmation"),"invalid_field_count":diagnostic.get("invalid_field_count"),"invalid_fields":diagnostic.get("invalid_fields",[]),"visible_alert_count":diagnostic.get("visible_alert_count"),"final_host":diagnostic.get("final_host"),"final_path":diagnostic.get("final_path")})
             if status=="portal_confirmed": confirmed+=1
             print("Portal outcome:",status)
             ledger[k]=status; persist(ledger)
