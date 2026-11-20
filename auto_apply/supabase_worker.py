@@ -7,6 +7,8 @@ It never bypasses CAPTCHA, MFA, login walls, or human-verification controls.
 from __future__ import annotations
 
 import json
+from io import BytesIO
+from pypdf import PdfReader
 import os
 import re
 from datetime import datetime, timezone
@@ -133,6 +135,43 @@ def _list(value) -> list[str]:
     if isinstance(value, list):
         return [str(x).strip() for x in value if str(x).strip()]
     return [x.strip() for x in str(value or "").split(",") if x.strip()]
+
+
+SKILL_RULES = [["AWS","aws|amazon web services"],["Azure","azure"],["GCP","gcp|google cloud"],["Jenkins","jenkins"],["OpenShift","openshift|ocp"],["Docker","docker"],["Kubernetes","kubernetes|k8s"],["Terraform","terraform"],["Linux","linux"],["Python","python"],["Bash","bash"],["PowerShell","powershell"],["GitHub Actions","github actions"],["Git","git"],["CI/CD","ci\\s*[/\\-]\\s*cd|continuous integration|continuous delivery"],["IAM","iam"],["Ansible","ansible"],["Prometheus","prometheus"],["Grafana","grafana"],["ArgoCD","argo\\s*cd"],["JFrog","jfrog|artifactory"],["Dynatrace","dynatrace"],["Splunk","splunk"],["Java","java"],["Spring Boot","spring boot"],[".NET","\\.net|dotnet"],["C#","c#"],["JavaScript","javascript"],["TypeScript","typescript"],["React","react"],["Node.js","node\\.?js"],["SQL","sql"],["PostgreSQL","postgresql|postgres"],["MySQL","mysql"],["Redis","redis"],["Kafka","kafka"],["ETL","etl"],["Selenium","selenium"],["Playwright","playwright"],["Go","golang"]]
+ROLE_RULES = [["DevOps Engineer","devops"],["Site Reliability Engineer","site reliability engineer|\\bsre\\b"],["Cloud Engineer","cloud engineer|cloud devops"],["Platform Engineer","platform engineer"],["Infrastructure Engineer","infrastructure engineer"],[".NET Developer","\\.net developer|dotnet developer|c# developer"],["Java Developer","java developer"],["Frontend Developer","front[ -]?end (?:developer|engineer)"],["Backend Developer","back[ -]?end (?:developer|engineer)"],["Full Stack Developer","full[ -]?stack (?:developer|engineer)"],["QA Engineer","qa engineer|quality assurance engineer|software test engineer"],["Data Engineer","data engineer"]]
+
+
+def enrich_matching_profile(profile: dict) -> dict:
+    """Use only skills found in the user's private PDF, never guess screening answers."""
+    resume = get_resume(str(profile["user_id"]))
+    if not resume:
+        return profile
+    try:
+        pdf = download_resume(str(resume["storage_path"]))
+        if not pdf.startswith(b"%PDF-") or len(pdf) > 6 * 1024 * 1024:
+            return profile
+        reader = PdfReader(BytesIO(pdf))
+        text = " ".join((page.extract_text() or "") for page in reader.pages[:20])
+        if not text.strip():
+            return profile
+        def found(rules):
+            return [label for label, pattern in rules if re.search(
+                r"(?:^|[^a-z0-9])(?:" + pattern + r")(?=$|[^a-z0-9])", text, re.I)]
+        skills = found(SKILL_RULES)
+        roles = found(ROLE_RULES)
+        existing = _list(profile.get("target_roles"))
+        generic = not existing or all(re.fullmatch(r"software engineer(?:ing)?|software developer|it professional", role, re.I) for role in existing)
+        cloud_skills = {"AWS", "Azure", "GCP", "Jenkins", "OpenShift", "Docker", "Kubernetes", "Terraform", "CI/CD"}
+        if generic and len(cloud_skills.intersection(skills)) >= 4 and not any(re.search(r"devops|site reliability|cloud|platform|infrastructure", role, re.I) for role in roles):
+            roles.append("DevOps Engineer")
+        enriched = dict(profile)
+        enriched["skills"] = list({s.lower(): s for s in _list(profile.get("skills")) + skills}.values())
+        if generic and roles:
+            enriched["target_roles"] = roles
+        return enriched
+    except Exception as exc:
+        print("Resume matching enrichment unavailable:", type(exc).__name__)
+        return profile
 
 
 def supported_job(job: dict) -> bool:
@@ -280,6 +319,7 @@ def queue_new_matches() -> int:
 
         attempted_ids = all_attempted_job_ids(user_id)
         threshold = max(50, min(int(profile.get("minimum_match_score") or 80), 100))
+        matching_profile = enrich_matching_profile(profile)
         ranked = []
         for job in jobs:
             job_id = str(job.get("id") or "")
@@ -288,7 +328,7 @@ def queue_new_matches() -> int:
             observed = verification.get(job_id) if isinstance(verification, dict) else None
             if not isinstance(observed, dict) or observed.get("status") != "no_verification_detected":
                 continue
-            score = match_score(job, profile)
+            score = match_score(job, matching_profile)
             if score >= threshold:
                 ranked.append((score, job))
 
@@ -436,10 +476,10 @@ def process_attempt(attempt: dict) -> None:
             )
             return
 
-        candidate = dict(profile)
+        candidate = enrich_matching_profile(profile)
         candidate["screening_answers"] = get_screening_answers(user_id)
-        candidate["target_roles"] = ", ".join(_list(profile.get("target_roles")))
-        candidate["skills"] = ", ".join(_list(profile.get("skills")))
+        candidate["target_roles"] = ", ".join(_list(candidate.get("target_roles")))
+        candidate["skills"] = ", ".join(_list(candidate.get("skills")))
         candidate["preferred_locations"] = ", ".join(
             _list(profile.get("preferred_locations"))
         )

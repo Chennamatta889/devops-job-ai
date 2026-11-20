@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 const FEED_URL =
   import.meta.env.VITE_JOB_FEED_URL ||
@@ -88,6 +88,39 @@ function experienceMatches(job, selected) {
   return min <= option.max && jobMax >= option.min
 }
 
+
+const SKILL_RULES = [["AWS","aws|amazon web services"],["Azure","azure"],["GCP","gcp|google cloud"],["Jenkins","jenkins"],["OpenShift","openshift|ocp"],["Docker","docker"],["Kubernetes","kubernetes|k8s"],["Terraform","terraform"],["Linux","linux"],["Python","python"],["Bash","bash"],["PowerShell","powershell"],["GitHub Actions","github actions"],["Git","git"],["CI/CD","ci\\s*[/\\-]\\s*cd|continuous integration|continuous delivery"],["IAM","iam"],["Ansible","ansible"],["Prometheus","prometheus"],["Grafana","grafana"],["ArgoCD","argo\\s*cd"],["JFrog","jfrog|artifactory"],["Dynatrace","dynatrace"],["Splunk","splunk"],["Java","java"],["Spring Boot","spring boot"],[".NET","\\.net|dotnet"],["C#","c#"],["JavaScript","javascript"],["TypeScript","typescript"],["React","react"],["Node.js","node\\.?js"],["SQL","sql"],["PostgreSQL","postgresql|postgres"],["MySQL","mysql"],["Redis","redis"],["Kafka","kafka"],["ETL","etl"],["Selenium","selenium"],["Playwright","playwright"],["Go","golang"]]
+const ROLE_RULES = [["DevOps Engineer","devops"],["Site Reliability Engineer","site reliability engineer|\\bsre\\b"],["Cloud Engineer","cloud engineer|cloud devops"],["Platform Engineer","platform engineer"],["Infrastructure Engineer","infrastructure engineer"],[".NET Developer","\\.net developer|dotnet developer|c# developer"],["Java Developer","java developer"],["Frontend Developer","front[ -]?end (?:developer|engineer)"],["Backend Developer","back[ -]?end (?:developer|engineer)"],["Full Stack Developer","full[ -]?stack (?:developer|engineer)"],["QA Engineer","qa engineer|quality assurance engineer|software test engineer"],["Data Engineer","data engineer"]]
+const splitList = (value) => String(value || '').split(',').map(x => x.trim()).filter(Boolean)
+const mergeList = (a, b) => [...new Map([...a, ...b].map(x => [x.toLowerCase(), x])).values()]
+function resumeSuggestions(text, profile) {
+  const matches = (rules) => rules.filter(([, p]) => new RegExp('(?:^|[^a-z0-9])(?:' + p + ')(?=$|[^a-z0-9])', 'i').test(text)).map(([name]) => name)
+  const skills = matches(SKILL_RULES)
+  const roles = matches(ROLE_RULES)
+  const existing = splitList(profile.target_roles)
+  const generic = !existing.length || existing.every(r => /^(software engineer(?:ing)?|software developer|it professional)$/i.test(r))
+  const cloud = roles.some(r => /devops|site reliability|cloud|platform|infrastructure/i.test(r))
+  const relevantCloudSkills = skills.filter(x => /^(AWS|Azure|GCP|Jenkins|OpenShift|Docker|Kubernetes|Terraform|CI\/CD)$/i.test(x)).length
+  if (generic && relevantCloudSkills >= 4 && !cloud) roles.push('DevOps Engineer')
+  const experience = text.match(/(?:\b(?:over|nearly|approximately|around)\s+)?(\d+(?:\.\d+)?)\s*\+?\s*years?\s+(?:of\s+)?(?:professional\s+|total\s+|work\s+)?experience\b/i)
+  return {skills: mergeList(splitList(profile.skills), skills).join(', '), target_roles: (generic && roles.length ? roles : existing).join(', '), years_experience: experience && Number(experience[1]) <= 50 ? experience[1] : profile.years_experience}
+}
+async function readResumeText(file) {
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+  const worker = await import('pdfjs-dist/legacy/build/pdf.worker.min.mjs?url')
+  pdfjs.GlobalWorkerOptions.workerSrc = worker.default
+  const doc = await pdfjs.getDocument({data: new Uint8Array(await file.arrayBuffer()), isEvalSupported: false}).promise
+  try {
+    const pages = []
+    for (let n = 1; n <= Math.min(doc.numPages, 20); n++) {
+      const page = await doc.getPage(n)
+      const content = await page.getTextContent()
+      pages.push(content.items.map(item => item.str || '').join(' '))
+    }
+    return pages.join('\n')
+  } finally { await doc.destroy() }
+}
+
 function App() {
   const [feed, setFeed] = useState({ jobs: [], count: 0, generated_at_utc: null })
   const [query, setQuery] = useState('')
@@ -107,6 +140,9 @@ function App() {
   const [testMatchSummary, setTestMatchSummary] = useState(null)
   const [autoConsent, setAutoConsent] = useState(false)
   const [resumeFile, setResumeFile] = useState(null)
+  const [resumeReading, setResumeReading] = useState(false)
+  const [resumeNotice, setResumeNotice] = useState('')
+  const resumeSelection = useRef(0)
   const [authUser, setAuthUser] = useState(null)
   const [authEmail, setAuthEmail] = useState('')
   const [authBusy, setAuthBusy] = useState(false)
@@ -465,15 +501,37 @@ function App() {
       relevant: scored.length,
       strong: scored.filter(({ score }) => score >= threshold).length,
       autoEligible: scored.filter(({ job, score }) =>
-        job.auto_apply_supported &&
+        job.direct_apply && job.auto_apply_supported &&
         job.verification_status === 'no_verification_detected' &&
         score >= threshold
-      ).length
+      ).length,
+      verificationPending: scored.filter(({job, score}) => job.direct_apply && job.auto_apply_supported && score >= threshold && job.verification_status !== 'no_verification_detected').length,
+      belowThreshold: scored.filter(({score}) => score < threshold).length
     }
   }
 
   function updateAutoProfile(field, value) {
     setAutoProfile((current) => ({ ...current, [field]: value }))
+  }
+
+  async function chooseResume(file) {
+    const selection = ++resumeSelection.current
+    setResumeFile(file || null)
+    setResumeNotice('')
+    setResumeReading(false)
+    if (!file || file.size > 6 * 1024 * 1024 || !file.name.toLowerCase().endsWith('.pdf')) return
+    setResumeReading(true)
+    try {
+      const text = await readResumeText(file)
+      if (selection !== resumeSelection.current) return
+      if (!text.trim()) throw new Error('No selectable text')
+      setAutoProfile(current => ({...current, ...resumeSuggestions(text, current)}))
+      setResumeNotice('Resume analyzed privately. Review the suggested roles, skills and experience before enabling Auto Apply.')
+    } catch {
+      if (selection === resumeSelection.current) setResumeNotice('Could not read this PDF automatically. Enter roles and skills manually or upload a text-based PDF.')
+    } finally {
+      if (selection === resumeSelection.current) setResumeReading(false)
+    }
   }
 
   async function enableAutoApply(event) {
@@ -567,49 +625,6 @@ function App() {
           })
         if (resumeError) throw resumeError
 
-        const threshold = Number(autoProfile.minimum_match_score || 80)
-        const dailyLimit = Number(autoProfile.daily_application_limit || 10)
-        const eligible = scoreProfileJobs(autoProfile)
-          .filter(({ job, score }) =>
-            job.auto_apply_supported &&
-            job.verification_status === 'no_verification_detected' &&
-            score >= threshold
-          )
-          .slice(0, dailyLimit)
-
-        let existingIds = new Set()
-        if (eligible.length) {
-          const ids = eligible.map(({ job }) => String(job.id || ''))
-          const { data: existing, error: existingError } = await supabaseClient
-            .from('application_attempts')
-            .select('external_job_id')
-            .in('external_job_id', ids)
-          if (existingError) throw existingError
-          existingIds = new Set((existing || []).map((row) => String(row.external_job_id)))
-        }
-
-        const queueRows = eligible
-          .filter(({ job }) => !existingIds.has(String(job.id || '')))
-          .map(({ job, score }) => ({
-            user_id: userId,
-            external_job_id: String(job.id || ''),
-            source: String(job.source || ''),
-            title: String(job.title || ''),
-            company: String(job.company || ''),
-            location: String(job.location || ''),
-            apply_url: String(job.url || ''),
-            match_score: score,
-            status: 'QUEUED',
-            message: 'Queued by candidate Auto Apply settings.'
-          }))
-
-        if (queueRows.length) {
-          const { error: queueError } = await supabaseClient
-            .from('application_attempts')
-            .insert(queueRows)
-          if (queueError) throw queueError
-        }
-
         const { error: enableError } = await supabaseClient
           .from('candidate_profiles')
           .update({
@@ -624,13 +639,8 @@ function App() {
         await loadApplicationAttempts()
         setAutoEnabled(true)
         setTestMatchSummary(previewMatchSummary(autoProfile))
-        setAutoMessage(
-          'Auto Apply enabled securely. ' +
-          queueRows.length +
-          ' new application' +
-          (queueRows.length === 1 ? '' : 's') +
-          ' queued for the production worker.'
-        )
+        const summary = previewMatchSummary(autoProfile)
+        setAutoMessage('Auto Apply enabled securely. ' + summary.autoEligible + ' eligible matches; the scheduled worker will queue new matches within your daily limit. ' + summary.verificationPending + ' strong supported matches await verification or require manual action.')
         return
       }
 
@@ -1065,10 +1075,11 @@ function App() {
               <input
                 type="file"
                 accept="application/pdf,.pdf"
-                onChange={(event) => setResumeFile(event.target.files?.[0] || null)}
+                onChange={(event) => chooseResume(event.target.files?.[0] || null)}
                 required
               />
               <small>PDF only. Resume files must be stored in private backend storage, never in the public job-feed repository.</small>
+              {(resumeReading || resumeNotice) && <small role="status">{resumeReading ? 'Reading resume privately…' : resumeNotice}</small>}
             </div>
 
             <label className="consent-row">
@@ -1079,7 +1090,7 @@ function App() {
             </label>
 
             <div className="upgrade-actions">
-              <button className="primary-button" type="submit" disabled={autoBusy || (supabaseClient && !authUser)}>
+              <button className="primary-button" type="submit" disabled={autoBusy || resumeReading || (supabaseClient && !authUser)}>
                 {autoBusy ? 'Saving…' : ((supabaseClient || AUTO_APPLY_API_URL) ? 'Enable Auto Apply' : 'Save & Test Resume')}
               </button>
               {!supabaseClient && !AUTO_APPLY_API_URL && (
@@ -1089,7 +1100,7 @@ function App() {
                 <span className="upgrade-note">Sign in with your email before enabling Auto Apply.</span>
               )}
             </div>
-            {testMatchSummary && !AUTO_APPLY_API_URL && !supabaseClient && (
+            {testMatchSummary && (
               <div className="test-results">
                 <div className="test-result">
                   <strong>{testMatchSummary.relevant}</strong>
@@ -1103,8 +1114,11 @@ function App() {
                   <strong>{testMatchSummary.autoEligible}</strong>
                   <span>currently auto-apply eligible</span>
                 </div>
+                <div className="test-result"><strong>{testMatchSummary.verificationPending}</strong><span>verification pending or manual action needed</span></div>
+                <div className="test-result"><strong>{testMatchSummary.belowThreshold}</strong><span>below minimum match</span></div>
               </div>
             )}
+            {supabaseClient && authUser && autoEnabled && applicationAttempts.length === 0 && <div className="upgrade-message">No application attempts recorded yet. The worker runs on a scheduled basis; refresh status after it runs. A match is not a confirmed submission. <button type="button" className="text-button" onClick={loadApplicationAttempts}>Refresh status</button></div>}
             {supabaseClient && authUser && applicationAttempts.length > 0 && (
               <div className="application-history">
                 <div className="history-heading">
