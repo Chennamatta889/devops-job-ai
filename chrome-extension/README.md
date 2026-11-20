@@ -10,6 +10,8 @@ This Manifest V3 extension is an assisted-application companion for DraftflowAI 
 - Detects visible human-verification/CAPTCHA indicators and stops.
 - Lets the candidate complete verification manually in the same tab.
 - Re-checks required fields before enabling submission.
+- Leaves employer location-autocomplete controls to the candidate and asks them to submit through the employer page after reviewing the form; it does not count typed text as a valid selection.
+- A submit click is only an attempt, not proof of submission.
 - Never attempts to solve or bypass CAPTCHA, MFA, login walls, or other access controls.
 
 ## Supported ATS in v0.1

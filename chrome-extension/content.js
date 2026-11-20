@@ -65,6 +65,10 @@
     }catch{return false}
   }
 
+  function locationNeedsManualSelection(){
+    return [...document.querySelectorAll('input.location-input, input[name="location"][role="combobox"], input[name="location"][aria-autocomplete="list"]')].some(visible);
+  }
+
   function fillNamed(profile){
     const parts=(profile.fullName||"").trim().split(/\s+/);
     const first=parts[0]||"";
@@ -80,9 +84,12 @@
     ];
     let count=0;
     for(const [value,labelPattern,selectors] of fields){
+      if(challengePresent()) break;
       if(!value) continue;
       const field=findByLabel(labelPattern)||firstVisible(selectors);
-      if(field&&setValue(field,value)) count++;
+      if(!field||field.disabled||field.readOnly||String(field.value||"").trim()) continue;
+      if(field.matches('[role="combobox"], [aria-autocomplete="list"], input.location-input')) continue;
+      if(setValue(field,value)) count++;
     }
     return count;
   }
@@ -142,13 +149,16 @@
     if(challengePresent()){
       return {status:"verification_required",message:"Human verification is present. Complete it manually in this same tab, then click Re-check after verification."};
     }
+    if(locationNeedsManualSelection()){
+      return {status:"review",message:"Select your exact location from the employer dropdown, review all fields, and use the employer\u2019s Submit button yourself. This extension cannot independently verify the location selection."};
+    }
     const missing=missingRequired();
     if(missing.length){
       return {status:"missing_required",message:"Manual input is still required: "+missing.slice(0,6).join(", "),missing};
     }
     const button=submitButton();
-    if(!button){
-      return {status:"review",message:"No supported submit button is visible yet. Continue the form manually and re-check."};
+    if(!button||button.disabled||button.getAttribute("aria-disabled")==="true"||document.querySelector("input:invalid:not([type=hidden]),textarea:invalid,select:invalid,[aria-invalid=true]")){
+      return {status:"review",message:"Review invalid fields or wait for the employer form to finish loading before submitting."};
     }
     return {status:"ready",message:"All detected required fields are complete and no human verification is visible. Ready to submit."};
   }
@@ -161,6 +171,7 @@
           sendResponse({status:"verification_required",message:"Human verification is already present. Complete it manually, then re-check."}); return;
         }
         const filled=fillNamed(message.profile||{});
+        if(challengePresent()){sendResponse(status());return;}
         const attached=attachResume(message.resume||{});
         const next=status();
         next.message=`Filled ${filled} candidate fields. Resume ${attached?"attached":"needs manual attachment"}. ${next.message}`;
@@ -180,7 +191,7 @@
           sendResponse({status:"review",message:"Submit button is not available."}); return;
         }
         button.click();
-        sendResponse({status:"submitted",message:"Submit was clicked in this tab. Confirm the employer page shows an application-success message before treating it as submitted."});
+        sendResponse({status:"submission_attempted",message:"Submit was clicked. Submission is not confirmed. Check the employer confirmation page and email before recording success."});
         return;
       }
       sendResponse({status:"review",message:"Unknown command."});

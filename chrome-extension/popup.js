@@ -76,7 +76,7 @@ async function send(command){
       resume:data.resumePdf
     });
     if(!response){show("The application page did not respond. Reload it and try again.","error");return}
-    const type=response.status==="ready"||response.status==="submitted"?"success":
+    const type=response.status==="ready"?"success":
       response.status==="verification_required"||response.status==="missing_required"?"error":"";
     show(response.message||response.status,type);
   }catch(err){
