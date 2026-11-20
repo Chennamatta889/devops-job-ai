@@ -110,6 +110,7 @@ def option_match(question, value, label, profile=None):
     q=normalize(question); v=normalize(value); l=normalize(label)
     if not v or not l: return False
     if l==v: return True
+    if q=="how soon can you join us" and re.fullmatch(r"\d+ days",v) and l==v.split()[0]: return True
     if not (re.search(r"\b(?:location|city)\b",q) and l.startswith(v+" ")): return False
     country=normalize((profile or {}).get("country"))
     if country and len(l.split())>=3 and country not in l:
@@ -231,6 +232,9 @@ def fill_screening(page,profile,verification_required=None):
         if answer is None: continue
         value=as_text(answer)
         if field.get_attribute("type")=="date" and not re.fullmatch(r"\d{4}-\d{2}-\d{2}",value): continue
+        if field.get_attribute("type")=="number" and normalize(question)=="how soon can you join us" and re.fullmatch(r"\d+ days",value,re.I):
+            value=value.split()[0]
+        if field.get_attribute("type")=="number" and not re.fullmatch(r"-?\d+(?:\.\d+)?",value): continue
         if tag=="select":
             options=field.locator("option").evaluate_all("els => els.map(e => ({label:e.textContent.trim(), value:e.value, disabled:e.disabled}))")
             choices=[o for o in options if not o["disabled"] and o["value"] and option_match(question,value,o["label"],profile)]
@@ -321,7 +325,8 @@ def unanswered_required(page):
             else {
                 // Some ATS forms put aria-required on a wrapper rather than
                 // the actual control. Evaluate the nested control, not the div.
-                const controls=Array.from(el.querySelectorAll('input:not([type=hidden]),textarea,select')).filter(x=>!x.disabled&&!x.readOnly);
+                const linked=el.tagName==='LABEL'?el.control:null;
+                const controls=Array.from(new Set([...(linked?[linked]:[]),...el.querySelectorAll('input:not([type=hidden]),textarea,select')])).filter(x=>!x.disabled&&!x.readOnly);
                 if(controls.length===1){
                     const c=controls[0];
                     empty=c.type==='file' ? !(c.files&&c.files.length) : c.type==='checkbox'||c.type==='radio' ? !c.checked : !String(c.value||'').trim();

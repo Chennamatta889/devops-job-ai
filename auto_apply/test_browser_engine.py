@@ -188,5 +188,19 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertFalse(resume_attachment_state(page,page.locator("#resume"),"Resume.pdf")["attached"])
             b.close()
 
+
+    def test_linked_phone_label_and_explicit_answers(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch(); page=b.new_page()
+            page.set_content('<label for="tel" aria-required="true">Phone</label><input id="tel" type="tel" required><label for="join">How soon can you join us?</label><input id="join" type="number" required><label for="relocate">Are you willing to relocate if needed?</label><select id="relocate" required><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>')
+            data={"phone":"+919876543210","screening_answers":{"How soon can you join us?":"30 days","Are you willing to relocate if needed?":True}}
+            self.assertEqual(fill_contact_fields(page,data),1)
+            self.assertEqual(fill_screening(page,data,verification_required),2)
+            self.assertEqual(page.locator("#join").input_value(),"30")
+            self.assertEqual(unanswered_required(page),[])
+            page.locator("#tel").fill("")
+            self.assertIn("Phone",unanswered_required(page))
+            b.close()
+
 if __name__ == "__main__":
     unittest.main()

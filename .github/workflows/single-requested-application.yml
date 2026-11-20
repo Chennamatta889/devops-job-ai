@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   apply:
-    if: contains(github.event.head_commit.message, '[attachment-retry-8]')
+    if: contains(github.event.head_commit.message, '[answered-retry-8]')
     runs-on: ubuntu-24.04
     timeout-minutes: 7
     env:

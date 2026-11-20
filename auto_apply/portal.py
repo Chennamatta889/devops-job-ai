@@ -214,14 +214,30 @@ def fill_greenhouse_country(page,data):
     if field.get_attribute("role")!="combobox": return None
     field.click()
     if verification_required(page): return None
+    if field.evaluate("el=>el.tagName.toLowerCase()==='input'") and field.is_editable():
+        field.fill("India")
     options=page.get_by_role("option",name=is_india)
-    visible=[options.nth(i) for i in range(options.count()) if options.nth(i).is_visible() and options.nth(i).is_enabled()]
+    for _ in range(12):
+        if verification_required(page): return None
+        visible=[options.nth(i) for i in range(options.count()) if options.nth(i).is_visible() and options.nth(i).is_enabled()]
+        if len(visible)==1: break
+        page.wait_for_timeout(150)
     if len(visible)!=1:
         field.press("Escape")
         return None
     visible[0].click()
     if verification_required(page): return None
-    rendered=field.evaluate("el=>[el.value,el.innerText,el.getAttribute('aria-valuetext'),el.getAttribute('aria-label')].filter(Boolean).join(' ')")
+    rendered=field.evaluate(r"""el=>{
+        let text=[el.value,el.innerText,el.getAttribute('aria-valuetext')].filter(Boolean);
+        let parent=el.parentElement;
+        for(let i=0;i<4&&parent;i++,parent=parent.parentElement){
+            if(parent.matches('form,body,main')||parent.querySelectorAll('[role=combobox]').length>1)break;
+            const shown=Array.from(parent.querySelectorAll('[class*="singleValue"],[class*="single-value"],[aria-selected=true]')).filter(x=>x.getClientRects().length);
+            text.push(...shown.map(x=>x.innerText));
+            if(shown.length)break;
+        }
+        return text.join(' ');
+    }""")
     return national if re.search(r"\bIndia\b|\+91",rendered,re.I) else None
 
 def fill_contact_fields(page,data,greenhouse=False):
