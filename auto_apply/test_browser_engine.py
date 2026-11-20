@@ -2,7 +2,7 @@
 import unittest
 from playwright.sync_api import sync_playwright
 from screening import location_suggestion_matches, select_lever_location, answer_for, fill_screening, unanswered_required
-from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields, validation_details, fill_greenhouse_country, resume_attachment_state, verify_resume_attachment, required_after_resume
+from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields, validation_details, fill_greenhouse_country, resume_attachment_state, verify_resume_attachment, required_after_resume, greenhouse_phone_state
 from supabase_worker import public_status
 
 class BrowserEngineTests(unittest.TestCase):
@@ -200,6 +200,23 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertEqual(unanswered_required(page),[])
             page.locator("#tel").fill("")
             self.assertIn("Phone",unanswered_required(page))
+            b.close()
+
+
+    def test_greenhouse_phone_selection_and_exact_digits(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch();page=b.new_page()
+            page.set_content('<div><div class="select__single-value">India +91</div><input id="country" role="combobox" aria-required="true" aria-label="Country"></div><input id="phone" type="tel" aria-required="true" aria-label="Phone" value="09876543210">')
+            data={"phone":"+919876543210"}
+            self.assertTrue(greenhouse_phone_state(page,data)["verified"])
+            self.assertEqual(required_after_resume(page,data,True),[])
+            page.locator("#phone").fill("1234")
+            self.assertFalse(greenhouse_phone_state(page,data)["verified"])
+            self.assertIn("Phone",required_after_resume(page,data,True))
+            page.locator("#phone").fill("9876543210")
+            page.locator(".select__single-value").evaluate("el=>el.textContent='United States +1'")
+            self.assertFalse(greenhouse_phone_state(page,data)["verified"])
+            self.assertIn("Phone",required_after_resume(page,data,True))
             b.close()
 
 if __name__ == "__main__":

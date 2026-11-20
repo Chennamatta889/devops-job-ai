@@ -240,6 +240,49 @@ def fill_greenhouse_country(page,data):
     }""")
     return national if re.search(r"\bIndia\b|\+91",rendered,re.I) else None
 
+def greenhouse_phone_state(page,data):
+    """Read only the displayed country selection and actual phone value.
+
+    The provider's international phone widget may format the national number
+    with a trunk prefix. Never treat an empty field or wrong digits as complete.
+    """
+    expected=re.sub(r"\D","",str(data.get("phone") or ""))
+    if not re.fullmatch(r"91[6-9]\d{9}",expected):
+        return {"verified":False,"reason":"unsupported_number"}
+    loc=page.locator('input#phone[type=tel]:visible')
+    country=page.locator('input#country[role=combobox]:visible')
+    if loc.count()!=1 or country.count()!=1:
+        return {"verified":False,"reason":"phone_widget_unresolved"}
+    c=country.evaluate(r"""el=>{
+        let parent=el.parentElement;
+        for(let i=0;i<5&&parent;i++,parent=parent.parentElement){
+            if(parent.matches('form,body,main')||parent.querySelectorAll('[role=combobox]').length>1)break;
+            const nodes=Array.from(parent.querySelectorAll('[class*="singleValue"],[class*="single-value"],[aria-selected=true]')).filter(x=>x.getClientRects().length&&!x.closest('[role=listbox]'));
+            const confirmed=nodes.some(x=>/^\s*India\s*(?:\(\+91\)|\+91)?\s*$/i.test(x.innerText));
+            if(confirmed)return true;
+            if(nodes.length)return false;
+        }
+        return false;
+    }""")
+    observed=loc.evaluate(r"""el=>{
+        let api=null;
+        try {
+            api=window.intlTelInput?.getInstance?.(el)||window.intlTelInputGlobals?.getInstance?.(el)||null;
+        }catch(e){}
+        let selected='',number='',widgetValid=null;
+        if(api){
+            try {selected=String(api.getSelectedCountryData?.()?.iso2||'');number=String(api.getNumber?.()||'');}catch(e){}
+            try {const v=api.isValidNumber?.();if(typeof v==='boolean')widgetValid=v;}catch(e){}
+        }
+        return {digits:String(el.value||'').replace(/\D/g,''),number:number.replace(/\D/g,''),selected,widgetValid,valid:el.validity?.valid===true,ariaInvalid:el.getAttribute('aria-invalid')==='true'};
+    }""")
+    national=expected[2:]
+    matches=observed["digits"] in {expected,national,"0"+national}
+    widget_matches=not observed["number"] or observed["number"]==expected
+    widget_country=not observed["selected"] or observed["selected"].lower()=="in"
+    verified=bool(c and matches and widget_matches and widget_country and observed["widgetValid"] is not False and observed["valid"] and not observed["ariaInvalid"])
+    return {"verified":verified,"country_selected":bool(c),"digits_match":matches,"widget_number_match":widget_matches,"widget_country_match":widget_country,"widget_valid":observed["widgetValid"],"native_valid":observed["valid"],"aria_invalid":observed["ariaInvalid"]}
+
 def fill_contact_fields(page,data,greenhouse=False):
     """Only fill ordinary empty candidate inputs, stopping on active verification."""
     filled=0
@@ -272,6 +315,8 @@ def fill_contact_fields(page,data,greenhouse=False):
                 value=str(data["phone"])
             elif present: continue
             loc.fill(str(value));filled+=1
+            if greenhouse and key=="phone":
+                loc.press("Tab")
     return filled
 
 ASHBY_SUBMIT_OPS={"ApiSubmitSingleApplicationFormAction","ApiSubmitMultipleFormsAction"}
@@ -324,10 +369,20 @@ def verify_resume_attachment(page,files,filename,diagnostic):
         page.wait_for_timeout(250)
     return "unverified"
 
-def required_after_resume(page):
+def required_after_resume(page,data=None,greenhouse=False,diagnostic=None):
     # Only called after the exact filename and a native file or removable preview are verified.
-    return [label for label in unanswered_required(page)
-            if not re.fullmatch(r"(?:resume(?:\s*/\s*cv)?|curriculum vitae)(?:\s*\*)?",label.strip(),re.I)]
+    missing=[label for label in unanswered_required(page)
+             if not re.fullmatch(r"(?:resume(?:\s*/\s*cv)?|curriculum vitae)(?:\s*\*)?",label.strip(),re.I)]
+    if greenhouse and data and page.locator('input#country[role=combobox]:visible').count()==1 and page.locator('input#phone[type=tel]:visible').count()==1:
+        state=greenhouse_phone_state(page,data)
+        if diagnostic is not None: diagnostic["phone_widget"]=state
+        if state["verified"]:
+            # React search inputs clear on selection. Validate the visible selection
+            # and exact candidate number instead of treating search text as data.
+            missing=[label for label in missing if not re.fullmatch(r"(?:phone(?: number)?|country(?: code)?)(?:\s*\*)?",label.strip(),re.I)]
+        elif not any(re.fullmatch(r"phone(?: number)?(?:\s*\*)?",label.strip(),re.I) for label in missing):
+            missing.append("Phone")
+    return missing
 
 def portal_apply(job, profile, pdf, diagnostic=None):
     diagnostic=diagnostic if diagnostic is not None else {}
@@ -442,7 +497,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if attachment_result=="verification": return "portal_review_human_verification_v2"
             if attachment_result!="attached": return "portal_review_resume_sync"
             diagnostic["validation_step"]="required_controls"
-            missing=required_after_resume(page)
+            missing=required_after_resume(page,data,greenhouse=u.hostname in {'job-boards.greenhouse.io','boards.greenhouse.io'},diagnostic=diagnostic)
             if missing:
                 diagnostic["missing_fields"]=missing
                 return "portal_review_missing_screening_v3"
@@ -465,7 +520,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if attachment_result=="verification": return "portal_review_human_verification_v2"
             if attachment_result!="attached": return "portal_review_resume_sync"
             diagnostic["validation_step"]="required_controls"
-            missing=required_after_resume(page)
+            missing=required_after_resume(page,data,greenhouse=u.hostname in {'job-boards.greenhouse.io','boards.greenhouse.io'},diagnostic=diagnostic)
             if missing:
                 diagnostic["missing_fields"]=missing
                 return "portal_review_missing_screening_v3"

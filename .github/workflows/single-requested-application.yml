@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   apply:
-    if: contains(github.event.head_commit.message, '[answered-retry-8]')
+    if: contains(github.event.head_commit.message, '[phone-gated-retry-8]')
     runs-on: ubuntu-24.04
     timeout-minutes: 7
     env:
@@ -25,6 +25,8 @@ jobs:
       - run: pip install requests pypdf playwright==1.51.0
       - run: python -m playwright install chromium
       - run: python -m unittest discover -s auto_apply -p 'test_browser_engine.py'
+      - name: Validate live phone widget with synthetic data and submission blocked
+        run: python auto_apply/rzr_phone_gate.py
       - name: Process exactly one separately requested application
         run: |
           PYTHONPATH=auto_apply python - <<'PY'
