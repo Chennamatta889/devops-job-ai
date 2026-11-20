@@ -80,7 +80,7 @@
       [profile.email,/^email/i,['input[type="email"]','input[name*="email" i]']],
       [profile.phone,/^phone|mobile/i,['input[type="tel"]','input[name*="phone" i]']],
       [profile.location,/^location|city/i,['input[name*="location" i]','input[name*="city" i]']],
-      [profile.linkedin,/linkedin/i,['input[name*="linkedin" i]','input[id*="linkedin" i]','input[name*="urls" i]']]
+      [profile.linkedin,/linkedin/i,['input[name*="linkedin" i]','input[id*="linkedin" i]']]
     ];
     let count=0;
     for(const [value,labelPattern,selectors] of fields){
@@ -121,8 +121,9 @@
     const missing=[];
     const required=[...document.querySelectorAll('input[required],textarea[required],select[required],[aria-required="true"]')];
     for(const el of required){
-      if(!visible(el)) continue;
+      if(el.disabled||el.readOnly) continue;
       const type=(el.type||"").toLowerCase();
+      if(!visible(el)&&type!=="file") continue;
       if(["hidden","submit","button"].includes(type)) continue;
       if(type==="file"){
         if(el.files?.length) continue;
@@ -145,7 +146,9 @@
     return candidates.find(el=>/^(submit application|submit|apply for this job|apply)$/i.test((el.innerText||el.value||"").trim()))||null;
   }
 
+  let submissionAttempted=false;
   function status(){
+    if(submissionAttempted) return {status:"submission_attempted",message:"Submission already attempted in this tab. Check employer confirmation before trying again."};
     if(challengePresent()){
       return {status:"verification_required",message:"Human verification is present. Complete it manually in this same tab, then click Re-check after verification."};
     }
@@ -167,6 +170,7 @@
     if(message?.type!=="DRAFTFLOW_ASSISTED_APPLY") return;
     (async()=>{
       if(message.command==="fill"){
+        if(submissionAttempted){sendResponse(status());return;}
         if(challengePresent()){
           sendResponse({status:"verification_required",message:"Human verification is already present. Complete it manually, then re-check."}); return;
         }
@@ -190,6 +194,7 @@
         if(!button){
           sendResponse({status:"review",message:"Submit button is not available."}); return;
         }
+        submissionAttempted=true;
         button.click();
         sendResponse({status:"submission_attempted",message:"Submit was clicked. Submission is not confirmed. Check the employer confirmation page and email before recording success."});
         return;

@@ -22,6 +22,14 @@ jobs:
           node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('chrome-extension/manifest.json','utf8'));if(m.manifest_version!==3)throw new Error('Manifest must be v3');for(const f of ['popup.html','popup.css','popup.js','content.js'])if(!fs.existsSync('chrome-extension/'+f))throw new Error('Missing '+f);console.log('Manifest package valid')"
           node --check chrome-extension/popup.js
           node --check chrome-extension/content.js
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Functional Chromium content-script tests
+        run: |
+          pip install playwright==1.51.0
+          python -m playwright install chromium
+          python chrome-extension/test_content.py
       - name: Package extension
         run: |
           cd chrome-extension
