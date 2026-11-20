@@ -36,5 +36,7 @@ jobs:
         run: |
           pip install requests pypdf playwright==1.51.0
           python -m playwright install chromium
+      - name: Run browser engine tests (synthetic forms only)
+        run: python -m unittest discover -s auto_apply -p "test_browser_engine.py"
       - name: Process queued applications
         run: python auto_apply/supabase_worker.py

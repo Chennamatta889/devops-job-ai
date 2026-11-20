@@ -126,60 +126,86 @@ def location_suggestion_matches(value, primary, label):
         return False
     if len(parts) > 1:
         return normalize(label) == " ".join(parts)
-    return normalize(primary) == parts[0]
+    return normalize(primary) == parts[0] or normalize(label) == parts[0]
 
-def select_lever_location(page, profile, verification_required):
-    """Click only one matching visible location suggestion; stop at verification."""
-    field = page.locator('input.location-input[name="location"]:visible')
-    if field.count() == 0:
-        return "not_present"
+def select_lever_location(page, profile, verification_required, diagnostic=None):
+    """Use visible suggestions only. Diagnostic output contains counts, not candidate or option text."""
+    trace = diagnostic if diagnostic is not None else {}
+    trace.update({"field_count": 0, "dropdown_count": 0, "option_count": 0, "match_count": 0})
+    def stop(reason, status="unresolved"):
+        trace["result"] = reason
+        return status
+    field = page.locator('input.location-input[name="location"]:visible, input[name="location"][autocomplete]:visible')
+    trace["field_count"] = field.count()
+    if not trace["field_count"]:
+        return stop("no_location_field", "not_present")
     if verification_required(page):
-        return "verification"
-    if field.count() != 1:
-        return "unresolved"
+        return stop("challenge", "verification")
+    if trace["field_count"] != 1:
+        return stop("multiple_location_fields")
     value = answer_for("Current location", profile)
     if not isinstance(value, str) or not value.strip():
-        return "unresolved"
+        return stop("missing_profile_answer")
+    trace["qualified_answer"] = len(value.split(",")) > 1
     if not field.is_enabled() or field.get_attribute("readonly") is not None:
-        return "unresolved"
+        return stop("field_not_editable")
     city = value.split(",")[0].strip()
     if not city:
-        return "unresolved"
+        return stop("missing_city")
     field.click()
     if verification_required(page):
-        return "verification"
+        return stop("challenge", "verification")
     field.fill("")
     field.press_sequentially(city, delay=100)
-    for _ in range(40):
+    for _ in range(48):
         if verification_required(page):
-            return "verification"
+            return stop("challenge", "verification")
         dropdown = page.locator(".pac-container:visible")
+        mode = "places"
+        if dropdown.count() == 0:
+            controls = field.get_attribute("aria-controls") or field.get_attribute("aria-owns")
+            if controls:
+                dropdown = page.locator('[role=listbox]:visible').filter(has=page.locator('[role=option]'))
+                if dropdown.count() != 1 or dropdown.get_attribute("id") != controls:
+                    dropdown = page.locator(".pac-container:visible")
+                else:
+                    mode = "aria"
+        trace["dropdown_count"] = max(trace["dropdown_count"], dropdown.count())
         if dropdown.count() == 1:
-            options = dropdown.locator(".pac-item:visible")
+            options = dropdown.locator(".pac-item:visible") if mode == "places" else dropdown.get_by_role("option")
+            trace["option_count"] = max(trace["option_count"], options.count())
             matches = []
             for i in range(options.count()):
                 opt = options.nth(i)
+                if not opt.is_visible() or not opt.is_enabled():
+                    continue
                 primary = opt.locator(".pac-item-query")
                 primary_text = primary.inner_text() if primary.count() == 1 else ""
-                # Google Places may render city and region as separate spans.
                 label = opt.evaluate("el => Array.from(el.querySelectorAll(':scope > span')).map(s => s.innerText.trim()).filter(Boolean).join(' ') || el.innerText")
-                if location_suggestion_matches(value, primary_text, label):
+                if location_suggestion_matches(value, primary_text, label) or location_suggestion_matches(value, primary_text, opt.inner_text()):
                     matches.append(opt)
+            trace["match_count"] = max(trace["match_count"], len(matches))
             if len(matches) == 1:
                 if verification_required(page):
-                    return "verification"
+                    return stop("challenge", "verification")
                 matches[0].click()
                 page.wait_for_timeout(500)
                 if verification_required(page):
-                    return "verification"
+                    return stop("challenge", "verification")
                 selected = field.input_value().strip()
-                if selected and dropdown.count() == 0 and (len(value.split(",")) == 1 or normalize(selected) == normalize(value)):
-                    return "selected"
-                return "unresolved"
+                trace["selection_value_present"] = bool(selected)
+                trace["dropdown_closed"] = dropdown.count() == 0
+                if selected and trace["dropdown_closed"] and (not trace["qualified_answer"] or normalize(selected) == normalize(value)):
+                    return stop("selected", "selected")
+                return stop("selection_not_confirmed")
             if len(matches) > 1:
-                return "unresolved"
+                return stop("multiple_matching_options")
         page.wait_for_timeout(250)
-    return "verification" if verification_required(page) else "unresolved"
+    if verification_required(page):
+        return stop("challenge", "verification")
+    if trace["option_count"]:
+        return stop("no_matching_option")
+    return stop("no_visible_options")
 
 def fill_screening(page,profile):
     fields=page.locator('input:visible:not([type=hidden]):not([type=submit]):not([type=button]):not([type=file]):not([type=checkbox]):not([type=radio]), textarea:visible, select:visible')

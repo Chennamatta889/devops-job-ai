@@ -219,7 +219,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if files.count()!=1: return "portal_review_resume_field"
             stage="screening"
             if u.hostname == "jobs.lever.co":
-                location_result = select_lever_location(page, data, verification_required)
+                location_result = select_lever_location(page, data, verification_required, diagnostic.setdefault("location_trace", {}))
                 if location_result == "verification":
                     return "portal_review_human_verification_v2"
                 if location_result == "unresolved":
@@ -302,6 +302,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 if verification_required(page): return "portal_review_human_verification_v2"
                 return "portal_review_form_sync_busy"
             stage="submit"
+            if verification_required(page): return "portal_review_human_verification_v2"
             success=page.get_by_text(re.compile(r"^(?:thank you for applying|thanks for applying|(?:your )?application (?:has been )?(?:successfully )?(?:submitted|received))[.!]?$",re.I))
             def visible_success():
                 return any(success.nth(i).is_visible() for i in range(min(success.count(),10)))
@@ -310,7 +311,6 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             submitted=True
             buttons.click(timeout=10000)
             stage="confirmation"
-            retried_click=False
             for tick in range(38):
                 if "success" in ashby_signals:
                     diagnostic["confirmation"]="ashby_form_submit_success"
@@ -325,13 +325,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                     diagnostic["confirmation"]="new_visible_success_message"
                     return "portal_confirmed"
                 if verification_required(page):
-                    return "portal_uncertain_human_verification_after_submit" if submit_responses() else "portal_review_human_verification_v2"
-                if u.hostname=="jobs.ashbyhq.com" and tick==7 and not submit_responses() and not retried_click:
-                    invalid_now=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
-                    if invalid_now.count()==0 and wait_form_quiet() and buttons.is_enabled() and not verification_required(page):
-                        diagnostic["second_click_after_no_submit"]=True
-                        buttons.click(timeout=10000)
-                        retried_click=True
+                    return "portal_uncertain_human_verification_after_submit"
                 page.wait_for_timeout(1000)
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             diagnostic["invalid_field_count"]=invalid.count()

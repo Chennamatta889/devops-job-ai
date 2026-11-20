@@ -408,6 +408,8 @@ def download_resume(storage_path: str) -> bytes:
 def public_status(portal_status: str) -> str:
     if portal_status == "portal_confirmed":
         return "SUBMITTED"
+    if portal_status.startswith("portal_uncertain"):
+        return "UNCERTAIN"
     if "human_verification" in portal_status:
         return "HUMAN_VERIFICATION_REQUIRED"
     if "missing_screening" in portal_status or "unanswered" in portal_status:
@@ -497,6 +499,8 @@ def process_attempt(attempt: dict) -> None:
         }
         portal_status = portal_apply(job, candidate, pdf, diagnostic)
         status = public_status(portal_status)
+        # Never publish input values, screenshots, employer HTML, or question content in public logs.
+        print("Attempt diagnostics:", json.dumps({"attempt": attempt_id, "stage": diagnostic.get("stage"), "result": portal_status, "location": diagnostic.get("location_trace", {})}, sort_keys=True))
         confirmation = str(diagnostic.get("confirmation") or "")
         message = portal_status
         if status == "QUESTION_REQUIRED":
