@@ -256,7 +256,13 @@ function App() {
       .order('created_at', { ascending: false })
       .limit(10)
     if (attemptError) return
-    const attempts = Array.isArray(data) ? data : []
+    let attempts = Array.isArray(data) ? data : []
+    const handoffIds = attempts.filter(a => ['HANDOFF_REQUESTED','HANDOFF_PREPARING','ASSISTANCE_REQUIRED'].includes(a.status)).map(a => a.id)
+    if (handoffIds.length) {
+      const { data: handoffs } = await supabaseClient.from('mobile_handoff_requests').select('attempt_id,status,viewer_url,expires_at,resume_attached,fields_filled').in('attempt_id',handoffIds)
+      const byId = new Map((handoffs || []).map(h => [String(h.attempt_id),h]))
+      attempts = attempts.map(a => ({ ...a, handoff: byId.get(String(a.id)) || null }))
+    }
     const ids = attempts.filter(a => a.status === 'SUBMITTED').map(a => a.id)
     if (!ids.length) { setApplicationAttempts(attempts); return }
     const { data: evidence, error: evidenceError } = await supabaseClient
@@ -1231,6 +1237,9 @@ function App() {
                       <span className={'history-status status-' + String(attempt.status || '').toLowerCase().replaceAll('_', '-')}>
                         {String(attempt.status || '').replaceAll('_', ' ')}
                       </span>
+                      {attempt.status === 'ASSISTANCE_REQUIRED' && (attempt.handoff?.status === 'READY' && Date.parse(attempt.handoff.expires_at) > Date.now() && /^https:\/\/api\.steel\.dev\//.test(attempt.handoff.viewer_url || '') ? (
+                        <a className="history-action" href={attempt.handoff.viewer_url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Continue live application</a>
+                      ) : <span className="history-message">Live session expired or unavailable. Refresh status; do not submit twice.</span>)}
                       {['HUMAN_VERIFICATION_REQUIRED', 'QUESTION_REQUIRED', 'PROFILE_REQUIRED', 'REVIEW_REQUIRED', 'UNCERTAIN'].includes(attempt.status) && attempt.apply_url && (
                         <a className="history-action" href={attempt.apply_url} target="_blank" rel="noopener noreferrer">Open application</a>
                       )}
