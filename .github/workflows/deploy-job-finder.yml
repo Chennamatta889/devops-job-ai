@@ -48,6 +48,9 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: npm run build
+
+      - name: Create fresh-entry page
+        run: cp frontend/dist/index.html frontend/dist/latest.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
