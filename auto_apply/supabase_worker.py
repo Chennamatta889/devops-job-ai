@@ -1,25 +1,38 @@
-"""Process queued DraftflowAI applications from Supabase.
+"""Multi-user DraftflowAI Auto Apply worker backed by Supabase.
 
-Uses the service-role key only inside the private GitHub Actions runner.
-Never prints candidate profile values, resume contents, tokens, or storage URLs.
+The service-role key is used only inside the private GitHub Actions runner.
+This worker never prints candidate profile values, resume contents, tokens, or storage URLs.
+It never bypasses CAPTCHA, MFA, login walls, or human-verification controls.
 """
 from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import datetime, timezone
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 import requests
 
-from portal import portal_apply
+from portal import HOSTS, portal_apply
 
 CONSENT_VERSION = "2026-11-v1"
-MAX_PER_RUN = 5
+MAX_SUBMISSIONS_PER_RUN = 5
+PUBLIC_JOB_FEED_URL = os.getenv(
+    "PUBLIC_JOB_FEED_URL",
+    "https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/jobs.json",
+)
+VERIFICATION_STATUS_URL = os.getenv(
+    "VERIFICATION_STATUS_URL",
+    "https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/verification-status.json",
+)
 
 
 def configured() -> bool:
-    return bool(os.getenv("SUPABASE_URL", "").strip() and os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip())
+    return bool(
+        os.getenv("SUPABASE_URL", "").strip()
+        and os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    )
 
 
 def base_url() -> str:
@@ -50,6 +63,18 @@ def rest_get(table: str, params: dict) -> list[dict]:
     return value if isinstance(value, list) else []
 
 
+def rest_insert(table: str, rows: list[dict]) -> None:
+    if not rows:
+        return
+    response = requests.post(
+        f"{base_url()}/rest/v1/{table}",
+        headers=headers({"Prefer": "return=minimal"}),
+        data=json.dumps(rows),
+        timeout=25,
+    )
+    response.raise_for_status()
+
+
 def patch_attempt(attempt_id: int, expected_status: str | None, values: dict) -> list[dict]:
     params = {"id": f"eq.{attempt_id}"}
     if expected_status:
@@ -64,6 +89,206 @@ def patch_attempt(attempt_id: int, expected_status: str | None, values: dict) ->
     response.raise_for_status()
     value = response.json()
     return value if isinstance(value, list) else []
+
+
+def fetch_public_json(url: str) -> dict:
+    response = requests.get(url, timeout=25, headers={"User-Agent": "DraftflowAI/1.0"})
+    response.raise_for_status()
+    value = response.json()
+    return value if isinstance(value, dict) else {}
+
+
+def _norm(value) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+
+
+def _list(value) -> list[str]:
+    if isinstance(value, list):
+        return [str(x).strip() for x in value if str(x).strip()]
+    return [x.strip() for x in str(value or "").split(",") if x.strip()]
+
+
+def supported_job(job: dict) -> bool:
+    if not job.get("direct_apply") or not job.get("auto_apply_supported"):
+        return False
+    try:
+        parsed = urlparse(str(job.get("url") or ""))
+        return parsed.scheme == "https" and parsed.hostname in HOSTS
+    except Exception:
+        return False
+
+
+def match_score(job: dict, profile: dict) -> int:
+    """Mirror the browser's conservative role/skills/experience scoring."""
+    if not supported_job(job):
+        return 0
+
+    years = float(profile.get("years_experience") or 0)
+    title = _norm(job.get("title"))
+    category = _norm(job.get("category"))
+    if years < 4 and re.search(
+        r"\b(senior|sr|staff|lead|principal|manager|architect|director|head)\b",
+        title,
+    ):
+        return 0
+
+    roles = [_norm(x) for x in _list(profile.get("target_roles"))]
+    cloud_terms = {
+        "cloud",
+        "devops",
+        "sre",
+        "site reliability",
+        "platform",
+        "infrastructure",
+        "kubernetes",
+        "release",
+        "build",
+    }
+    wants_cloud = any(
+        any(term in role or role in term for term in cloud_terms) for role in roles
+    )
+
+    role_match = False
+    if wants_cloud and category == "cloud devops sre":
+        role_match = True
+    else:
+        title_tokens = {x for x in title.split() if len(x) > 2}
+        for role in roles:
+            if role and (role in title or title in role):
+                role_match = True
+                break
+            role_tokens = {x for x in role.split() if len(x) > 2}
+            if role_tokens:
+                overlap = len(role_tokens & title_tokens) / len(role_tokens)
+                if overlap >= 0.5:
+                    role_match = True
+                    break
+    if not role_match:
+        return 0
+
+    required = job.get("experience_min")
+    if isinstance(required, (int, float)) and float(required) > years + 0.5:
+        return 0
+
+    own_skills = {_norm(x) for x in _list(profile.get("skills"))}
+    job_skills = {_norm(x) for x in (job.get("skills") or []) if x}
+    if job_skills:
+        skill_score = round(35 * len(job_skills & own_skills) / len(job_skills))
+    else:
+        skill_score = 12
+
+    experience_score = 15
+    if isinstance(required, (int, float)) and float(required) > years:
+        experience_score = 10
+
+    preferred = [_norm(x) for x in _list(profile.get("preferred_locations"))]
+    location = _norm(job.get("location"))
+    location_score = 5 if (
+        not preferred
+        or any(x == "india" or x in location for x in preferred)
+    ) else 0
+
+    return min(100, 45 + skill_score + experience_score + location_score)
+
+
+def attempts_created_today(user_id: str) -> set[str]:
+    start = datetime.now(timezone.utc).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ).isoformat()
+    rows = rest_get(
+        "application_attempts",
+        {
+            "user_id": f"eq.{user_id}",
+            "created_at": f"gte.{start}",
+            "select": "external_job_id",
+            "limit": "500",
+        },
+    )
+    return {str(row.get("external_job_id") or "") for row in rows}
+
+
+def all_attempted_job_ids(user_id: str) -> set[str]:
+    rows = rest_get(
+        "application_attempts",
+        {
+            "user_id": f"eq.{user_id}",
+            "select": "external_job_id",
+            "limit": "5000",
+        },
+    )
+    return {str(row.get("external_job_id") or "") for row in rows}
+
+
+def queue_new_matches() -> int:
+    feed = fetch_public_json(PUBLIC_JOB_FEED_URL)
+    jobs = feed.get("jobs") if isinstance(feed.get("jobs"), list) else []
+
+    verification = {}
+    try:
+        verification = fetch_public_json(VERIFICATION_STATUS_URL).get("jobs") or {}
+    except Exception as exc:
+        print(f"Verification feed unavailable: {type(exc).__name__}")
+        return 0
+
+    profiles = rest_get(
+        "candidate_profiles",
+        {
+            "auto_apply_enabled": "eq.true",
+            "consent_version": f"eq.{CONSENT_VERSION}",
+            "select": "*",
+            "limit": "500",
+        },
+    )
+
+    queued_total = 0
+    for profile in profiles:
+        user_id = str(profile.get("user_id") or "")
+        if not user_id:
+            continue
+        daily_limit = max(1, min(int(profile.get("daily_application_limit") or 10), 100))
+        today_ids = attempts_created_today(user_id)
+        remaining = max(0, daily_limit - len(today_ids))
+        if remaining == 0:
+            continue
+
+        attempted_ids = all_attempted_job_ids(user_id)
+        threshold = max(50, min(int(profile.get("minimum_match_score") or 80), 100))
+        ranked = []
+        for job in jobs:
+            job_id = str(job.get("id") or "")
+            if not job_id or job_id in attempted_ids:
+                continue
+            observed = verification.get(job_id) if isinstance(verification, dict) else None
+            if not isinstance(observed, dict) or observed.get("status") != "no_verification_detected":
+                continue
+            score = match_score(job, profile)
+            if score >= threshold:
+                ranked.append((score, job))
+
+        ranked.sort(key=lambda item: item[0], reverse=True)
+        rows = []
+        for score, job in ranked[:remaining]:
+            rows.append(
+                {
+                    "user_id": user_id,
+                    "external_job_id": str(job.get("id") or ""),
+                    "source": str(job.get("source") or ""),
+                    "title": str(job.get("title") or ""),
+                    "company": str(job.get("company") or ""),
+                    "location": str(job.get("location") or ""),
+                    "apply_url": str(job.get("url") or ""),
+                    "match_score": score,
+                    "status": "QUEUED",
+                    "message": "Automatically queued from fresh public job feed.",
+                }
+            )
+        if rows:
+            rest_insert("application_attempts", rows)
+            queued_total += len(rows)
+
+    print(f"Enabled profiles checked: {len(profiles)}")
+    print(f"New matching applications queued: {queued_total}")
+    return queued_total
 
 
 def get_profile(user_id: str) -> dict | None:
@@ -132,7 +357,6 @@ def process_attempt(attempt: dict) -> None:
     attempt_id = int(attempt["id"])
     user_id = str(attempt["user_id"])
 
-    # Atomic claim prevents a second worker from taking the same queued row.
     claimed = patch_attempt(
         attempt_id,
         "QUEUED",
@@ -144,27 +368,54 @@ def process_attempt(attempt: dict) -> None:
     try:
         profile = get_profile(user_id)
         if not profile:
-            patch_attempt(attempt_id, "SUBMITTING", {"status": "PROFILE_REQUIRED", "message": "Candidate profile is missing."})
+            patch_attempt(
+                attempt_id,
+                "SUBMITTING",
+                {"status": "PROFILE_REQUIRED", "message": "Candidate profile is missing."},
+            )
             return
-        if not profile.get("auto_apply_enabled") or profile.get("consent_version") != CONSENT_VERSION:
-            patch_attempt(attempt_id, "SUBMITTING", {"status": "PAUSED", "message": "Auto Apply is not enabled with current consent."})
+        if (
+            not profile.get("auto_apply_enabled")
+            or profile.get("consent_version") != CONSENT_VERSION
+        ):
+            patch_attempt(
+                attempt_id,
+                "SUBMITTING",
+                {
+                    "status": "PAUSED",
+                    "message": "Auto Apply is not enabled with current consent.",
+                },
+            )
             return
 
         resume = get_resume(user_id)
         if not resume:
-            patch_attempt(attempt_id, "SUBMITTING", {"status": "PROFILE_REQUIRED", "message": "No active resume is available."})
+            patch_attempt(
+                attempt_id,
+                "SUBMITTING",
+                {"status": "PROFILE_REQUIRED", "message": "No active resume is available."},
+            )
             return
 
         pdf = download_resume(str(resume["storage_path"]))
         if not pdf.startswith(b"%PDF-"):
-            patch_attempt(attempt_id, "SUBMITTING", {"status": "REVIEW_REQUIRED", "message": "Stored resume is not a valid PDF."})
+            patch_attempt(
+                attempt_id,
+                "SUBMITTING",
+                {
+                    "status": "REVIEW_REQUIRED",
+                    "message": "Stored resume is not a valid PDF.",
+                },
+            )
             return
 
         candidate = dict(profile)
         candidate["screening_answers"] = get_screening_answers(user_id)
-        candidate["target_roles"] = ", ".join(profile.get("target_roles") or [])
-        candidate["skills"] = ", ".join(profile.get("skills") or [])
-        candidate["preferred_locations"] = ", ".join(profile.get("preferred_locations") or [])
+        candidate["target_roles"] = ", ".join(_list(profile.get("target_roles")))
+        candidate["skills"] = ", ".join(_list(profile.get("skills")))
+        candidate["preferred_locations"] = ", ".join(
+            _list(profile.get("preferred_locations"))
+        )
 
         diagnostic = {}
         job = {
@@ -178,7 +429,6 @@ def process_attempt(attempt: dict) -> None:
         }
         portal_status = portal_apply(job, candidate, pdf, diagnostic)
         status = public_status(portal_status)
-        message = portal_status
         confirmation = str(diagnostic.get("confirmation") or "")
 
         patch_attempt(
@@ -186,7 +436,7 @@ def process_attempt(attempt: dict) -> None:
             "SUBMITTING",
             {
                 "status": status,
-                "message": message[:500],
+                "message": portal_status[:500],
                 "confirmation": confirmation[:200],
                 "updated_at": datetime.now(timezone.utc).isoformat(),
             },
@@ -210,16 +460,18 @@ def main() -> None:
         print("Supabase worker not configured; skipping.")
         return
 
+    queue_new_matches()
+
     queued = rest_get(
         "application_attempts",
         {
             "status": "eq.QUEUED",
             "select": "id,user_id,external_job_id,source,title,company,location,apply_url,match_score,status",
             "order": "created_at.asc",
-            "limit": str(MAX_PER_RUN),
+            "limit": str(MAX_SUBMISSIONS_PER_RUN),
         },
     )
-    print(f"Queued applications selected: {len(queued)}")
+    print(f"Queued applications selected for submission: {len(queued)}")
     for attempt in queued:
         process_attempt(attempt)
 
