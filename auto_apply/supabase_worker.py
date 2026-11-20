@@ -505,7 +505,7 @@ def process_attempt(attempt: dict) -> None:
         portal_status = portal_apply(job, candidate, pdf, diagnostic)
         status = public_status(portal_status)
         # Never publish input values, screenshots, employer HTML, or question content in public logs.
-        print("Attempt diagnostics:", json.dumps({"attempt": attempt_id, "stage": diagnostic.get("stage"), "result": portal_status, "location": diagnostic.get("location_trace", {}), "validation": diagnostic.get("validation_details", []), "submit_clicked": diagnostic.get("submit_clicked", False), "post_click_response_count": diagnostic.get("post_click_response_count")}, sort_keys=True))
+        print("Attempt diagnostics:", json.dumps({"attempt": attempt_id, "stage": diagnostic.get("stage"), "result": portal_status, "location": diagnostic.get("location_trace", {}), "validation": diagnostic.get("validation_details", []), "validation_step": diagnostic.get("validation_step"), "resume_attachment": diagnostic.get("resume_attachment"), "exception_type": diagnostic.get("exception_type"), "submit_clicked": diagnostic.get("submit_clicked", False), "post_click_response_count": diagnostic.get("post_click_response_count")}, sort_keys=True))
         confirmation = str(diagnostic.get("confirmation") or "")
         message = portal_status
         if status == "QUESTION_REQUIRED":

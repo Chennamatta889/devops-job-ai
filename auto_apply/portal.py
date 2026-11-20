@@ -299,7 +299,7 @@ def resume_attachment_state(page, files, filename):
     return native
 
 def verify_resume_attachment(page,files,filename,diagnostic):
-    for _ in range(12):
+    for _ in range(40):
         diagnostic["validation_step"]="resume_attachment_snapshot"
         if verification_required(page): return "verification"
         snapshot=resume_attachment_state(page,files,filename)
