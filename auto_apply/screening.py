@@ -318,7 +318,17 @@ def unanswered_required(page):
             }else if(el.type==='checkbox') empty=!el.checked;
             else if(el.getAttribute('role')==='combobox'&&el.tagName!=='SELECT') empty=!el.value && !el.getAttribute('aria-valuetext') && !el.querySelector('[aria-selected=true]');
             else if('value' in el) empty=!String(el.value||'').trim();
-            else empty=true;
+            else {
+                // Some ATS forms put aria-required on a wrapper rather than
+                // the actual control. Evaluate the nested control, not the div.
+                const controls=Array.from(el.querySelectorAll('input:not([type=hidden]),textarea,select')).filter(x=>!x.disabled&&!x.readOnly);
+                if(controls.length===1){
+                    const c=controls[0];
+                    empty=c.type==='file' ? !(c.files&&c.files.length) : c.type==='checkbox'||c.type==='radio' ? !c.checked : !String(c.value||'').trim();
+                }else if(controls.length>0&&controls.every(c=>c.type==='radio')){
+                    empty=!controls.some(c=>c.checked);
+                }else {empty=true;}
+            }
             if(!empty) continue;
             const legend=el.closest('fieldset')?.querySelector('legend')?.innerText;
             const labels=Array.from(el.labels||[]).map(l=>l.innerText).join(' ');

@@ -243,9 +243,11 @@ def fill_contact_fields(page,data,greenhouse=False):
         if verification_required(page): break
         value=national if key=="phone" and national else data.get(data_keys.get(key,key))
         if not value: continue
-        loc=page.locator('input[name="'+key+'"],input[id="'+key+'"]')
+        loc=page.locator('input[name="'+key+'"]:visible,input[id="'+key+'"]:visible')
         if loc.count()!=1:
-            loc=page.get_by_label(re.compile(label,re.I)).and_(page.locator("input"))
+            loc=page.get_by_label(re.compile(label,re.I)).and_(page.locator("input:visible"))
+        if key=="phone" and loc.count()!=1:
+            loc=page.locator('input[type="tel"]:visible')
         if loc.count()==1 and loc.is_visible() and loc.is_enabled() and loc.get_attribute("readonly") is None and not loc.input_value().strip():
             if loc.get_attribute("type") in ("hidden","checkbox","radio","file","password","submit","button"): continue
             loc.fill(str(value));filled+=1
@@ -321,17 +323,6 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if verification_required(page): return "portal_review_human_verification_v2"
             print("Screening fields filled:",fill_screening(page,data,verification_required))
             if verification_required(page): return "portal_review_human_verification_v2"
-            missing=unanswered_required(page)
-            if missing:
-                diagnostic["missing_fields"]=missing
-                return "portal_review_missing_screening_v3"
-            selects=page.locator("select:visible[required], select:visible[aria-required=true]")
-            for i in range(selects.count()):
-                if not selects.nth(i).input_value(): return "portal_review_unanswered_select"
-            unknown=page.locator('input:visible:not([type=hidden]):not([type=submit]):not([type=button]):not([type=file]), textarea:visible')
-            for i in range(unknown.count()):
-                field=unknown.nth(i)
-                if not field.input_value().strip() and (field.get_attribute("required") is not None or field.get_attribute("aria-required")=="true"): return "portal_review_unanswered_fields"
             if not all(data.get(x) for x in ("email","phone")): return "portal_review_contact"
             buttons=page.get_by_role("button",name=re.compile(r"^(submit application|submit|apply for this job)$",re.I))
             if buttons.count()!=1: return "portal_review_submit_button"
@@ -388,6 +379,19 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             else:
                 page.wait_for_timeout(1000)
             if verification_required(page): return "portal_review_human_verification_v2"
+            stage="final_validation"
+            if verification_required(page): return "portal_review_human_verification_v2"
+            if not files.evaluate("el=>el.files && el.files.length>0"):
+                return "portal_review_resume_sync"
+            missing=unanswered_required(page)
+            if missing:
+                diagnostic["missing_fields"]=missing
+                return "portal_review_missing_screening_v3"
+            invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
+            if invalid.count():
+                diagnostic["invalid_field_count"]=invalid.count()
+                diagnostic["validation_details"]=validation_details(page)
+                return "portal_review_validation_failed"
             for _ in range(20):
                 if buttons.is_enabled(): break
                 page.wait_for_timeout(500)
@@ -397,6 +401,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 return "portal_review_form_sync_busy"
             stage="final_validation"
             if verification_required(page): return "portal_review_human_verification_v2"
+            if not files.evaluate("el=>el.files && el.files.length>0"):
+                return "portal_review_resume_sync"
             missing=unanswered_required(page)
             if missing:
                 diagnostic["missing_fields"]=missing

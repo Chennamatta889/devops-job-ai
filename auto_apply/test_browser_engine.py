@@ -139,5 +139,17 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertEqual(page.locator("#country").input_value(),"US")
             b.close()
 
+
+    def test_resume_wrapper_and_visible_phone(self):
+        with sync_playwright() as p:
+            browser=p.chromium.launch(); page=browser.new_page()
+            page.set_content('<div aria-required="true" aria-label="Phone"><input type="tel" id="mobile"></div><input type="hidden" name="phone"><div aria-required="true" aria-label="Resume/CV*"><input type="file" id="resume" style="display:none"></div><div aria-required="true" aria-label="Unanswered"><input id="other"></div>')
+            self.assertEqual(fill_contact_fields(page,{"phone":"+919876543210"}),1)
+            self.assertEqual(page.locator("#mobile").input_value(),"+919876543210")
+            self.assertCountEqual(unanswered_required(page),["Resume/CV*","Unanswered"])
+            page.locator("#resume").set_input_files({"name":"Fixture.pdf","mimeType":"application/pdf","buffer":b"%PDF-1.4 fixture"})
+            self.assertEqual(unanswered_required(page),["Unanswered"])
+            browser.close()
+
 if __name__ == "__main__":
     unittest.main()
