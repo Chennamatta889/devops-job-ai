@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 
 const FEED_URL =
   import.meta.env.VITE_JOB_FEED_URL ||
-  'https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/jobs.json'
+  (import.meta.env.BASE_URL + 'data/jobs.json')
 
 const AUTO_APPLY_API_URL = (import.meta.env.VITE_AUTO_APPLY_API_URL || '').replace(/\/$/, '')
 const VERIFICATION_STATUS_URL =
   import.meta.env.VITE_VERIFICATION_STATUS_URL ||
-  'https://raw.githubusercontent.com/Chennamatta889/devops-job-ai/main/data/verification-status.json'
+  (import.meta.env.BASE_URL + 'data/verification-status.json')
 
 function prettySource(value = '') {
   const names = {
