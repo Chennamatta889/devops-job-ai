@@ -16,7 +16,7 @@ def answer_for(question, profile):
     q=re.sub(r" (?:required|optional)$","",q)
     if q in ("number of years of experience","years of experience","total work experience in a similar role capacity"):
         return profile.get("experience_years",profile.get("years_experience"))
-    if q in ("current notice period in days","notice period in days","current notice period"):
+    if q in ("current notice period in days","notice period in days","current notice period","official notice period","official notice period in days"):
         return profile.get("notice_period_days")
     city_match=re.fullmatch(r"(?:are you )?(?:currently )?(?:living|located|based|residing) in ([a-z0-9 ]+)",q)
     if city_match and profile.get("current_location"):
@@ -47,6 +47,8 @@ def answer_for(question, profile):
         days=profile.get("notice_period_days")
         if type(days) is int and days>=0:
             return f"Available after my {days}-day notice period."
+    if q in ("current ctc","expected ctc"):
+        return None  # Ambiguous units; require an explicitly saved answer.
     fields=(
         (r"^(?:current|present) (?:work |job |residential )?(?:location|city)(?: in india)?$","current_location"),
         (r"^(?:current|present) (?:company|employer|organization)(?: name)?$|^name of (?:your )?(?:current|present) (?:company|employer|organization)$","current_company"),

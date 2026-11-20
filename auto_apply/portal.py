@@ -135,24 +135,68 @@ def candidate_data(profile, pdf):
         if isinstance(amount,(int,float)) and amount>0: data.setdefault(key+"_ctc_lpa",amount/100000)
     data.setdefault("interest_statement","I am interested in this opportunity because it aligns with my goal of growing in cloud infrastructure, automation and reliable software delivery. I would welcome the opportunity to contribute to the team and develop my technical expertise.")
     return data
+def passive_recaptcha_frame(src, title, bounds):
+    """Recognize only Google-owned informational/invisible anchor frames.
+
+    Never classify a challenge frame or an unknown provider as passive.
+    A passive anchor is not a verification result and does not disable or
+    alter the site's verification. Active challenges still stop automation.
+    """
+    try:
+        u=urlparse(src)
+        if u.scheme!="https" or u.hostname not in {"www.google.com","www.recaptcha.net","recaptcha.google.com"} or u.username or u.password or u.port not in (None,443):
+            return False
+        if not re.fullmatch(r"/recaptcha/(?:api2|enterprise)/anchor",u.path):
+            return False
+        if "challenge" in title.lower():
+            return False
+        values=parse_qs(u.query).get("size",[])
+        return values==["invisible"]
+    except (TypeError,ValueError):
+        return False
+
 def verification_required(page):
-    """Detect an active human challenge without interacting with verification widgets."""
+    """Fail closed on visible challenges; ignore only recognized passive embeds."""
+    selectors=page.get_by_text(re.compile(r"^(verify (?:that )?you are (?:a )?human|complete the (?:captcha|security check)|please (?:complete|solve) the captcha|checking your browser|security verification|i am not a robot|i'm not a robot)[.!]?$",re.I))
+    for i in range(min(selectors.count(),20)):
+        if selectors.nth(i).is_visible(): return True
     frames=page.locator('iframe[src*="captcha" i], iframe[src*="challenge" i], iframe[src*="turnstile" i], iframe[title*="captcha" i], iframe[title*="challenge" i]')
     for i in range(frames.count()):
         frame=frames.nth(i)
         if not frame.is_visible(): continue
         bounds=frame.bounding_box()
         if not bounds or bounds["width"]<2 or bounds["height"]<2: continue
-        title=(frame.get_attribute("title") or "").lower()
-        src=(frame.get_attribute("src") or "").lower()
-        # A small reCAPTCHA informational badge is not an interactive challenge.
-        if ("recaptcha" in src or "recaptcha" in title) and bounds["width"]<=100 and bounds["height"]<=100 and "/bframe" not in src and "challenge" not in title:
-            continue
+        title=(frame.get_attribute("title") or "")
+        src=(frame.get_attribute("src") or "")
+        if passive_recaptcha_frame(src,title,bounds): continue
         return True
-    selectors=page.get_by_text(re.compile(r"^(verify (?:that )?you are (?:a )?human|complete the (?:captcha|security check)|please (?:complete|solve) the captcha|checking your browser|security verification|i am not a robot|i'm not a robot)[.!]?$",re.I))
-    for i in range(min(selectors.count(),20)):
-        if selectors.nth(i).is_visible(): return True
     return False
+
+def fill_contact_fields(page,data):
+    """Only fill ordinary empty candidate inputs, stopping on active verification."""
+    filled=0
+    fields=(
+        ("first_name",r"^first name\b"),
+        ("last_name",r"^last name\b"),
+        ("name",r"^(?:full |legal |your )?name\s*\*?$"),
+        ("email",r"^email(?: address)?\b"),
+        ("phone",r"^(?:phone|mobile)(?: number)?\b"),
+        ("org",r"^current (?:company|employer)\b"),
+        ("urls[LinkedIn]",r"^linkedin(?: profile| url)?\b"),
+        ("urls[GitHub]",r"^github(?: profile| url)?\b"),
+    )
+    data_keys={"org":"current_company","urls[LinkedIn]":"linkedin","urls[GitHub]":"github"}
+    for key,label in fields:
+        if verification_required(page): break
+        value=data.get(data_keys.get(key,key))
+        if not value: continue
+        loc=page.locator('input[name="'+key+'"],input[id="'+key+'"]')
+        if loc.count()!=1:
+            loc=page.get_by_label(re.compile(label,re.I)).and_(page.locator("input"))
+        if loc.count()==1 and loc.is_visible() and loc.is_enabled() and loc.get_attribute("readonly") is None and not loc.input_value().strip():
+            if loc.get_attribute("type") in ("hidden","checkbox","radio","file","password","submit","button"): continue
+            loc.fill(str(value));filled+=1
+    return filled
 
 ASHBY_SUBMIT_OPS={"ApiSubmitSingleApplicationFormAction","ApiSubmitMultipleFormsAction"}
 def ashby_submit_signal(payload):
@@ -213,16 +257,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                         return "portal_review_missing_screening_v3"
                     return "portal_review_location_autocomplete"
             stage="contact_fields"
-            fields={"first_name":data.get("first_name"),"last_name":data.get("last_name"),"name":data.get("name"),"email":data.get("email"),"phone":data.get("phone"),"org":data.get("current_company"),"urls[LinkedIn]":data.get("linkedin"),"urls[GitHub]":data.get("github")}
-            for key,val in fields.items():
-                if verification_required(page): return "portal_review_human_verification_v2"
-                if not val: continue
-                locator=page.locator('input[name="'+key+'"],input[id="'+key+'"]')
-                if locator.count()==1 and locator.is_visible(): locator.fill(str(val))
-            if u.hostname in HOSTS:
-                for label,value in [(r"^(?:full |legal |your )?name\s*\*?$",data.get("name")),(r"^first name",data.get("first_name")),(r"^last name",data.get("last_name")),(r"^email",data.get("email")),(r"^phone",data.get("phone"))]:
-                    field=page.get_by_label(re.compile(label,re.I))
-                    if value and field.count()==1 and field.is_visible(): field.fill(str(value))
+            diagnostic["contact_fields_filled"]=fill_contact_fields(page,data)
+            if verification_required(page): return "portal_review_human_verification_v2"
             stage="resume_field"
             files=page.locator('input[type=file][name="resume"], input[type=file][id="resume"], input[type=file][name="resumeFile"]')
             if files.count()==0:

@@ -11,7 +11,7 @@ from uuid import UUID
 import os
 import re
 import requests
-from portal import HOSTS, candidate_data, verification_required
+from portal import HOSTS, candidate_data, verification_required, fill_contact_fields
 from screening import fill_screening, unanswered_required
 
 API="https://api.steel.dev/v1/sessions"
@@ -106,12 +106,7 @@ def prepare_handoff(job,profile,pdf,*,consent=False,client=None):
             filled=0
             attached=False
             if not verification_required(page):
-                fields={"name":"name","first_name":"first_name","last_name":"last_name","email":"email","phone":"phone","org":"current_company","urls[LinkedIn]":"linkedin"}
-                for name,key in fields.items():
-                    if verification_required(page): break
-                    loc=page.locator('input[name="'+name+'"], input[id="'+name+'"]')
-                    if data.get(key) and loc.count()==1 and loc.is_visible() and loc.is_enabled() and not loc.input_value().strip():
-                        loc.fill(str(data[key]));filled+=1
+                filled+=fill_contact_fields(page,data)
                 if not verification_required(page):
                     filled+=fill_screening(page,data,verification_required)
                 if not verification_required(page):
