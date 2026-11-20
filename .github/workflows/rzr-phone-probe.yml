@@ -1,0 +1,19 @@
+name: RZR phone component diagnosis
+on:
+  push:
+    branches: [main]
+    paths: ['auto_apply/rzr_phone_probe.py']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests pypdf playwright==1.51.0
+      - run: python -m playwright install chromium
+      - run: python auto_apply/rzr_phone_probe.py
