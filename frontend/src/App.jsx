@@ -9,6 +9,19 @@ const VERIFICATION_STATUS_URL =
   import.meta.env.VITE_VERIFICATION_STATUS_URL ||
   (import.meta.env.BASE_URL + 'data/verification-status.json')
 
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/$/, '')
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || ''
+const SUPABASE_READY = Boolean(
+  SUPABASE_URL &&
+  SUPABASE_PUBLISHABLE_KEY &&
+  typeof window !== 'undefined' &&
+  window.supabase?.createClient
+)
+const supabaseClient = SUPABASE_READY
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+  : null
+const AUTO_APPLY_CONSENT_VERSION = '2026-11-v1'
+
 function prettySource(value = '') {
   const names = {
     greenhouse: 'Greenhouse',
@@ -89,10 +102,20 @@ function App() {
   const [testMatchSummary, setTestMatchSummary] = useState(null)
   const [autoConsent, setAutoConsent] = useState(false)
   const [resumeFile, setResumeFile] = useState(null)
+  const [authUser, setAuthUser] = useState(null)
+  const [authEmail, setAuthEmail] = useState('')
+  const [authBusy, setAuthBusy] = useState(false)
+  const [authMessage, setAuthMessage] = useState('')
+  const [applicationAttempts, setApplicationAttempts] = useState([])
   const [autoProfile, setAutoProfile] = useState({
     name: '',
     email: '',
     phone: '',
+    linkedin: '',
+    current_location: '',
+    notice_period_days: '30',
+    current_ctc_lpa: '',
+    expected_ctc_lpa: '',
     years_experience: '3',
     target_roles: '',
     skills: '',
@@ -144,6 +167,90 @@ function App() {
   useEffect(() => {
     loadJobs()
   }, [])
+
+  async function loadApplicationAttempts() {
+    if (!supabaseClient) return
+    const { data, error: attemptError } = await supabaseClient
+      .from('application_attempts')
+      .select('id,title,company,match_score,status,message,created_at')
+      .order('created_at', { ascending: false })
+      .limit(10)
+    if (!attemptError) setApplicationAttempts(Array.isArray(data) ? data : [])
+  }
+
+  useEffect(() => {
+    if (!supabaseClient) return undefined
+    let active = true
+
+    supabaseClient.auth.getSession().then(({ data }) => {
+      if (!active) return
+      const user = data?.session?.user || null
+      setAuthUser(user)
+      if (user?.email) {
+        setAuthEmail(user.email)
+        setAutoProfile((current) => ({
+          ...current,
+          email: current.email || user.email
+        }))
+        loadApplicationAttempts()
+      }
+    })
+
+    const { data: listener } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if (!active) return
+      const user = session?.user || null
+      setAuthUser(user)
+      if (user?.email) {
+        setAuthEmail(user.email)
+        setAutoProfile((current) => ({
+          ...current,
+          email: current.email || user.email
+        }))
+        window.setTimeout(loadApplicationAttempts, 0)
+      } else {
+        setApplicationAttempts([])
+      }
+    })
+
+    return () => {
+      active = false
+      listener?.subscription?.unsubscribe()
+    }
+  }, [])
+
+  async function sendSignInLink() {
+    if (!supabaseClient) return
+    const email = authEmail.trim()
+    if (!email) {
+      setAuthMessage('Enter your email address first.')
+      return
+    }
+    setAuthBusy(true)
+    setAuthMessage('')
+    try {
+      const { error: signInError } = await supabaseClient.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.origin + import.meta.env.BASE_URL,
+          shouldCreateUser: true
+        }
+      })
+      if (signInError) throw signInError
+      setAuthMessage('Sign-in link sent. Open it from your email to continue.')
+    } catch (err) {
+      setAuthMessage(err.message || 'Could not send the sign-in link.')
+    } finally {
+      setAuthBusy(false)
+    }
+  }
+
+  async function signOutAutoApply() {
+    if (!supabaseClient) return
+    await supabaseClient.auth.signOut()
+    setAuthUser(null)
+    setApplicationAttempts([])
+    setAuthMessage('Signed out.')
+  }
 
   const sourceOptions = useMemo(
     () => [
@@ -233,7 +340,7 @@ function App() {
     })
   }
 
-  function previewMatchSummary(profile) {
+  function scoreProfileJobs(profile) {
     const roles = String(profile.target_roles || '')
       .split(',')
       .map((item) => item.trim().toLowerCase())
@@ -245,18 +352,14 @@ function App() {
         .filter(Boolean)
     )
     const years = Number(profile.years_experience || 0)
-    const threshold = Number(profile.minimum_match_score || 80)
     const seniorTitle = /\b(senior|sr\.?|staff|lead|principal|manager|architect|director|head)\b/i
-
     const cloudTerms = ['cloud', 'devops', 'sre', 'site reliability', 'platform', 'infrastructure', 'kubernetes', 'release', 'build']
     const wantsCloudFamily = roles.some((role) => cloudTerms.some((term) => role.includes(term) || term.includes(role)))
 
     function roleMatches(job) {
       const title = String(job.title || '').toLowerCase()
       const category = String(job.category || '').toLowerCase()
-
       if (wantsCloudFamily && category === 'cloud / devops / sre') return true
-
       return roles.some((role) => {
         if (title.includes(role) || role.includes(title)) return true
         const roleTokens = new Set(role.split(/\s+/).filter((token) => token.length > 2))
@@ -271,23 +374,28 @@ function App() {
       return Number(job.experience_min) <= years + 0.5
     }
 
-    const relevant = feed.jobs.filter((job) => {
-      if (!roleMatches(job) || !experienceFits(job)) return false
-      if (years < 4 && seniorTitle.test(String(job.title || ''))) return false
-      return true
-    })
+    return feed.jobs
+      .filter((job) => {
+        if (!roleMatches(job) || !experienceFits(job)) return false
+        if (years < 4 && seniorTitle.test(String(job.title || ''))) return false
+        return true
+      })
+      .map((job) => {
+        const jobSkills = (job.skills || []).map((item) => String(item).toLowerCase())
+        const matchedSkills = jobSkills.filter((item) => skills.has(item)).length
+        const skillScore = jobSkills.length ? Math.round((matchedSkills / jobSkills.length) * 35) : 12
+        const experienceScore = Number.isFinite(job.experience_min) && Number(job.experience_min) > years ? 10 : 15
+        const score = Math.min(100, 45 + skillScore + experienceScore + 5)
+        return { job, score }
+      })
+      .sort((a, b) => b.score - a.score)
+  }
 
-    const scored = relevant.map((job) => {
-      const jobSkills = (job.skills || []).map((item) => String(item).toLowerCase())
-      const matchedSkills = jobSkills.filter((item) => skills.has(item)).length
-      const skillScore = jobSkills.length ? Math.round((matchedSkills / jobSkills.length) * 35) : 12
-      const experienceScore = Number.isFinite(job.experience_min) && Number(job.experience_min) > years ? 10 : 15
-      const score = Math.min(100, 45 + skillScore + experienceScore + 5)
-      return { job, score }
-    })
-
+  function previewMatchSummary(profile) {
+    const threshold = Number(profile.minimum_match_score || 80)
+    const scored = scoreProfileJobs(profile)
     return {
-      relevant: relevant.length,
+      relevant: scored.length,
       strong: scored.filter(({ score }) => score >= threshold).length,
       autoEligible: scored.filter(({ job, score }) =>
         job.auto_apply_supported &&
@@ -324,6 +432,140 @@ function App() {
 
     setAutoBusy(true)
     try {
+      if (supabaseClient) {
+        if (!authUser?.id) throw new Error('Sign in before enabling Auto Apply.')
+
+        const userId = authUser.id
+        const roles = String(autoProfile.target_roles || '').split(',').map((item) => item.trim()).filter(Boolean)
+        const skills = String(autoProfile.skills || '').split(',').map((item) => item.trim()).filter(Boolean)
+        const locations = String(autoProfile.preferred_locations || '').split(',').map((item) => item.trim()).filter(Boolean)
+        const toNumberOrNull = (value) => String(value || '').trim() === '' ? null : Number(value)
+
+        const profilePayload = {
+          user_id: userId,
+          name: autoProfile.name.trim(),
+          email: autoProfile.email.trim() || authUser.email || '',
+          phone: autoProfile.phone.trim(),
+          linkedin: autoProfile.linkedin.trim(),
+          current_location: autoProfile.current_location.trim(),
+          years_experience: Number(autoProfile.years_experience || 0),
+          target_roles: roles,
+          skills,
+          preferred_locations: locations.length ? locations : ['India'],
+          notice_period_days: toNumberOrNull(autoProfile.notice_period_days),
+          current_ctc_lpa: toNumberOrNull(autoProfile.current_ctc_lpa),
+          expected_ctc_lpa: toNumberOrNull(autoProfile.expected_ctc_lpa),
+          minimum_match_score: Number(autoProfile.minimum_match_score || 80),
+          daily_application_limit: Number(autoProfile.daily_application_limit || 10),
+          auto_apply_enabled: false,
+          consent_version: '',
+          consented_at: null,
+          updated_at: new Date().toISOString()
+        }
+
+        const { error: profileError } = await supabaseClient
+          .from('candidate_profiles')
+          .upsert(profilePayload, { onConflict: 'user_id' })
+        if (profileError) throw profileError
+
+        const safeName = resumeFile.name.replace(/[^A-Za-z0-9._-]+/g, '-').slice(-120) || 'resume.pdf'
+        const storagePath = userId + '/' + Date.now() + '-' + safeName
+        const { error: uploadError } = await supabaseClient.storage
+          .from('resumes')
+          .upload(storagePath, resumeFile, {
+            contentType: 'application/pdf',
+            upsert: false
+          })
+        if (uploadError) throw uploadError
+
+        const { error: deactivateError } = await supabaseClient
+          .from('resume_variants')
+          .update({ active: false, updated_at: new Date().toISOString() })
+          .eq('user_id', userId)
+          .eq('active', true)
+        if (deactivateError) throw deactivateError
+
+        const { error: resumeError } = await supabaseClient
+          .from('resume_variants')
+          .insert({
+            user_id: userId,
+            filename: safeName,
+            storage_path: storagePath,
+            content_type: 'application/pdf',
+            resume_text: '',
+            target_roles: roles,
+            skills,
+            years_experience: Number(autoProfile.years_experience || 0),
+            active: true
+          })
+        if (resumeError) throw resumeError
+
+        const threshold = Number(autoProfile.minimum_match_score || 80)
+        const dailyLimit = Number(autoProfile.daily_application_limit || 10)
+        const eligible = scoreProfileJobs(autoProfile)
+          .filter(({ job, score }) =>
+            job.auto_apply_supported &&
+            job.verification_status === 'no_verification_detected' &&
+            score >= threshold
+          )
+          .slice(0, dailyLimit)
+
+        let existingIds = new Set()
+        if (eligible.length) {
+          const ids = eligible.map(({ job }) => String(job.id || ''))
+          const { data: existing, error: existingError } = await supabaseClient
+            .from('application_attempts')
+            .select('external_job_id')
+            .in('external_job_id', ids)
+          if (existingError) throw existingError
+          existingIds = new Set((existing || []).map((row) => String(row.external_job_id)))
+        }
+
+        const queueRows = eligible
+          .filter(({ job }) => !existingIds.has(String(job.id || '')))
+          .map(({ job, score }) => ({
+            user_id: userId,
+            external_job_id: String(job.id || ''),
+            source: String(job.source || ''),
+            title: String(job.title || ''),
+            company: String(job.company || ''),
+            location: String(job.location || ''),
+            apply_url: String(job.url || ''),
+            match_score: score,
+            status: 'QUEUED',
+            message: 'Queued by candidate Auto Apply settings.'
+          }))
+
+        if (queueRows.length) {
+          const { error: queueError } = await supabaseClient
+            .from('application_attempts')
+            .insert(queueRows)
+          if (queueError) throw queueError
+        }
+
+        const { error: enableError } = await supabaseClient
+          .from('candidate_profiles')
+          .update({
+            auto_apply_enabled: true,
+            consent_version: AUTO_APPLY_CONSENT_VERSION,
+            consented_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', userId)
+        if (enableError) throw enableError
+
+        await loadApplicationAttempts()
+        setTestMatchSummary(previewMatchSummary(autoProfile))
+        setAutoMessage(
+          'Auto Apply enabled securely. ' +
+          queueRows.length +
+          ' new application' +
+          (queueRows.length === 1 ? '' : 's') +
+          ' queued for the production worker.'
+        )
+        return
+      }
+
       if (!AUTO_APPLY_API_URL) {
         await saveResumeInBrowser(resumeFile)
         localStorage.setItem('draftflowai-test-profile', JSON.stringify(autoProfile))
@@ -642,10 +884,42 @@ function App() {
                 respects your daily limit and stops when a required question needs your input.
               </p>
             </div>
-            <div className={AUTO_APPLY_API_URL ? 'backend-status ready' : 'backend-status test'}>
-              {AUTO_APPLY_API_URL ? 'Secure backend connected' : 'Browser-only test mode'}
+            <div className={(supabaseClient || AUTO_APPLY_API_URL) ? 'backend-status ready' : 'backend-status test'}>
+              {supabaseClient
+                ? 'Production account backend ready'
+                : (AUTO_APPLY_API_URL ? 'Legacy private backend connected' : 'Browser-only test mode')}
             </div>
           </div>
+
+          {supabaseClient && (
+            <div className="auth-panel">
+              {authUser ? (
+                <>
+                  <div>
+                    <strong>Signed in</strong>
+                    <span>{authUser.email}</span>
+                  </div>
+                  <button className="secondary-button" type="button" onClick={signOutAutoApply}>Sign out</button>
+                </>
+              ) : (
+                <>
+                  <div className="field auth-email-field">
+                    <label>Sign in for Auto Apply</label>
+                    <input
+                      type="email"
+                      value={authEmail}
+                      onChange={(event) => setAuthEmail(event.target.value)}
+                      placeholder="you@example.com"
+                    />
+                  </div>
+                  <button className="secondary-button" type="button" onClick={sendSignInLink} disabled={authBusy}>
+                    {authBusy ? 'Sending…' : 'Email sign-in link'}
+                  </button>
+                </>
+              )}
+              {authMessage && <span className="auth-message">{authMessage}</span>}
+            </div>
+          )}
 
           <form className="upgrade-form" onSubmit={enableAutoApply}>
             <div className="field">
@@ -659,6 +933,26 @@ function App() {
             <div className="field">
               <label>Phone</label>
               <input value={autoProfile.phone} onChange={(event) => updateAutoProfile('phone', event.target.value)} />
+            </div>
+            <div className="field">
+              <label>LinkedIn profile</label>
+              <input value={autoProfile.linkedin} onChange={(event) => updateAutoProfile('linkedin', event.target.value)} placeholder="https://linkedin.com/in/..." />
+            </div>
+            <div className="field">
+              <label>Current location</label>
+              <input value={autoProfile.current_location} onChange={(event) => updateAutoProfile('current_location', event.target.value)} placeholder="Hyderabad, India" />
+            </div>
+            <div className="field">
+              <label>Notice period (days)</label>
+              <input type="number" min="0" max="365" value={autoProfile.notice_period_days} onChange={(event) => updateAutoProfile('notice_period_days', event.target.value)} />
+            </div>
+            <div className="field">
+              <label>Current CTC (LPA)</label>
+              <input type="number" min="0" step="0.1" value={autoProfile.current_ctc_lpa} onChange={(event) => updateAutoProfile('current_ctc_lpa', event.target.value)} />
+            </div>
+            <div className="field">
+              <label>Expected CTC (LPA)</label>
+              <input type="number" min="0" step="0.1" value={autoProfile.expected_ctc_lpa} onChange={(event) => updateAutoProfile('expected_ctc_lpa', event.target.value)} />
             </div>
             <div className="field">
               <label>Experience (years)</label>
@@ -714,14 +1008,17 @@ function App() {
             </label>
 
             <div className="upgrade-actions">
-              <button className="primary-button" type="submit" disabled={autoBusy}>
-                {autoBusy ? 'Saving…' : (AUTO_APPLY_API_URL ? 'Enable Auto Apply' : 'Save & Test Resume')}
+              <button className="primary-button" type="submit" disabled={autoBusy || (supabaseClient && !authUser)}>
+                {autoBusy ? 'Saving…' : ((supabaseClient || AUTO_APPLY_API_URL) ? 'Enable Auto Apply' : 'Save & Test Resume')}
               </button>
-              {!AUTO_APPLY_API_URL && (
+              {!supabaseClient && !AUTO_APPLY_API_URL && (
                 <span className="upgrade-note">Test mode keeps the PDF only in this browser. It is not uploaded to GitHub or any server, and no applications are submitted.</span>
               )}
+              {supabaseClient && !authUser && (
+                <span className="upgrade-note">Sign in with your email before enabling Auto Apply.</span>
+              )}
             </div>
-            {testMatchSummary && !AUTO_APPLY_API_URL && (
+            {testMatchSummary && !AUTO_APPLY_API_URL && !supabaseClient && (
               <div className="test-results">
                 <div className="test-result">
                   <strong>{testMatchSummary.relevant}</strong>
@@ -735,6 +1032,26 @@ function App() {
                   <strong>{testMatchSummary.autoEligible}</strong>
                   <span>currently auto-apply eligible</span>
                 </div>
+              </div>
+            )}
+            {supabaseClient && authUser && applicationAttempts.length > 0 && (
+              <div className="application-history">
+                <div className="history-heading">
+                  <strong>Recent Auto Apply activity</strong>
+                  <button className="text-button" type="button" onClick={loadApplicationAttempts}>Refresh status</button>
+                </div>
+                {applicationAttempts.map((attempt) => (
+                  <div className="history-row" key={attempt.id}>
+                    <div>
+                      <strong>{attempt.title}</strong>
+                      <span>{prettyCompany(attempt.company)}</span>
+                    </div>
+                    <span>{Math.round(Number(attempt.match_score || 0))}%</span>
+                    <span className={'history-status status-' + String(attempt.status || '').toLowerCase().replaceAll('_', '-')}>
+                      {String(attempt.status || '').replaceAll('_', ' ')}
+                    </span>
+                  </div>
+                ))}
               </div>
             )}
             {autoMessage && <div className="upgrade-message">{autoMessage}</div>}
