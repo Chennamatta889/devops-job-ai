@@ -17,6 +17,7 @@ from urllib.parse import quote, urlparse
 import requests
 
 from portal import HOSTS, portal_apply
+from screening import normalize
 
 CONSENT_VERSION = "2026-11-v1"
 MAX_SUBMISSIONS_PER_RUN = 5
@@ -538,12 +539,43 @@ def process_attempt(attempt: dict) -> None:
         print(f"Attempt {attempt_id}: UNCERTAIN ({type(exc).__name__})")
 
 
+def retry_answered_attempts() -> None:
+    """Retry only pre-submission missing-question stops after fresh exact answers."""
+    rows = rest_get("application_attempts", {
+        "status": "eq.QUESTION_REQUIRED",
+        "select": "id,user_id,message,updated_at",
+        "order": "updated_at.asc",
+        "limit": "100",
+    })
+    for attempt in rows:
+        msg = str(attempt.get("message") or "")
+        prefix = "Required information needed: "
+        if not msg.startswith(prefix):
+            continue
+        questions = [normalize(q) for q in msg[len(prefix):].split("; ") if normalize(q)]
+        if not questions:
+            continue
+        profile = get_profile(str(attempt["user_id"]))
+        if not profile or not profile.get("auto_apply_enabled") or profile.get("consent_version") != CONSENT_VERSION:
+            continue
+        saved = rest_get("screening_answers", {"user_id": f"eq.{attempt['user_id']}", "select": "question,answer,updated_at"})
+        valid = {normalize(r["question"]): r for r in saved if isinstance(r.get("answer"), (str, int, float, bool)) and str(r["answer"]).strip()}
+        if not all(q in valid for q in questions):
+            continue
+        def stamp(value):
+            return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if not any(stamp(valid[q]["updated_at"]) > stamp(attempt["updated_at"]) for q in questions):
+            continue
+        patch_attempt(int(attempt["id"]), "QUESTION_REQUIRED", {"status": "QUEUED", "message": "Retry queued after candidate supplied screening answers.", "updated_at": datetime.now(timezone.utc).isoformat()})
+
+
 def main() -> None:
     if not configured():
         print("Supabase worker not configured; skipping.")
         return
 
     ensure_resume_bucket()
+    retry_answered_attempts()
     queue_new_matches()
 
     queued = rest_get(

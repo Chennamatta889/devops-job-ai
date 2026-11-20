@@ -148,6 +148,11 @@ function App() {
   const [authBusy, setAuthBusy] = useState(false)
   const [authMessage, setAuthMessage] = useState('')
   const [applicationAttempts, setApplicationAttempts] = useState([])
+  const [screeningAnswers, setScreeningAnswers] = useState({})
+  const [screeningDrafts, setScreeningDrafts] = useState({})
+  const [screeningCustom, setScreeningCustom] = useState('')
+  const [screeningMessage, setScreeningMessage] = useState('')
+  const [screeningBusy, setScreeningBusy] = useState(false)
   const [autoEnabled, setAutoEnabled] = useState(false)
   const [autoProfile, setAutoProfile] = useState({
     name: '',
@@ -247,10 +252,61 @@ function App() {
     if (!supabaseClient) return
     const { data, error: attemptError } = await supabaseClient
       .from('application_attempts')
-      .select('id,title,company,apply_url,match_score,status,message,created_at')
+      .select('id,title,company,apply_url,match_score,status,message,created_at,updated_at')
       .order('created_at', { ascending: false })
       .limit(10)
     if (!attemptError) setApplicationAttempts(Array.isArray(data) ? data : [])
+  }
+
+  const missingScreeningQuestions = useMemo(() => [...new Set(applicationAttempts
+    .filter(a => a.status === 'QUESTION_REQUIRED' && String(a.message || '').startsWith('Required information needed: '))
+    .flatMap(a => a.message.slice('Required information needed: '.length).split('; ').map(q => q.trim()).filter(Boolean)))], [applicationAttempts])
+
+  useEffect(() => {
+    let active = true
+    setScreeningAnswers({})
+    setScreeningDrafts({})
+    setScreeningMessage('')
+    if (supabaseClient && authUser?.id) {
+      supabaseClient.from('screening_answers').select('question,answer').eq('user_id',authUser.id)
+        .then(({data,error}) => {
+          if (!active) return
+          if (error) { setScreeningMessage(error.message); return }
+          setScreeningAnswers(Object.fromEntries((data || []).map(r => [r.question, typeof r.answer === 'boolean' ? (r.answer ? 'Yes' : 'No') : String(r.answer ?? '')])))
+        })
+    }
+    return () => { active = false }
+  }, [authUser?.id])
+
+  async function saveScreeningAnswers() {
+    if (!supabaseClient || !authUser?.id) return
+    const changes = Object.entries(screeningDrafts).filter(([q,value]) => q.trim() && value.trim() && value.trim() !== screeningAnswers[q])
+    if (!changes.length) { setScreeningMessage('Enter a new or updated answer first.'); return }
+    setScreeningBusy(true)
+    try {
+      const rows = changes.map(([question, value]) => ({
+        user_id:authUser.id, question, answer: value.trim(), updated_at:new Date().toISOString()
+      }))
+      const {error} = await supabaseClient.from('screening_answers').upsert(rows,{onConflict:'user_id,question'})
+      if (error) throw error
+      setScreeningAnswers(old=>({...old,...Object.fromEntries(changes.map(([q,v])=>[q,v.trim()]))}))
+      setScreeningDrafts({})
+      setScreeningMessage('Answers saved privately. Eligible applications blocked by missing answers can be retried by the scheduled worker.')
+    } catch (err) { setScreeningMessage(err.message || 'Could not save answers.') }
+    finally { setScreeningBusy(false) }
+  }
+
+  async function deleteScreeningAnswer(question) {
+    if (!supabaseClient || !authUser?.id || screeningBusy) return
+    setScreeningBusy(true)
+    try {
+      const {error} = await supabaseClient.from('screening_answers').delete().eq('user_id',authUser.id).eq('question',question)
+      if(error) throw error
+      setScreeningAnswers(old=>{const next={...old};delete next[question];return next})
+      setScreeningDrafts(old=>{const next={...old};delete next[question];return next})
+      setScreeningMessage('Answer removed.')
+    } catch(err) { setScreeningMessage(err.message || 'Could not remove answer.') }
+    finally {setScreeningBusy(false)}
   }
 
   useEffect(() => {
@@ -1116,6 +1172,24 @@ function App() {
                 </div>
                 <div className="test-result"><strong>{testMatchSummary.verificationPending}</strong><span>verification pending or manual action needed</span></div>
                 <div className="test-result"><strong>{testMatchSummary.belowThreshold}</strong><span>below minimum match</span></div>
+              </div>
+            )}
+            {supabaseClient && authUser && (
+              <div className="application-history">
+                <div className="history-heading"><strong>Screening answer bank</strong><button type="button" className="text-button" onClick={loadApplicationAttempts}>Refresh questions</button></div>
+                <p>Save accurate answers once. Exact employer questions are reused on future applications. Use the units or format requested; leave unknown answers blank. Never enter passwords, verification codes or sensitive identifiers.</p>
+                {[...new Set([...missingScreeningQuestions, ...Object.keys(screeningAnswers), ...Object.keys(screeningDrafts)])].map(question=>(
+                  <div className="field field-wide" key={question}>
+                    <label>{question}</label>
+                    <input value={screeningDrafts[question] ?? screeningAnswers[question] ?? ''} onChange={event=>setScreeningDrafts(old=>({...old,[question]:event.target.value}))} placeholder="Type your accurate answer" maxLength={600}/>
+                    {Object.hasOwn(screeningAnswers,question) && <button type="button" className="text-button" disabled={screeningBusy} onClick={()=>deleteScreeningAnswer(question)}>Remove saved answer</button>}
+                  </div>
+                ))}
+                <div className="field field-wide"><label>Add another screening question</label><input value={screeningCustom} onChange={event=>setScreeningCustom(event.target.value)} maxLength={500} placeholder="Type the employer's exact question" />
+                  <button type="button" className="secondary-button" disabled={!screeningCustom.trim()} onClick={()=>{const q=screeningCustom.trim();setScreeningDrafts(old=>({...old,[q]:old[q] ?? screeningAnswers[q] ?? ''}));setScreeningCustom('')}}>Add question</button>
+                </div>
+                <button type="button" className="primary-button" disabled={screeningBusy} onClick={saveScreeningAnswers}>{screeningBusy ? 'Saving…' : 'Save screening answers'}</button>
+                {screeningMessage && <div role="status" className="upgrade-message">{screeningMessage}</div>}
               </div>
             )}
             {supabaseClient && authUser && autoEnabled && applicationAttempts.length === 0 && <div className="upgrade-message">No application attempts recorded yet. The worker runs on a scheduled basis; refresh status after it runs. A match is not a confirmed submission. <button type="button" className="text-button" onClick={loadApplicationAttempts}>Refresh status</button></div>}

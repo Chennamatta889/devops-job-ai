@@ -9,6 +9,8 @@ def answer_for(question, profile):
     if isinstance(answers,dict):
         for key,value in answers.items():
             if normalize(key)==q and isinstance(value,(str,int,float,bool)):
+                if isinstance(value, str) and value.strip().lower() in ("yes", "no"):
+                    return value.strip().lower() == "yes"
                 return value
     q=re.sub(r"^(?:please (?:enter|provide|specify|share|select) (?:your )?|what (?:is|are) your )","",q)
     q=re.sub(r" (?:required|optional)$","",q)
