@@ -222,3 +222,6 @@ drop policy if exists "email_challenge_send_once" on public.application_email_ch
 create policy "email_challenge_send_once" on public.application_email_challenges for update to authenticated
 using ((select auth.uid())=user_id and status='WAITING' and expires_at > now() and encrypted_code is null)
 with check ((select auth.uid())=user_id and status='WAITING' and expires_at > now() and encrypted_code is not null);
+
+-- Account-specific unattended mode; no employer verification is bypassed.
+alter table public.candidate_profiles add column if not exists unattended_auto_apply boolean not null default false;

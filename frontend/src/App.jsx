@@ -187,6 +187,8 @@ function App() {
   const [screeningMessage, setScreeningMessage] = useState('')
   const [screeningBusy, setScreeningBusy] = useState(false)
   const [autoEnabled, setAutoEnabled] = useState(false)
+  const [unattendedMode,setUnattendedMode] = useState(false)
+  const [modeBusy,setModeBusy] = useState(false)
   const [autoProfile, setAutoProfile] = useState({
     name: '',
     email: '',
@@ -261,6 +263,7 @@ function App() {
     }
 
     setAutoEnabled(Boolean(data.auto_apply_enabled))
+    setUnattendedMode(data.unattended_auto_apply === true)
     setAutoConsent(Boolean(data.auto_apply_enabled && data.consent_version === AUTO_APPLY_CONSENT_VERSION))
     setAutoProfile((current) => ({
       ...current,
@@ -296,7 +299,7 @@ function App() {
       const byId = new Map((handoffs || []).map(h => [String(h.attempt_id),h]))
       attempts = attempts.map(a => ({ ...a, handoff: byId.get(String(a.id)) || null }))
     }
-    const ids = attempts.filter(a => a.status === 'SUBMITTED').map(a => a.id)
+    const ids = attempts.filter(a => ['SUBMITTED','UNCERTAIN'].includes(a.status)).map(a => a.id)
     if (!ids.length) { setApplicationAttempts(attempts); return }
     const { data: evidence, error: evidenceError } = await supabaseClient
       .from('application_email_confirmations')
@@ -305,7 +308,7 @@ function App() {
     const byAttempt = new Map((evidence || []).map(row => [String(row.attempt_id), row.received_at]))
     setApplicationAttempts(attempts.map(a => ({
       ...a,
-      email_confirmation: a.status !== 'SUBMITTED' ? null : evidenceError ? 'unavailable' : byAttempt.has(String(a.id)) ? 'confirmed' : 'pending',
+      email_confirmation: !['SUBMITTED','UNCERTAIN'].includes(a.status) ? null : evidenceError ? 'unavailable' : byAttempt.has(String(a.id)) ? 'confirmed' : 'pending',
       email_received_at: byAttempt.get(String(a.id)) || null
     })))
   }
@@ -451,6 +454,18 @@ function App() {
     setApplicationAttempts([])
     setAutoEnabled(false)
     setAuthMessage('Signed out.')
+  }
+
+  async function changeUnattendedMode(enabled) {
+    if (!supabaseClient || !authUser?.id || modeBusy) return
+    setModeBusy(true);setAutoMessage('')
+    try {
+      const {data,error}=await supabaseClient.from('candidate_profiles').update({unattended_auto_apply:enabled,updated_at:new Date().toISOString()}).eq('user_id',authUser.id).select('unattended_auto_apply').maybeSingle()
+      if(error||!data)throw new Error('Could not save application mode.')
+      setUnattendedMode(data.unattended_auto_apply===true)
+      setAutoMessage(enabled?'Unattended mode enabled. Applications requiring verification are skipped.':'Human-assisted mode enabled.')
+    }catch{setAutoMessage('Could not save application mode. Refresh and try again.')}
+    finally{setModeBusy(false)}
   }
 
   async function pauseAutoApply() {
@@ -1258,7 +1273,11 @@ function App() {
               </div>
             )}
             {supabaseClient && authUser && autoEnabled && applicationAttempts.length === 0 && <div className="upgrade-message">No application attempts recorded yet. The worker runs on a scheduled basis; refresh status after it runs. A match is not a confirmed submission. <button type="button" className="text-button" onClick={loadApplicationAttempts}>Refresh status</button></div>}
-            {authUser && emailChallenges.map(challenge=><ApplicationEmailCode key={challenge.id} challenge={challenge} attempt={applicationAttempts.find(a=>String(a.id)===String(challenge.attempt_id))} onSubmitted={loadApplicationAttempts}/>)}
+            {supabaseClient && authUser && autoEnabled && <div className="upgrade-message" style={{margin:'12px 0'}}>
+              <label><input type="checkbox" checked={unattendedMode} disabled={modeBusy} onChange={e=>changeUnattendedMode(e.target.checked)} /> Unattended Auto Apply</label>
+              <p>Skip employer verification and continue eligible jobs. Unconfirmed submissions are never automatically retried.</p>
+            </div>}
+            {!unattendedMode && authUser && emailChallenges.map(challenge=><ApplicationEmailCode key={challenge.id} challenge={challenge} attempt={applicationAttempts.find(a=>String(a.id)===String(challenge.attempt_id))} onSubmitted={loadApplicationAttempts}/>)}
             {supabaseClient && authUser && applicationAttempts.length > 0 && (
               <div className="application-history">
                 <div className="history-heading">
@@ -1271,10 +1290,10 @@ function App() {
                       <strong>{attempt.title}</strong>
                       <span>{prettyCompany(attempt.company)}</span>
                       {attempt.message && <span className="history-message">{attempt.message}</span>}
-                      {attempt.status === 'SUBMITTED' && (
+                      {['SUBMITTED','UNCERTAIN'].includes(attempt.status) && (
                         <span className="history-message">
                           {attempt.email_confirmation === 'confirmed' ? 'Email confirmed · ' + formatDate(attempt.email_received_at) :
-                            attempt.email_confirmation === 'pending' ? 'Pending email confirmation · portal submission recorded' :
+                            attempt.email_confirmation === 'pending' ? (attempt.status === 'SUBMITTED' ? 'Pending email confirmation · portal submission recorded' : 'Submission unconfirmed · awaiting employer receipt') :
                             'Email confirmation status unavailable'}
                         </span>
                       )}
@@ -1282,7 +1301,7 @@ function App() {
                     <span>{Math.round(Number(attempt.match_score || 0))}%</span>
                     <div className="history-status-wrap">
                       <span className={'history-status status-' + String(attempt.status || '').toLowerCase().replaceAll('_', '-')}>
-                        {String(attempt.status || '').replaceAll('_', ' ')}
+                        {attempt.status === 'UNCERTAIN' && attempt.email_confirmation === 'confirmed' ? 'EMAIL CONFIRMED' : String(attempt.status || '').replaceAll('_', ' ')}
                       </span>
                       {attempt.status === 'ASSISTANCE_REQUIRED' && (attempt.handoff?.status === 'READY' && Date.parse(attempt.handoff.expires_at) > Date.now() && /^https:\/\/api\.steel\.dev\//.test(attempt.handoff.viewer_url || '') ? (
                         <a className="history-action" href={attempt.handoff.viewer_url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Continue live application</a>

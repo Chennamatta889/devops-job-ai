@@ -301,5 +301,30 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertEqual(page.locator("#code").input_value(),"")
             b.close()
 
+
+    def test_unattended_worker_skips_challenge_and_keeps_uncertain_after_click(self):
+        import supabase_worker as worker
+        from unittest.mock import patch
+        candidate={"user_id":"fixture","auto_apply_enabled":True,"consent_version":worker.CONSENT_VERSION,"unattended_auto_apply":True}
+        first={"id":1,"user_id":"fixture","external_job_id":"synthetic-first"}
+        second={"id":2,"user_id":"fixture","external_job_id":"synthetic-second"}
+        third={"id":3,"user_id":"fixture","external_job_id":"synthetic-third"}
+        outcomes=iter(["portal_review_human_verification_v2","portal_uncertain_email_verification_required","portal_confirmed"])
+        def fake_portal(job, data, pdf, diagnostic, email_code_provider=None):
+            self.assertIsNone(email_code_provider)
+            return next(outcomes)
+        with patch.multiple(worker,patch_attempt=__import__("unittest.mock",fromlist=["Mock"]).Mock(return_value=[{}]),get_profile=__import__("unittest.mock",fromlist=["Mock"]).Mock(return_value=candidate),get_resume=__import__("unittest.mock",fromlist=["Mock"]).Mock(return_value={"storage_path":"fixture"}),download_resume=__import__("unittest.mock",fromlist=["Mock"]).Mock(return_value=b"%PDF-fixture"),enrich_matching_profile=lambda p:dict(p),get_screening_answers=lambda uid:{},portal_apply=fake_portal):
+            for item in (first,second,third):
+                worker.process_attempt(item)
+            states=[c.args[2]["status"] for c in worker.patch_attempt.call_args_list if c.args[1]=="SUBMITTING"]
+            self.assertEqual(states,["HUMAN_VERIFICATION_REQUIRED","UNCERTAIN","SUBMITTED"])
+
+    def test_attempt_dedup_history_is_paginated(self):
+        import supabase_worker as worker
+        from unittest.mock import patch
+        with patch.object(worker,"rest_get",side_effect=[[{"id":1,"external_job_id":"a"}],[{"id":3,"external_job_id":"b"}],[]]) as get:
+            self.assertEqual(worker.all_attempted_job_ids("fixture"),{"a","b"})
+            self.assertEqual(get.call_args.args[1]["id"],"gt.3")
+
 if __name__ == "__main__":
     unittest.main()

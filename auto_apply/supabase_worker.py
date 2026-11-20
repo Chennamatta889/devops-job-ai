@@ -275,15 +275,21 @@ def attempts_created_today(user_id: str) -> set[str]:
 
 
 def all_attempted_job_ids(user_id: str) -> set[str]:
-    rows = rest_get(
-        "application_attempts",
-        {
-            "user_id": f"eq.{user_id}",
-            "select": "external_job_id",
-            "limit": "5000",
-        },
-    )
-    return {str(row.get("external_job_id") or "") for row in rows}
+    # Stable keyset pagination avoids the API default maximum row count.
+    result = set()
+    last = 0
+    while True:
+        rows = rest_get("application_attempts", {
+            "user_id": f"eq.{user_id}", "id": f"gt.{last}",
+            "select": "id,external_job_id", "order": "id.asc", "limit": "500",
+        })
+        if not rows:
+            return result
+        result.update(str(row.get("external_job_id") or "") for row in rows)
+        next_id = int(rows[-1]["id"])
+        if next_id <= last:
+            raise RuntimeError("Attempt history pagination did not advance")
+        last = next_id
 
 
 def queue_new_matches() -> int:
@@ -342,7 +348,13 @@ def queue_new_matches() -> int:
 
         ranked.sort(key=lambda item: item[0], reverse=True)
         rows = []
-        for score, job in ranked[:remaining]:
+        for score, job in ranked:
+            if len(rows) >= remaining:
+                break
+            job_id = str(job.get("id") or "")
+            if job_id in attempted_ids:
+                continue
+            attempted_ids.add(job_id)
             rows.append(
                 {
                     "user_id": user_id,
@@ -358,8 +370,13 @@ def queue_new_matches() -> int:
                 }
             )
         if rows:
-            rest_insert("application_attempts", rows)
-            queued_total += len(rows)
+            # The unique (user_id,external_job_id) constraint is the final race guard.
+            response = requests.post(f"{base_url()}/rest/v1/application_attempts",
+                headers=headers({"Prefer": "resolution=ignore-duplicates,return=representation"}),
+                params={"on_conflict":"user_id,external_job_id","select":"id"},
+                json=rows,timeout=25)
+            response.raise_for_status()
+            queued_total += len(response.json())
 
     print(f"Enabled profiles checked: {len(profiles)}")
     print(f"New matching applications queued: {queued_total}")
@@ -508,7 +525,10 @@ def process_attempt(attempt: dict) -> None:
                 latest=get_profile(user_id)
                 return bool(latest and latest.get("auto_apply_enabled") and latest.get("consent_version")==CONSENT_VERSION and still_valid())
             return wait_for_user_code(page, attempt_id, user_id, (headers,base_url,rest_get,rest_insert), authorized)
-        portal_status = portal_apply(job, candidate, pdf, diagnostic, email_code_provider=provide_code)
+        unattended = profile.get("unattended_auto_apply") is True
+        # No code provider in unattended mode. An employer challenge ends this
+        # attempt, never triggers a mailbox-code lookup, and never blocks the queue.
+        portal_status = portal_apply(job, candidate, pdf, diagnostic, email_code_provider=None if unattended else provide_code)
         status = public_status(portal_status)
         # Never publish input values, screenshots, employer HTML, or question content in public logs.
         print("Attempt diagnostics:", json.dumps({"attempt": attempt_id, "stage": diagnostic.get("stage"), "result": portal_status, "location": diagnostic.get("location_trace", {}), "validation": diagnostic.get("validation_details", []), "validation_step": diagnostic.get("validation_step"), "resume_attachment": diagnostic.get("resume_attachment"), "exception_type": diagnostic.get("exception_type"), "submit_clicked": diagnostic.get("submit_clicked", False), "post_click_response_count": diagnostic.get("post_click_response_count"), "email_verification": {k: diagnostic[k] for k in ("email_verification_required","email_code_received","email_code_typed","email_code_value_matches","email_code_input_valid","email_verify_button_enabled","email_verify_clicked","email_code_outcome") if k in diagnostic}}, sort_keys=True))
@@ -524,13 +544,15 @@ def process_attempt(attempt: dict) -> None:
             if missing:
                 message += ": " + "; ".join(missing[:4])
         elif status == "HUMAN_VERIFICATION_REQUIRED":
-            message = "Human verification is required on the employer application page."
+            message = "Skipped: employer requires human verification. Continuing other eligible jobs." if unattended else "Human verification is required on the employer application page."
         elif status == "PROFILE_REQUIRED":
             message = "Candidate profile needs additional required contact information."
         elif "validation" in portal_status:
             categories = sorted({item["category"] for item in diagnostic.get("validation_details", []) if item.get("category") in {"phone","country","email","linkedin","resume","first_name","last_name","website","other"}})
             message = ("Submission outcome uncertain; do not retry without checking employer receipt." if status == "UNCERTAIN" else "Form validation failed before submission.")
             if categories: message += " Fields: " + ", ".join(categories)
+        elif unattended and ("email_verification" in portal_status or "human_verification" in portal_status):
+            message = "Stopped after submit: employer verification required. Submission unconfirmed; do not retry automatically. Continuing other eligible jobs."
         elif "email_verification" in portal_status or "email_code" in portal_status:
             message = "Employer email verification not confirmed; do not retry automatically. Check the application receipt."
         elif status == "SUBMITTED":
