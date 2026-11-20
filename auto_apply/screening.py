@@ -120,26 +120,37 @@ def field_question(field):
         const prompt=lever?.querySelector("label:not([for]),.application-label,.application-question-label,.question-label,.application-question-title,legend,[role=heading]")?.innerText||"";
         return (el.getAttribute('aria-label')||aria.join(' ').trim()||labels.join(' ').trim()||legend||prompt||el.getAttribute('placeholder')||'').trim();
     }""")
+def location_suggestion_matches(value, primary, label):
+    parts = [normalize(x) for x in str(value).split(",") if normalize(x)]
+    if not parts:
+        return False
+    if len(parts) > 1:
+        return normalize(label) == " ".join(parts)
+    return normalize(primary) == parts[0]
+
 def select_lever_location(page, profile, verification_required):
-    """Use only visible employer autocomplete suggestions, never hidden fields."""
+    """Click only one matching visible location suggestion; stop at verification."""
     field = page.locator('input.location-input[name="location"]:visible')
     if field.count() == 0:
         return "not_present"
-    if field.count() != 1 or verification_required(page):
-        return "verification" if verification_required(page) else "unresolved"
+    if verification_required(page):
+        return "verification"
+    if field.count() != 1:
+        return "unresolved"
     value = answer_for("Current location", profile)
     if not isinstance(value, str) or not value.strip():
         return "unresolved"
     if not field.is_enabled() or field.get_attribute("readonly") is not None:
         return "unresolved"
-    city = normalize(value.split(",")[0])
+    city = value.split(",")[0].strip()
     if not city:
         return "unresolved"
     field.click()
     if verification_required(page):
         return "verification"
-    field.fill(value.strip())
-    for _ in range(24):
+    field.fill("")
+    field.press_sequentially(city, delay=100)
+    for _ in range(40):
         if verification_required(page):
             return "verification"
         dropdown = page.locator(".pac-container:visible")
@@ -149,24 +160,20 @@ def select_lever_location(page, profile, verification_required):
             for i in range(options.count()):
                 opt = options.nth(i)
                 primary = opt.locator(".pac-item-query")
-                if primary.count() != 1:
-                    continue
-                if normalize(primary.inner_text()) != city:
-                    continue
-                label = normalize(opt.inner_text())
-                context = [normalize(p) for p in value.split(",")[1:] if p.strip()]
-                if profile.get("country"):
-                    context.append(normalize(profile["country"]))
-                if all(x in label.split() or (" " + x + " ") in (" " + label + " ") for x in context):
+                primary_text = primary.inner_text() if primary.count() == 1 else ""
+                # Google Places may render city and region as separate spans.
+                label = opt.evaluate("el => Array.from(el.querySelectorAll(':scope > span')).map(s => s.innerText.trim()).filter(Boolean).join(' ') || el.innerText")
+                if location_suggestion_matches(value, primary_text, label):
                     matches.append(opt)
             if len(matches) == 1:
                 if verification_required(page):
                     return "verification"
                 matches[0].click()
-                page.wait_for_timeout(350)
+                page.wait_for_timeout(500)
                 if verification_required(page):
                     return "verification"
-                if field.input_value().strip() and dropdown.count() == 0:
+                selected = field.input_value().strip()
+                if selected and dropdown.count() == 0 and (len(value.split(",")) == 1 or normalize(selected) == normalize(value)):
                     return "selected"
                 return "unresolved"
             if len(matches) > 1:
