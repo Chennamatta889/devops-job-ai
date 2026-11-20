@@ -1,0 +1,27 @@
+name: Resume existing mobile application
+on:
+  push:
+    branches: [main]
+    paths: ['auto_apply/resume_mobile_pilot.py', '.github/workflows/resume-mobile-pilot.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: private-mobile-application-pilot
+  cancel-in-progress: false
+jobs:
+  resume:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[resume-mobile]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      STEEL_API_KEY: ${{ secrets.STEEL_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests pypdf playwright==1.51.0
+      - run: python auto_apply/resume_mobile_pilot.py
