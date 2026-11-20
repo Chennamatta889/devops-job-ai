@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   apply:
-    if: contains(github.event.head_commit.message, '[single-request-7]')
+    if: contains(github.event.head_commit.message, '[single-request-8]')
     runs-on: ubuntu-24.04
     timeout-minutes: 7
     env:
@@ -29,7 +29,7 @@ jobs:
         run: |
           PYTHONPATH=auto_apply python - <<'PY'
           from supabase_worker import rest_get, patch_attempt, process_attempt, get_profile, enrich_matching_profile, match_score, fetch_public_json, PUBLIC_JOB_FEED_URL
-          rows = rest_get("application_attempts", {"id":"eq.7","external_job_id":"eq.525a243282517276","status":"eq.MANUAL_REQUESTED","select":"*"})
+          rows = rest_get("application_attempts", {"id":"eq.8","external_job_id":"eq.greenhouse-rzr-4254732009","status":"eq.MANUAL_REQUESTED","select":"*"})
           if len(rows)!=1:
               print("No unprocessed matching request; nothing submitted.")
               raise SystemExit(0)
@@ -37,9 +37,21 @@ jobs:
           profile=get_profile(attempt["user_id"])
           if not profile or not profile.get("auto_apply_enabled"):
               raise SystemExit("Consent unavailable")
-          job=next((j for j in fetch_public_json(PUBLIC_JOB_FEED_URL).get("jobs",[]) if j.get("id")==attempt["external_job_id"] and j.get("url")==attempt["apply_url"]),None)
-          if not job:
-              raise SystemExit("Job unavailable")
+          # Verify the official public ATS listing before sending candidate data.
+          import requests, re
+          url="https://job-boards.greenhouse.io/rzr/jobs/4254732009"
+          if attempt["apply_url"]!=url:
+              raise SystemExit("Unexpected employer URL")
+          resp=requests.get("https://boards-api.greenhouse.io/v1/boards/rzr/jobs/4254732009",params={"content":"true"},timeout=30)
+          if resp.status_code!=200:
+              patch_attempt(attempt["id"],"MANUAL_REQUESTED",{"status":"REVIEW_REQUIRED","message":"Live employer listing could not be verified; no submission."})
+              raise SystemExit(0)
+          public=resp.json()
+          if str(public.get("id"))!="4254732009" or "devops engineer" not in str(public.get("title","")).lower():
+              raise SystemExit("Unexpected employer listing")
+          if not re.search(r"bengaluru|bangalore|india",str(public.get("location",{}).get("name","")),re.I):
+              raise SystemExit("Unexpected listing location")
+          job={"id":attempt["external_job_id"],"source":"greenhouse","title":public["title"],"company":"rzr","location":"Bengaluru, India","url":url,"direct_apply":True,"auto_apply_supported":True,"category":"Cloud / DevOps / SRE","experience_min":3,"skills":["kubernetes","linux","terraform","bash","python","git","docker","ci/cd"]}
           score=match_score(job,enrich_matching_profile(profile))
           if score < int(profile.get("minimum_match_score") or 70):
               patch_attempt(attempt["id"],"MANUAL_REQUESTED",{"status":"REVIEW_REQUIRED","match_score":score,"message":"Match below configured threshold; no submission."})
