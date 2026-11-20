@@ -1,0 +1,40 @@
+name: Production Auto Apply worker
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/10 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'auto_apply/supabase_worker.py'
+      - 'auto_apply/portal.py'
+      - 'auto_apply/screening.py'
+      - '.github/workflows/auto-apply-supabase-worker.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-auto-apply-worker
+  cancel-in-progress: false
+
+jobs:
+  process-queue:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      ALLOW_PRIVATE_MAIL_LOOKUP: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install worker dependencies
+        run: |
+          pip install requests pypdf playwright==1.51.0
+          python -m playwright install chromium
+      - name: Process queued applications
+        run: python auto_apply/supabase_worker.py
