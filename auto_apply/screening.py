@@ -325,6 +325,9 @@ def unanswered_required(page):
                 if(controls.length===1){
                     const c=controls[0];
                     empty=c.type==='file' ? !(c.files&&c.files.length) : c.type==='checkbox'||c.type==='radio' ? !c.checked : !String(c.value||'').trim();
+                }else if(controls.filter(c=>c.type==='tel').length===1&&controls.every(c=>c.type==='tel'||c.getAttribute('role')==='combobox')){
+                    const tel=controls.find(c=>c.type==='tel');
+                    empty=!String(tel.value||'').trim()||!tel.validity?.valid;
                 }else if(controls.length>0&&controls.every(c=>c.type==='radio')){
                     empty=!controls.some(c=>c.checked);
                 }else {empty=true;}

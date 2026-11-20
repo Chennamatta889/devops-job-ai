@@ -248,8 +248,13 @@ def fill_contact_fields(page,data,greenhouse=False):
             loc=page.get_by_label(re.compile(label,re.I)).and_(page.locator("input:visible"))
         if key=="phone" and loc.count()!=1:
             loc=page.locator('input[type="tel"]:visible')
-        if loc.count()==1 and loc.is_visible() and loc.is_enabled() and loc.get_attribute("readonly") is None and not loc.input_value().strip():
+        if loc.count()==1 and loc.is_visible() and loc.is_enabled() and loc.get_attribute("readonly") is None:
             if loc.get_attribute("type") in ("hidden","checkbox","radio","file","password","submit","button"): continue
+            present=loc.input_value().strip()
+            # A bare dialing prefix is not a populated phone number.
+            if key=="phone" and present in ("+91","+91-","+91 (") and re.fullmatch(r"\+91[6-9]\d{9}",str(data.get("phone") or "")):
+                value=str(data["phone"])
+            elif present: continue
             loc.fill(str(value));filled+=1
     return filled
 

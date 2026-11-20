@@ -143,12 +143,24 @@ class BrowserEngineTests(unittest.TestCase):
     def test_resume_wrapper_and_visible_phone(self):
         with sync_playwright() as p:
             browser=p.chromium.launch(); page=browser.new_page()
-            page.set_content('<div aria-required="true" aria-label="Phone"><input type="tel" id="mobile"></div><input type="hidden" name="phone"><div aria-required="true" aria-label="Resume/CV*"><input type="file" id="resume" style="display:none"></div><div aria-required="true" aria-label="Unanswered"><input id="other"></div>')
+            page.set_content('<div aria-required="true" aria-label="Phone"><input type="tel" id="mobile"></div><input type="hidden" name="phone"><div aria-required="true" aria-label="Resume/CV*"><button type="button">Attach resume</button><input type="file" id="resume" style="display:none"></div><div aria-required="true" aria-label="Unanswered"><input id="other"></div>')
             self.assertEqual(fill_contact_fields(page,{"phone":"+919876543210"}),1)
             self.assertEqual(page.locator("#mobile").input_value(),"+919876543210")
             self.assertCountEqual(unanswered_required(page),["Resume/CV*","Unanswered"])
             page.locator("#resume").set_input_files({"name":"Fixture.pdf","mimeType":"application/pdf","buffer":b"%PDF-1.4 fixture"})
             self.assertEqual(unanswered_required(page),["Unanswered"])
+            browser.close()
+
+
+    def test_salary_answers_and_dialing_prefix(self):
+        with sync_playwright() as p:
+            browser=p.chromium.launch(); page=browser.new_page()
+            page.set_content('<div aria-required="true" aria-label="Phone"><input role="combobox" aria-label="Country"><input type="tel" id="phone" value="+91"></div><label for="q1">Current Salary ?</label><input id="q1" required><label for="q2">Expected Salary ?</label><input id="q2" required>')
+            data={"phone":"+919876543210","screening_answers":{"Current Salary ?":"INR 500000 annual CTC","Expected Salary ?":"INR 1200000 annual CTC"}}
+            self.assertEqual(fill_contact_fields(page,data),1)
+            self.assertEqual(fill_screening(page,data,verification_required),2)
+            self.assertEqual(page.locator("#phone").input_value(),"+919876543210")
+            self.assertEqual(unanswered_required(page),[])
             browser.close()
 
 if __name__ == "__main__":
