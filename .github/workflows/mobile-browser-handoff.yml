@@ -1,0 +1,32 @@
+name: Mobile browser handoff prototype
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'auto_apply/cloud_handoff.py'
+      - 'auto_apply/test_cloud_handoff.py'
+      - '.github/workflows/mobile-browser-handoff.yml'
+  workflow_dispatch:
+    inputs:
+      live_smoke:
+        description: 'Use provider credits for a synthetic 2-minute browser test'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests pypdf playwright==1.51.0
+      - run: python -m unittest discover -s auto_apply -p test_cloud_handoff.py -v
+      - name: Optional live synthetic provider smoke
+        if: github.event_name == 'workflow_dispatch' && inputs.live_smoke
+        env:
+          STEEL_API_KEY: ${{ secrets.STEEL_API_KEY }}
+        run: python auto_apply/cloud_handoff.py
