@@ -351,7 +351,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 return "portal_review_server_validation"
             if invalid.count():
                 return "portal_review_validation_failed"
-            if u.hostname=="jobs.ashbyhq.com" and not final_submit_responses:
+            if u.hostname=="jobs.ashbyhq.com" and not submit_responses():
                 return "portal_review_no_submit_operation"
             if any(x==409 for x in codes):
                 return "portal_review_duplicate_possible"
