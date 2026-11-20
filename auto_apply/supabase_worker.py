@@ -622,7 +622,12 @@ def main() -> None:
 
     ensure_resume_bucket()
     retry_answered_attempts()
-    queue_new_matches()
+    try:
+        queue_new_matches()
+    except Exception as exc:
+        # A feed outage must not prevent processing already-valid queued work.
+        # Re-check feed on the next scheduled invocation.
+        print("Job queue refresh unavailable:",type(exc).__name__)
 
     queued = rest_get(
         "application_attempts",

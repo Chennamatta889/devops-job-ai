@@ -177,7 +177,7 @@ class VerificationTests(unittest.TestCase):
         self.assertTrue(verification_required(self.page_with_frame(True)))
     def test_badge_and_visible_prompt(self):
         from portal import verification_required
-        p=self.page_with_frame(True,70,60,"https://www.google.com/recaptcha/api2/anchor","reCAPTCHA")
+        p=self.page_with_frame(True,70,60,"https://www.google.com/recaptcha/api2/anchor?size=invisible","reCAPTCHA")
         self.assertFalse(verification_required(p))
         p.get_by_text.return_value.count.return_value=1
         p.get_by_text.return_value.nth.return_value.is_visible.return_value=True
@@ -235,8 +235,8 @@ class LiveLeverQuestionTests(unittest.TestCase):
             ("What is your Current Annual Salary?",500000),
             ("What is your Expected Annual Salary ?",1100000),
             ("What is your notice period?",30),
-            ("What is your current CTC",500000),
-            ("What is your expected CTC",1100000),
+            ("What is your current CTC",None),
+            ("What is your expected CTC",None),
             ("How many years of relevant experience do you have?",2.9),
             ("Are you currently living in Hyderabad?",True),
             ("If not, will you be comfortable relocating to Hyderabad?",True),

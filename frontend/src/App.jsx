@@ -326,6 +326,14 @@ function App() {
     return ()=>{active=false;window.clearInterval(timer)}
   },[authUser?.id])
 
+  useEffect(() => {
+    if (!supabaseClient || !authUser?.id) return
+    const refresh=()=>{if(document.visibilityState==='visible')loadApplicationAttempts()}
+    const timer=window.setInterval(refresh,15000)
+    document.addEventListener('visibilitychange',refresh)
+    return ()=>{window.clearInterval(timer);document.removeEventListener('visibilitychange',refresh)}
+  },[authUser?.id])
+
   const missingScreeningQuestions = useMemo(() => [...new Set(applicationAttempts
     .filter(a => a.status === 'QUESTION_REQUIRED' && String(a.message || '').startsWith('Required information needed: '))
     .flatMap(a => a.message.slice('Required information needed: '.length).split('; ').map(q => q.trim()).filter(Boolean)))], [applicationAttempts])
@@ -772,11 +780,11 @@ function App() {
           .eq('user_id', userId)
         if (enableError) throw enableError
 
-        await loadApplicationAttempts()
         setAutoEnabled(true)
-        setTestMatchSummary(previewMatchSummary(autoProfile))
         const summary = previewMatchSummary(autoProfile)
-        setAutoMessage('Auto Apply enabled securely. ' + summary.autoEligible + ' eligible matches; the scheduled worker will queue new matches within your daily limit. ' + summary.verificationPending + ' strong supported matches await verification or require manual action.')
+        setTestMatchSummary(summary)
+        setAutoMessage('Saved successfully. Resume uploaded and Auto Apply enabled. ' + summary.autoEligible + ' potential eligible matches in the current feed; duplicate checks and actual submissions are performed by the scheduled worker. This save does not immediately submit an application.')
+        await loadApplicationAttempts()
         return
       }
 
@@ -1227,7 +1235,7 @@ function App() {
 
             <div className="upgrade-actions">
               <button className="primary-button" type="submit" disabled={autoBusy || resumeReading || (supabaseClient && !authUser)}>
-                {autoBusy ? 'Saving…' : ((supabaseClient || AUTO_APPLY_API_URL) ? 'Enable Auto Apply' : 'Save & Test Resume')}
+                {autoBusy ? 'Saving…' : ((supabaseClient || AUTO_APPLY_API_URL) ? 'Save & Enable Auto Apply' : 'Save & Test Resume')}
               </button>
               {!supabaseClient && !AUTO_APPLY_API_URL && (
                 <span className="upgrade-note">Test mode keeps the PDF only in this browser. It is not uploaded to GitHub or any server, and no applications are submitted.</span>
@@ -1235,6 +1243,9 @@ function App() {
               {supabaseClient && !authUser && (
                 <span className="upgrade-note">Sign in with your email before enabling Auto Apply.</span>
               )}
+            </div>
+            <div className="upgrade-message" role="status" aria-live="polite" style={{margin:'12px 0'}}>
+              {autoBusy ? 'Saving profile and resume…' : autoMessage || (autoEnabled ? 'Auto Apply is enabled. The worker processes eligible jobs on its schedule.' : 'Save your profile and resume to enable Auto Apply.')}
             </div>
             {testMatchSummary && (
               <div className="test-results">
@@ -1314,7 +1325,7 @@ function App() {
                 ))}
               </div>
             )}
-            {autoMessage && <div className="upgrade-message">{autoMessage}</div>}
+
           </form>
         </section>
 

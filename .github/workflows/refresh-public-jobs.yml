@@ -33,6 +33,10 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install test dependencies
+        run: |
+          pip install requests pypdf playwright==1.51.0
+          python -m playwright install chromium
       - name: Run public discovery tests
         run: python -m unittest discover -s auto_apply -p 'test_*.py'
 
