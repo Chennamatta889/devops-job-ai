@@ -1,7 +1,7 @@
 """Conservative applicant-side browser adapter; never bypass challenges."""
 import os, json, base64, re, io, imaplib, email, ssl
 from urllib.parse import urlparse, parse_qs
-from screening import fill_screening, unanswered_required, field_question
+from screening import fill_screening, unanswered_required, field_question, select_lever_location
 
 HOSTS={"job-boards.greenhouse.io","boards.greenhouse.io","jobs.lever.co","jobs.ashbyhq.com"}
 _PRIVATE_LINKEDIN_CACHE={}
@@ -218,6 +218,14 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 files=page.get_by_label(re.compile(r"resume|curriculum vitae",re.I)).and_(page.locator("input[type=file]"))
             if files.count()!=1: return "portal_review_resume_field"
             stage="screening"
+            if u.hostname == "jobs.lever.co":
+                location_result = select_lever_location(page, data, verification_required)
+                if location_result == "verification":
+                    return "portal_review_human_verification_v2"
+                if location_result == "unresolved":
+                    diagnostic["missing_fields"] = ["Current location (select an unambiguous autocomplete suggestion)"]
+                    return "portal_review_missing_screening_v3"
+            if verification_required(page): return "portal_review_human_verification_v2"
             print("Screening fields filled:",fill_screening(page,data))
             missing=unanswered_required(page)
             if missing:

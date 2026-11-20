@@ -120,6 +120,60 @@ def field_question(field):
         const prompt=lever?.querySelector("label:not([for]),.application-label,.application-question-label,.question-label,.application-question-title,legend,[role=heading]")?.innerText||"";
         return (el.getAttribute('aria-label')||aria.join(' ').trim()||labels.join(' ').trim()||legend||prompt||el.getAttribute('placeholder')||'').trim();
     }""")
+def select_lever_location(page, profile, verification_required):
+    """Use only visible employer autocomplete suggestions, never hidden fields."""
+    field = page.locator('input.location-input[name="location"]:visible')
+    if field.count() == 0:
+        return "not_present"
+    if field.count() != 1 or verification_required(page):
+        return "verification" if verification_required(page) else "unresolved"
+    value = answer_for("Current location", profile)
+    if not isinstance(value, str) or not value.strip():
+        return "unresolved"
+    if not field.is_enabled() or field.get_attribute("readonly") is not None:
+        return "unresolved"
+    city = normalize(value.split(",")[0])
+    if not city:
+        return "unresolved"
+    field.click()
+    if verification_required(page):
+        return "verification"
+    field.fill(value.strip())
+    for _ in range(24):
+        if verification_required(page):
+            return "verification"
+        dropdown = page.locator(".pac-container:visible")
+        if dropdown.count() == 1:
+            options = dropdown.locator(".pac-item:visible")
+            matches = []
+            for i in range(options.count()):
+                opt = options.nth(i)
+                primary = opt.locator(".pac-item-query")
+                if primary.count() != 1:
+                    continue
+                if normalize(primary.inner_text()) != city:
+                    continue
+                label = normalize(opt.inner_text())
+                context = [normalize(p) for p in value.split(",")[1:] if p.strip()]
+                if profile.get("country"):
+                    context.append(normalize(profile["country"]))
+                if all(x in label.split() or (" " + x + " ") in (" " + label + " ") for x in context):
+                    matches.append(opt)
+            if len(matches) == 1:
+                if verification_required(page):
+                    return "verification"
+                matches[0].click()
+                page.wait_for_timeout(350)
+                if verification_required(page):
+                    return "verification"
+                if field.input_value().strip() and dropdown.count() == 0:
+                    return "selected"
+                return "unresolved"
+            if len(matches) > 1:
+                return "unresolved"
+        page.wait_for_timeout(250)
+    return "verification" if verification_required(page) else "unresolved"
+
 def fill_screening(page,profile):
     fields=page.locator('input:visible:not([type=hidden]):not([type=submit]):not([type=button]):not([type=file]):not([type=checkbox]):not([type=radio]), textarea:visible, select:visible')
     filled=0
