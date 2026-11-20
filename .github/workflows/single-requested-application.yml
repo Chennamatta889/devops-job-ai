@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   apply:
-    if: contains(github.event.head_commit.message, '[verified-phone-submit-8]')
+    if: contains(github.event.head_commit.message, '[human-email-retry-8]')
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     env:
@@ -36,6 +36,11 @@ jobs:
               print("No unprocessed matching request; nothing submitted.")
               raise SystemExit(0)
           attempt=rows[0]
+          receipts=rest_get("application_email_confirmations",{"attempt_id":"eq.8","select":"attempt_id","limit":"1"})
+          if receipts:
+              print("A confirmation exists already. No duplicate submission.")
+              patch_attempt(attempt["id"],"MANUAL_REQUESTED",{"status":"SUBMITTED","message":"Employer email receipt present. No retry needed.","confirmation":"employer_email_receipt"})
+              raise SystemExit(0)
           profile=get_profile(attempt["user_id"])
           if not profile or not profile.get("auto_apply_enabled"):
               raise SystemExit("Consent unavailable")
