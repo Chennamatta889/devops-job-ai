@@ -457,13 +457,29 @@ def process_attempt(attempt: dict) -> None:
         portal_status = portal_apply(job, candidate, pdf, diagnostic)
         status = public_status(portal_status)
         confirmation = str(diagnostic.get("confirmation") or "")
+        message = portal_status
+        if status == "QUESTION_REQUIRED":
+            missing = [
+                str(item).strip()[:160]
+                for item in (diagnostic.get("missing_fields") or [])
+                if str(item).strip()
+            ]
+            message = "Required information needed"
+            if missing:
+                message += ": " + "; ".join(missing[:4])
+        elif status == "HUMAN_VERIFICATION_REQUIRED":
+            message = "Human verification is required on the employer application page."
+        elif status == "PROFILE_REQUIRED":
+            message = "Candidate profile needs additional required contact information."
+        elif status == "SUBMITTED":
+            message = "Application submission confirmed by the employer ATS."
 
         patch_attempt(
             attempt_id,
             "SUBMITTING",
             {
                 "status": status,
-                "message": portal_status[:500],
+                "message": message[:500],
                 "confirmation": confirmation[:200],
                 "updated_at": datetime.now(timezone.utc).isoformat(),
             },
