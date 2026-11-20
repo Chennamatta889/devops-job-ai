@@ -1,0 +1,26 @@
+name: Read-only ATS browser preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'auto_apply/public_location_preflight.py'
+      - '.github/workflows/ats-readonly-preflight.yml'
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      ALLOW_PRIVATE_MAIL_LOOKUP: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          pip install playwright==1.51.0
+          python -m playwright install chromium
+      - name: Inspect public location field without submitting
+        run: python auto_apply/public_location_preflight.py
