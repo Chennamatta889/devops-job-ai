@@ -91,6 +91,33 @@ def patch_attempt(attempt_id: int, expected_status: str | None, values: dict) ->
     return value if isinstance(value, list) else []
 
 
+def ensure_resume_bucket() -> None:
+    endpoint = f"{base_url()}/storage/v1/bucket/resumes"
+    response = requests.get(endpoint, headers=headers(), timeout=20)
+    if response.status_code == 200:
+        return
+    if response.status_code != 404:
+        response.raise_for_status()
+
+    created = requests.post(
+        f"{base_url()}/storage/v1/bucket",
+        headers=headers(),
+        data=json.dumps(
+            {
+                "id": "resumes",
+                "name": "resumes",
+                "public": False,
+                "file_size_limit": 6291456,
+                "allowed_mime_types": ["application/pdf"],
+            }
+        ),
+        timeout=20,
+    )
+    if created.status_code not in (200, 201):
+        created.raise_for_status()
+    print("Private resume bucket created.")
+
+
 def fetch_public_json(url: str) -> dict:
     response = requests.get(url, timeout=25, headers={"User-Agent": "DraftflowAI/1.0"})
     response.raise_for_status()
@@ -460,6 +487,7 @@ def main() -> None:
         print("Supabase worker not configured; skipping.")
         return
 
+    ensure_resume_bucket()
     queue_new_matches()
 
     queued = rest_get(
