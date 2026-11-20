@@ -20,6 +20,7 @@ with sync_playwright() as p:
     page.wait_for_timeout(500)
     state=greenhouse_phone_state(page,data)
     print("LIVE PHONE PREFLIGHT:",json.dumps(state))
+    print("PHONE WIDGET SELECTION:",json.dumps(page.locator(".iti button.iti__selected-country").evaluate_all("els=>els.map(b=>({title:b.getAttribute('title'),label:b.getAttribute('aria-label'),expanded:b.getAttribute('aria-expanded'),flags:Array.from(b.querySelectorAll('.iti__flag')).map(x=>x.className),visible:!!b.getClientRects().length}))")))
     if not state["verified"]:raise SystemExit("Live phone state not verified. No live application will run.")
     missing=required_after_resume(page,data,True)
     if any(re.fullmatch(r"(?:phone(?: number)?|country(?: code)?)(?:\s*\*)?",x.strip(),re.I) for x in missing):

@@ -230,6 +230,8 @@ class BrowserEngineTests(unittest.TestCase):
             data={"phone":"+919876543210"}
             self.assertTrue(greenhouse_phone_state(page,data)["verified"])
             self.assertEqual(required_after_resume(page,data,True),[])
+            page.locator("button.iti__selected-country").evaluate("el=>el.style.display='none'")
+            self.assertTrue(greenhouse_phone_state(page,data)["verified"])
             page.locator("button .iti__flag").evaluate("el=>el.className='iti__flag iti__us'")
             self.assertFalse(greenhouse_phone_state(page,data)["verified"])
             page.locator("button .iti__flag").evaluate("el=>el.className='iti__flag iti__in'")

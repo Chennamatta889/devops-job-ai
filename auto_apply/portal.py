@@ -281,7 +281,8 @@ def greenhouse_phone_state(page,data):
         const widgetExpected=!!widget||el.hasAttribute('data-intl-tel-input-id');
         let widgetSelectionVerified=!widgetExpected;
         if(widget){
-            const buttons=Array.from(widget.querySelectorAll('button.iti__selected-country')).filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden');
+            // Greenhouse supplies a separate visible country picker and hides this widget's redundant button; read only its scoped selected state.
+            const buttons=Array.from(widget.querySelectorAll('button.iti__selected-country'));
             if(buttons.length===1){
                 const b=buttons[0];
                 const flags=b.querySelectorAll('.iti__flag');
