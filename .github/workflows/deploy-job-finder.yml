@@ -6,6 +6,8 @@ on:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'data/jobs.json'
+      - 'data/verification-status.json'
       - '.github/workflows/deploy-job-finder.yml'
 
 permissions:
@@ -30,6 +32,16 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: frontend/package.json
+      - name: Bundle latest public feed
+        run: |
+          mkdir -p frontend/public/data
+          cp data/jobs.json frontend/public/data/jobs.json
+          if [ -f data/verification-status.json ]; then
+            cp data/verification-status.json frontend/public/data/verification-status.json
+          else
+            printf '{"generated_at_utc":null,"counts":{},"jobs":{}}\n' > frontend/public/data/verification-status.json
+          fi
+
       - name: Install dependencies
         working-directory: frontend
         run: npm install
