@@ -159,12 +159,8 @@ grant select, insert, update, delete on
 to authenticated;
 grant usage, select on all sequences in schema public to authenticated;
 
-insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('resumes', 'resumes', false, 6291456, array['application/pdf'])
-on conflict (id) do update
-set public = false,
-    file_size_limit = excluded.file_size_limit,
-    allowed_mime_types = excluded.allowed_mime_types;
+-- The private "resumes" bucket is created through the Storage API by
+-- auto_apply/supabase_worker.py. Do not write bucket/object metadata directly.
 
 drop policy if exists "resume_objects_select_own" on storage.objects;
 create policy "resume_objects_select_own" on storage.objects
