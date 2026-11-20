@@ -277,6 +277,42 @@ def ashby_submit_signal(payload):
         return "validation"
     return ""
 
+def resume_attachment_state(page, files, filename):
+    """Snapshot without waiting for an input that the application may remove."""
+    native=files.evaluate_all("(els)=>({input_count:els.length, matching_file_count:els.reduce((n,e)=>n+Array.from(e.files||[]).filter(f=>f.name=== "+json.dumps(filename)+").length,0)})")
+    previews=page.get_by_text(filename,exact=True).evaluate_all(r"""els=>els.map(el=>{
+        const visible=e=>!!(e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'&&getComputedStyle(e).display!=='none');
+        if(!visible(el))return false;
+        let parent=el;
+        for(let i=0;i<4&&parent;i++,parent=parent.parentElement){
+            if(parent.matches('form,body,main'))break;
+            for(const b of parent.querySelectorAll('button,[role=button],a')){
+                if(!visible(b))continue;
+                const text=[b.innerText,b.getAttribute('aria-label'),b.getAttribute('title')].filter(Boolean).join(' ');
+                if(/\b(remove|delete|clear|replace)\b/i.test(text))return true;
+            }
+        }
+        return false;
+    })""")
+    native["preview_with_remove"]=sum(bool(x) for x in previews)
+    native["attached"]=(native["input_count"]==1 and native["matching_file_count"]==1) or native["preview_with_remove"]==1
+    return native
+
+def verify_resume_attachment(page,files,filename,diagnostic):
+    for _ in range(12):
+        diagnostic["validation_step"]="resume_attachment_snapshot"
+        if verification_required(page): return "verification"
+        snapshot=resume_attachment_state(page,files,filename)
+        diagnostic["resume_attachment"]=snapshot
+        if snapshot["attached"]: return "attached"
+        page.wait_for_timeout(250)
+    return "unverified"
+
+def required_after_resume(page):
+    # Only called after the exact filename and a native file or removable preview are verified.
+    return [label for label in unanswered_required(page)
+            if not re.fullmatch(r"(?:resume(?:\s*/\s*cv)?|curriculum vitae)(?:\s*\*)?",label.strip(),re.I)]
+
 def portal_apply(job, profile, pdf, diagnostic=None):
     diagnostic=diagnostic if diagnostic is not None else {}
     stage="candidate"
@@ -386,12 +422,15 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if verification_required(page): return "portal_review_human_verification_v2"
             stage="final_validation"
             if verification_required(page): return "portal_review_human_verification_v2"
-            if not files.evaluate("el=>el.files && el.files.length>0"):
-                return "portal_review_resume_sync"
-            missing=unanswered_required(page)
+            attachment_result=verify_resume_attachment(page,files,"Resume.pdf",diagnostic)
+            if attachment_result=="verification": return "portal_review_human_verification_v2"
+            if attachment_result!="attached": return "portal_review_resume_sync"
+            diagnostic["validation_step"]="required_controls"
+            missing=required_after_resume(page)
             if missing:
                 diagnostic["missing_fields"]=missing
                 return "portal_review_missing_screening_v3"
+            diagnostic["validation_step"]="invalid_controls"
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             if invalid.count():
                 diagnostic["invalid_field_count"]=invalid.count()
@@ -406,12 +445,15 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 return "portal_review_form_sync_busy"
             stage="final_validation"
             if verification_required(page): return "portal_review_human_verification_v2"
-            if not files.evaluate("el=>el.files && el.files.length>0"):
-                return "portal_review_resume_sync"
-            missing=unanswered_required(page)
+            attachment_result=verify_resume_attachment(page,files,"Resume.pdf",diagnostic)
+            if attachment_result=="verification": return "portal_review_human_verification_v2"
+            if attachment_result!="attached": return "portal_review_resume_sync"
+            diagnostic["validation_step"]="required_controls"
+            missing=required_after_resume(page)
             if missing:
                 diagnostic["missing_fields"]=missing
                 return "portal_review_missing_screening_v3"
+            diagnostic["validation_step"]="invalid_controls"
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             if invalid.count():
                 diagnostic["invalid_field_count"]=invalid.count()
@@ -445,6 +487,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 if verification_required(page):
                     return "portal_uncertain_human_verification_after_submit"
                 page.wait_for_timeout(1000)
+            diagnostic["validation_step"]="invalid_controls"
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             diagnostic["invalid_field_count"]=invalid.count()
             diagnostic["validation_details"]=validation_details(page)
@@ -489,7 +532,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 return "portal_uncertain_submit_response"
             return "portal_uncertain_no_submission_response"
     except Exception as exc:
-        print("Portal diagnostic:",stage,type(exc).__name__)
+        diagnostic["exception_type"]=type(exc).__name__
+        print("Portal diagnostic:",stage,diagnostic.get("validation_step",""),type(exc).__name__)
         return "portal_uncertain_"+stage if submitted else "portal_review_"+stage+"_error"
     finally:
         diagnostic["stage"]=stage

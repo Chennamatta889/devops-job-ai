@@ -2,7 +2,7 @@
 import unittest
 from playwright.sync_api import sync_playwright
 from screening import location_suggestion_matches, select_lever_location, answer_for, fill_screening, unanswered_required
-from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields, validation_details, fill_greenhouse_country
+from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields, validation_details, fill_greenhouse_country, resume_attachment_state, verify_resume_attachment, required_after_resume
 from supabase_worker import public_status
 
 class BrowserEngineTests(unittest.TestCase):
@@ -162,6 +162,31 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertEqual(page.locator("#phone").input_value(),"+919876543210")
             self.assertEqual(unanswered_required(page),[])
             browser.close()
+
+
+    def test_resume_input_removed_after_upload(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch(); page=b.new_page()
+            page.set_content('<div aria-required="true" aria-label="Resume/CV*"><input type="file" id="resume"><script>document.getElementById("resume").onchange=e=>{const parent=e.target.parentElement;const name=e.target.files[0].name;e.target.remove();const span=document.createElement("span");span.textContent=name;parent.append(span);const button=document.createElement("button");button.textContent="Remove file";parent.append(button)}</script></div>')
+            files=page.locator("#resume")
+            files.set_input_files({"name":"Resume.pdf","mimeType":"application/pdf","buffer":b"%PDF-1.4 fixture"})
+            self.assertEqual(files.count(),0)
+            from playwright.sync_api import TimeoutError
+            with self.assertRaises(TimeoutError):
+                files.evaluate("el=>el.files.length",timeout=100)
+            diag={}
+            self.assertEqual(verify_resume_attachment(page,files,"Resume.pdf",diag),"attached")
+            self.assertEqual(diag["resume_attachment"]["preview_with_remove"],1)
+            self.assertEqual(required_after_resume(page),[])
+            b.close()
+    def test_attachment_not_assumed_when_input_disappears(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch(); page=b.new_page()
+            page.set_content('<div>Resume.pdf</div><button>Submit application</button>')
+            self.assertFalse(resume_attachment_state(page,page.locator("#resume"),"Resume.pdf")["attached"])
+            page.set_content('<input type="file" id="resume">')
+            self.assertFalse(resume_attachment_state(page,page.locator("#resume"),"Resume.pdf")["attached"])
+            b.close()
 
 if __name__ == "__main__":
     unittest.main()
