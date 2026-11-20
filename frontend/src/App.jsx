@@ -9,8 +9,13 @@ const VERIFICATION_STATUS_URL =
   import.meta.env.VITE_VERIFICATION_STATUS_URL ||
   (import.meta.env.BASE_URL + 'data/verification-status.json')
 
-const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/$/, '')
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || ''
+const SUPABASE_URL = (
+  import.meta.env.VITE_SUPABASE_URL ||
+  'https://badjbyxuvrasdwjgkzkl.supabase.co'
+).replace(/\/$/, '')
+const SUPABASE_PUBLISHABLE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  'sb_publishable_2hZDKpj2Y0CoNnzMoMtSwQ_PZ0wlWUP'
 const SUPABASE_READY = Boolean(
   SUPABASE_URL &&
   SUPABASE_PUBLISHABLE_KEY &&
