@@ -16,6 +16,17 @@ def snapshot(page):
     }).slice(0,20)""")
 def phone_missing(page):
     return any(re.search(r'\bphone\b|\bmobile\b',x,re.I) for x in unanswered_required(page))
+
+def trace(page, label):
+    details=page.locator('[aria-required=true]:visible,input:visible[required],textarea:visible[required],select:visible[required]').evaluate_all(r"""els=>els.map(el=>{
+        const linked=el.tagName==='LABEL'?el.control:null;
+        const controls=Array.from(new Set([...(linked?[linked]:[]),...el.querySelectorAll('input:not([type=hidden]),textarea,select')])).filter(c=>!c.disabled&&!c.readOnly);
+        const text=[el.getAttribute('aria-label'),el.id,el.name,...Array.from(el.labels||[]).map(l=>l.innerText)].filter(Boolean).join(' ');
+        return {tag:el.tagName,id:el.id,role:el.getAttribute('role'),type:el.type||null,label:text,required:el.required||false,ariaRequired:el.getAttribute('aria-required'),valueLength:typeof el.value==='string'?el.value.length:null,digitCount:typeof el.value==='string'?el.value.replace(/\D/g,'').length:null,attributeLength:el.getAttribute('value')?.length??null,valid:el.validity?.valid??null,ariaInvalid:el.getAttribute('aria-invalid'),controls:controls.map(c=>({type:c.type,role:c.getAttribute('role'),length:c.value?.length??null})),visible:!!el.getClientRects().length};
+    }).filter(e=>/phone|country|mobile/i.test(e.label))""")
+    missing=unanswered_required(page)
+    print("PHONE TRACE",label,json.dumps({"required_controls":details,"phone_missing_labels":[x for x in missing if re.search(r'phone|mobile|country',x,re.I)],"invalid":validation_details(page)}))
+    print("PHONE WIDGET",label,json.dumps(page.locator(".iti__selected-country,.iti__selected-dial-code,.iti__selected-flag").evaluate_all(r"""els=>els.filter(e=>e.getClientRects().length).map(e=>({label:e.getAttribute('aria-label'),title:e.getAttribute('title'),text:e.innerText}))""")))
 with sync_playwright() as p:
     browser=p.chromium.launch()
     context=browser.new_context(service_workers="block")
@@ -26,14 +37,26 @@ with sync_playwright() as p:
     link=page.get_by_role("link",name=re.compile(r"^apply(?: now| for this job)?$",re.I))
     if link.count()==1 and link.is_visible(): link.click(timeout=5000)
     if verification_required(page):
-        print("PHONE PROBE: human verification; stopped.")
+        print("PHONE TRACE verification; stopped")
     else:
-        print("PHONE PROBE before:",json.dumps(snapshot(page)))
-        print("PHONE PROBE missing before:",phone_missing(page))
-        print("PHONE PROBE fill count:",fill_contact_fields(page,{"phone":FIXTURE},greenhouse=True))
-        page.wait_for_timeout(300)
-        print("PHONE PROBE after:",json.dumps(snapshot(page)))
-        print("PHONE PROBE missing after:",phone_missing(page))
-        print("PHONE PROBE invalid categories:",json.dumps(validation_details(page)))
-        print("PHONE PROBE required markers:",json.dumps(page.locator('[aria-required=true]:visible').evaluate_all(r"""els=>els.filter(el=>/phone|mobile/i.test([el.getAttribute('aria-label'),el.id,el.innerText].filter(Boolean).join(' '))&&el.innerText.length<200).map(el=>({tag:el.tagName,role:el.getAttribute('role'),label:el.getAttribute('aria-label'),text:el.innerText.slice(0,100),html:el.outerHTML.slice(0,1200)})).slice(0,5)""")))
+        trace(page,"before")
+        fill_contact_fields(page,{"phone":FIXTURE},greenhouse=True)
+        page.wait_for_timeout(250)
+        trace(page,"production_fill")
+        phone=page.locator('input[type=tel]#phone:visible')
+        if phone.count()==1 and not verification_required(page):
+            phone.fill("")
+            phone.press_sequentially(FIXTURE,delay=25)
+            phone.press("Tab")
+            page.wait_for_timeout(450)
+            trace(page,"typed_and_blurred")
+        if not verification_required(page):
+            country=page.locator('input#country[role=combobox]:visible')
+            if country.count()==1:
+                country.click()
+                country.fill("India")
+                page.wait_for_timeout(300)
+                if not verification_required(page):
+                    print("COUNTRY OPTIONS",json.dumps(page.get_by_role("option").evaluate_all("els=>els.filter(x=>x.getClientRects().length).map(x=>x.innerText).slice(0,10)")))
+                    country.press("Escape")
     browser.close()
