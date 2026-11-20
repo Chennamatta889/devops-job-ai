@@ -1,0 +1,50 @@
+name: Single requested live application
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/single-requested-application.yml']
+permissions:
+  contents: read
+concurrency:
+  group: production-auto-apply-worker
+  cancel-in-progress: false
+jobs:
+  apply:
+    if: contains(github.event.head_commit.message, '[single-request-7]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      ALLOW_PRIVATE_MAIL_LOOKUP: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests pypdf playwright==1.51.0
+      - run: python -m playwright install chromium
+      - run: python -m unittest discover -s auto_apply -p 'test_browser_engine.py'
+      - name: Process exactly one separately requested application
+        run: |
+          PYTHONPATH=auto_apply python - <<'PY'
+          from supabase_worker import rest_get, patch_attempt, process_attempt, get_profile, enrich_matching_profile, match_score, fetch_public_json, PUBLIC_JOB_FEED_URL
+          rows = rest_get("application_attempts", {"id":"eq.7","external_job_id":"eq.525a243282517276","status":"eq.MANUAL_REQUESTED","select":"*"})
+          if len(rows)!=1:
+              print("No unprocessed matching request; nothing submitted.")
+              raise SystemExit(0)
+          attempt=rows[0]
+          profile=get_profile(attempt["user_id"])
+          if not profile or not profile.get("auto_apply_enabled"):
+              raise SystemExit("Consent unavailable")
+          job=next((j for j in fetch_public_json(PUBLIC_JOB_FEED_URL).get("jobs",[]) if j.get("id")==attempt["external_job_id"] and j.get("url")==attempt["apply_url"]),None)
+          if not job:
+              raise SystemExit("Job unavailable")
+          score=match_score(job,enrich_matching_profile(profile))
+          if score < int(profile.get("minimum_match_score") or 70):
+              patch_attempt(attempt["id"],"MANUAL_REQUESTED",{"status":"REVIEW_REQUIRED","match_score":score,"message":"Match below configured threshold; no submission."})
+              raise SystemExit(0)
+          claimed=patch_attempt(attempt["id"],"MANUAL_REQUESTED",{"status":"QUEUED","match_score":score,"message":"One explicitly requested application using updated worker."})
+          if claimed:
+              process_attempt(claimed[0])
+          PY
