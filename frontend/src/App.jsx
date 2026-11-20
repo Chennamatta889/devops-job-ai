@@ -255,7 +255,20 @@ function App() {
       .select('id,title,company,apply_url,match_score,status,message,created_at,updated_at')
       .order('created_at', { ascending: false })
       .limit(10)
-    if (!attemptError) setApplicationAttempts(Array.isArray(data) ? data : [])
+    if (attemptError) return
+    const attempts = Array.isArray(data) ? data : []
+    const ids = attempts.filter(a => a.status === 'SUBMITTED').map(a => a.id)
+    if (!ids.length) { setApplicationAttempts(attempts); return }
+    const { data: evidence, error: evidenceError } = await supabaseClient
+      .from('application_email_confirmations')
+      .select('attempt_id,received_at')
+      .in('attempt_id',ids)
+    const byAttempt = new Map((evidence || []).map(row => [String(row.attempt_id), row.received_at]))
+    setApplicationAttempts(attempts.map(a => ({
+      ...a,
+      email_confirmation: a.status !== 'SUBMITTED' ? null : evidenceError ? 'unavailable' : byAttempt.has(String(a.id)) ? 'confirmed' : 'pending',
+      email_received_at: byAttempt.get(String(a.id)) || null
+    })))
   }
 
   const missingScreeningQuestions = useMemo(() => [...new Set(applicationAttempts
@@ -1205,6 +1218,13 @@ function App() {
                       <strong>{attempt.title}</strong>
                       <span>{prettyCompany(attempt.company)}</span>
                       {attempt.message && <span className="history-message">{attempt.message}</span>}
+                      {attempt.status === 'SUBMITTED' && (
+                        <span className="history-message">
+                          {attempt.email_confirmation === 'confirmed' ? 'Email confirmed · ' + formatDate(attempt.email_received_at) :
+                            attempt.email_confirmation === 'pending' ? 'Pending email confirmation · portal submission recorded' :
+                            'Email confirmation status unavailable'}
+                        </span>
+                      )}
                     </div>
                     <span>{Math.round(Number(attempt.match_score || 0))}%</span>
                     <div className="history-status-wrap">
