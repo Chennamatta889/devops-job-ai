@@ -26,7 +26,7 @@ jobs:
       - run: pip install requests pypdf playwright==1.51.0
       - run: python -m unittest discover -s auto_apply -p test_cloud_handoff.py -v
       - name: Optional live synthetic provider smoke
-        if: github.event_name == 'workflow_dispatch' && inputs.live_smoke
+        if: (github.event_name == 'workflow_dispatch' && inputs.live_smoke) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[steel-smoke]'))
         env:
           STEEL_API_KEY: ${{ secrets.STEEL_API_KEY }}
         run: python auto_apply/cloud_handoff.py
