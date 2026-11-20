@@ -574,3 +574,143 @@ footer strong { color: #344054; }
   footer { display: block; text-align: center; }
   footer span { display: block; margin-top: 5px; }
 }
+
+
+.auth-panel {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+  padding: 16px;
+  border: 1px solid #d0d5dd;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.auth-panel > div:first-child:not(.field) {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-right: auto;
+}
+
+.auth-panel strong {
+  color: #101828;
+  font-size: 13px;
+}
+
+.auth-panel span {
+  color: #667085;
+  font-size: 12px;
+}
+
+.auth-email-field {
+  min-width: min(340px, 100%);
+  flex: 1;
+}
+
+.auth-message {
+  flex-basis: 100%;
+}
+
+.application-history {
+  grid-column: 1 / -1;
+  border: 1px solid #e4e7ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.history-heading,
+.history-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 70px 190px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+}
+
+.history-heading {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e4e7ec;
+  background: #f9fafb;
+}
+
+.history-row + .history-row {
+  border-top: 1px solid #f2f4f7;
+}
+
+.history-row > div {
+  min-width: 0;
+}
+
+.history-row strong,
+.history-row span {
+  display: block;
+}
+
+.history-row strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #182230;
+  font-size: 13px;
+}
+
+.history-row > div span {
+  margin-top: 3px;
+  color: #667085;
+  font-size: 11px;
+}
+
+.history-status {
+  justify-self: end;
+  border-radius: 999px;
+  padding: 6px 9px;
+  background: #f2f4f7;
+  color: #475467;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.status-submitted {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.status-human-verification-required,
+.status-question-required,
+.status-profile-required,
+.status-review-required,
+.status-uncertain {
+  background: #fff4ed;
+  color: #b93815;
+}
+
+.status-submitting,
+.status-queued {
+  background: #eff8ff;
+  color: #175cd3;
+}
+
+@media (max-width: 620px) {
+  .auth-panel {
+    align-items: stretch;
+  }
+
+  .auth-panel .secondary-button {
+    width: 100%;
+  }
+
+  .history-row {
+    grid-template-columns: minmax(0, 1fr) 52px;
+  }
+
+  .history-status {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
