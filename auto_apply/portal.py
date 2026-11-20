@@ -183,6 +183,29 @@ def validation_details(page):
         return {category,flags};
     })""")
 
+def greenhouse_india_selected(field):
+    """Verify a rendered selection, never the transient search text.
+
+    Greenhouse's dialing-code picker renders a flag and +91, not "India".
+    A scoped selected-value element with India's flag and exactly +91 is proof.
+    """
+    return field.evaluate(r"""el=>{
+        if(el.getAttribute('aria-expanded')==='true'||el.getAttribute('aria-invalid')==='true')return false;
+        let parent=el.parentElement;
+        for(let i=0;i<5&&parent;i++,parent=parent.parentElement){
+            if(parent.matches('form,body,main')||parent.querySelectorAll('[role=combobox]').length>1)break;
+            const nodes=Array.from(parent.querySelectorAll('[class*="singleValue"],[class*="single-value"],[aria-selected=true]')).filter(x=>x.getClientRects().length&&!x.closest('[role=listbox]')&&getComputedStyle(x).visibility!=='hidden');
+            if(!nodes.length)continue;
+            if(nodes.length!==1)return false;
+            const node=nodes[0];
+            const text=node.innerText.trim();
+            const flags=node.querySelectorAll('.iti__flag');
+            if(flags.length)return flags.length===1&&flags[0].classList.contains('iti__in')&&/^\+91$|^India\s*(?:\(\+91\)|\+91)?$/i.test(text);
+            return /^India\s*(?:\(\+91\)|\+91)?$/i.test(text);
+        }
+        return false;
+    }""")
+
 def fill_greenhouse_country(page,data):
     """Select India only from an unambiguous visible option and confirmed facts."""
     facts=data.get("screening_answers") or {}
@@ -227,18 +250,8 @@ def fill_greenhouse_country(page,data):
         return None
     visible[0].click()
     if verification_required(page): return None
-    rendered=field.evaluate(r"""el=>{
-        let text=[el.value,el.innerText,el.getAttribute('aria-valuetext')].filter(Boolean);
-        let parent=el.parentElement;
-        for(let i=0;i<4&&parent;i++,parent=parent.parentElement){
-            if(parent.matches('form,body,main')||parent.querySelectorAll('[role=combobox]').length>1)break;
-            const shown=Array.from(parent.querySelectorAll('[class*="singleValue"],[class*="single-value"],[aria-selected=true]')).filter(x=>x.getClientRects().length);
-            text.push(...shown.map(x=>x.innerText));
-            if(shown.length)break;
-        }
-        return text.join(' ');
-    }""")
-    return national if re.search(r"\bIndia\b|\+91",rendered,re.I) else None
+    return national if greenhouse_india_selected(field) else None
+
 
 def greenhouse_phone_state(page,data):
     """Read only the displayed country selection and actual phone value.
@@ -253,17 +266,7 @@ def greenhouse_phone_state(page,data):
     country=page.locator('input#country[role=combobox]:visible')
     if loc.count()!=1 or country.count()!=1:
         return {"verified":False,"reason":"phone_widget_unresolved"}
-    c=country.evaluate(r"""el=>{
-        let parent=el.parentElement;
-        for(let i=0;i<5&&parent;i++,parent=parent.parentElement){
-            if(parent.matches('form,body,main')||parent.querySelectorAll('[role=combobox]').length>1)break;
-            const nodes=Array.from(parent.querySelectorAll('[class*="singleValue"],[class*="single-value"],[aria-selected=true]')).filter(x=>x.getClientRects().length&&!x.closest('[role=listbox]'));
-            const confirmed=nodes.some(x=>/^\s*India\s*(?:\(\+91\)|\+91)?\s*$/i.test(x.innerText));
-            if(confirmed)return true;
-            if(nodes.length)return false;
-        }
-        return false;
-    }""")
+    c=greenhouse_india_selected(country)
     observed=loc.evaluate(r"""el=>{
         let api=null;
         try {
@@ -274,14 +277,26 @@ def greenhouse_phone_state(page,data):
             try {selected=String(api.getSelectedCountryData?.()?.iso2||'');number=String(api.getNumber?.()||'');}catch(e){}
             try {const v=api.isValidNumber?.();if(typeof v==='boolean')widgetValid=v;}catch(e){}
         }
-        return {digits:String(el.value||'').replace(/\D/g,''),number:number.replace(/\D/g,''),selected,widgetValid,valid:el.validity?.valid===true,ariaInvalid:el.getAttribute('aria-invalid')==='true'};
+        const widget=el.closest('.iti');
+        const widgetExpected=!!widget||el.hasAttribute('data-intl-tel-input-id');
+        let widgetSelectionVerified=!widgetExpected;
+        if(widget){
+            const buttons=Array.from(widget.querySelectorAll('button.iti__selected-country')).filter(b=>b.getClientRects().length&&getComputedStyle(b).visibility!=='hidden');
+            if(buttons.length===1){
+                const b=buttons[0];
+                const flags=b.querySelectorAll('.iti__flag');
+                const label=b.getAttribute('aria-label')||'';
+                widgetSelectionVerified=b.getAttribute('aria-expanded')!=='true'&&/^India$/i.test(b.getAttribute('title')||'')&&/\bselected India\s*\(\+91\)/i.test(label)&&flags.length===1&&flags[0].classList.contains('iti__in');
+            }
+        }
+        return {digits:String(el.value||'').replace(/\D/g,''),number:number.replace(/\D/g,''),selected,widgetValid,widgetExpected,widgetSelectionVerified,valid:el.validity?.valid===true,ariaInvalid:el.getAttribute('aria-invalid')==='true'};
     }""")
     national=expected[2:]
     matches=observed["digits"] in {expected,national,"0"+national}
     widget_matches=not observed["number"] or observed["number"]==expected
-    widget_country=not observed["selected"] or observed["selected"].lower()=="in"
+    widget_country=(not observed["selected"] or observed["selected"].lower()=="in") and observed["widgetSelectionVerified"]
     verified=bool(c and matches and widget_matches and widget_country and observed["widgetValid"] is not False and observed["valid"] and not observed["ariaInvalid"])
-    return {"verified":verified,"country_selected":bool(c),"digits_match":matches,"widget_number_match":widget_matches,"widget_country_match":widget_country,"widget_valid":observed["widgetValid"],"native_valid":observed["valid"],"aria_invalid":observed["ariaInvalid"]}
+    return {"verified":verified,"country_selected":bool(c),"digits_match":matches,"widget_number_match":widget_matches,"widget_country_match":widget_country,"widget_selection_verified":observed["widgetSelectionVerified"],"widget_valid":observed["widgetValid"],"native_valid":observed["valid"],"aria_invalid":observed["ariaInvalid"]}
 
 def fill_contact_fields(page,data,greenhouse=False):
     """Only fill ordinary empty candidate inputs, stopping on active verification."""

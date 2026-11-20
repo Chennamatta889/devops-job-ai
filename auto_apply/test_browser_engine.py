@@ -219,5 +219,29 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertIn("Phone",required_after_resume(page,data,True))
             b.close()
 
+
+    def test_greenhouse_flag_dial_code_and_independent_phone_widget(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch();page=b.new_page()
+            page.set_content('''<div class="select__value-container select__value-container--has-value">
+                <div class="select__single-value"><div class="iti__flag iti__in"></div><span>+91</span></div>
+                <div class="select__input-container"><input id="country" role="combobox" aria-expanded="false" aria-invalid="false" aria-required="true" aria-label="Country"></div>
+                </div><div class="iti"><button class="iti__selected-country" aria-expanded="false" title="India" aria-label="Change country, selected India (+91)"><div class="iti__flag iti__in"></div></button><input id="phone" type="tel" data-intl-tel-input-id="0" aria-required="true" aria-label="Phone" value="09876543210"></div>''')
+            data={"phone":"+919876543210"}
+            self.assertTrue(greenhouse_phone_state(page,data)["verified"])
+            self.assertEqual(required_after_resume(page,data,True),[])
+            page.locator("button .iti__flag").evaluate("el=>el.className='iti__flag iti__us'")
+            self.assertFalse(greenhouse_phone_state(page,data)["verified"])
+            page.locator("button .iti__flag").evaluate("el=>el.className='iti__flag iti__in'")
+            page.locator(".select__single-value .iti__flag").evaluate("el=>el.className='iti__flag iti__us'")
+            self.assertFalse(greenhouse_phone_state(page,data)["verified"])
+            page.locator(".select__single-value .iti__flag").evaluate("el=>el.className='iti__flag iti__in'")
+            page.locator("#country").evaluate("el=>el.setAttribute('aria-expanded','true')")
+            self.assertFalse(greenhouse_phone_state(page,data)["verified"])
+            page.locator("#country").evaluate("el=>el.setAttribute('aria-expanded','false')")
+            page.locator("#phone").fill("")
+            self.assertFalse(greenhouse_phone_state(page,data)["verified"])
+            b.close()
+
 if __name__ == "__main__":
     unittest.main()

@@ -16,6 +16,7 @@ with sync_playwright() as p:
     if verification_required(page):raise SystemExit("Live preflight stopped for human verification")
     data={"phone":"+919876543210"}
     fill_contact_fields(page,data,greenhouse=True)
+    # The real country picker and the phone widget must both report India.
     page.wait_for_timeout(500)
     state=greenhouse_phone_state(page,data)
     print("LIVE PHONE PREFLIGHT:",json.dumps(state))
@@ -23,5 +24,5 @@ with sync_playwright() as p:
     missing=required_after_resume(page,data,True)
     if any(re.fullmatch(r"(?:phone(?: number)?|country(?: code)?)(?:\s*\*)?",x.strip(),re.I) for x in missing):
         raise SystemExit("Phone still flagged as incomplete. No live application will run.")
-    print("LIVE PHONE PREFLIGHT PASSED")
+    print("LIVE PHONE PREFLIGHT PASSED: country flag +91, matching number, and widget state verified; no application submitted.")
     browser.close()
