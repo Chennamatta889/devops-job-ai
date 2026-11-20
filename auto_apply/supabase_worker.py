@@ -505,7 +505,7 @@ def process_attempt(attempt: dict) -> None:
         portal_status = portal_apply(job, candidate, pdf, diagnostic)
         status = public_status(portal_status)
         # Never publish input values, screenshots, employer HTML, or question content in public logs.
-        print("Attempt diagnostics:", json.dumps({"attempt": attempt_id, "stage": diagnostic.get("stage"), "result": portal_status, "location": diagnostic.get("location_trace", {})}, sort_keys=True))
+        print("Attempt diagnostics:", json.dumps({"attempt": attempt_id, "stage": diagnostic.get("stage"), "result": portal_status, "location": diagnostic.get("location_trace", {}), "validation": diagnostic.get("validation_details", []), "submit_clicked": diagnostic.get("submit_clicked", False), "post_click_response_count": diagnostic.get("post_click_response_count")}, sort_keys=True))
         confirmation = str(diagnostic.get("confirmation") or "")
         message = portal_status
         if status == "QUESTION_REQUIRED":
@@ -521,6 +521,10 @@ def process_attempt(attempt: dict) -> None:
             message = "Human verification is required on the employer application page."
         elif status == "PROFILE_REQUIRED":
             message = "Candidate profile needs additional required contact information."
+        elif "validation" in portal_status:
+            categories = sorted({item["category"] for item in diagnostic.get("validation_details", []) if item.get("category") in {"phone","country","email","linkedin","resume","first_name","last_name","website","other"}})
+            message = ("Submission outcome uncertain; do not retry without checking employer receipt." if status == "UNCERTAIN" else "Form validation failed before submission.")
+            if categories: message += " Fields: " + ", ".join(categories)
         elif status == "SUBMITTED":
             message = "Application submission confirmed by the employer ATS."
         elif portal_status == "portal_review_location_autocomplete":

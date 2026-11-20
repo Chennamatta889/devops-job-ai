@@ -172,7 +172,59 @@ def verification_required(page):
         return True
     return False
 
-def fill_contact_fields(page,data):
+def validation_details(page):
+    """Safe diagnostic categories and validity flags, never field values."""
+    return page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible").evaluate_all(r"""els=>els.slice(0,20).map(el=>{
+        const labels=Array.from(el.labels||[]).map(x=>x.innerText).join(' ');
+        const prompt=(labels+' '+(el.getAttribute('aria-label')||'')+' '+(el.id||'')+' '+(el.name||'')).toLowerCase();
+        const category=/phone|mobile/.test(prompt)?'phone':/country/.test(prompt)?'country':/email/.test(prompt)?'email':/linkedin/.test(prompt)?'linkedin':/resume|cv/.test(prompt)?'resume':/first.?name/.test(prompt)?'first_name':/last.?name/.test(prompt)?'last_name':/website/.test(prompt)?'website':'other';
+        const flags=['valueMissing','typeMismatch','patternMismatch','tooLong','tooShort','rangeUnderflow','rangeOverflow','stepMismatch','badInput','customError'].filter(k=>el.validity?.[k]);
+        if(el.getAttribute('aria-invalid')==='true')flags.push('ariaInvalid');
+        return {category,flags};
+    })""")
+
+def fill_greenhouse_country(page,data):
+    """Select India only from an unambiguous visible option and confirmed facts."""
+    facts=data.get("screening_answers") or {}
+    country=str(data.get("country") or next((v for k,v in facts.items() if str(k).strip().lower() in ("country","country of residence")), "") if isinstance(facts,dict) else data.get("country") or "").strip().lower()
+    digits=re.sub(r"\D","",str(data.get("phone") or ""))
+    if re.fullmatch(r"91[6-9]\d{9}",digits) and str(data.get("phone")).strip().startswith("+"):
+        national=digits[2:]
+        if country and country not in ("india","in"): return None
+    elif country in ("india","in") and re.fullmatch(r"[6-9]\d{9}",digits):
+        national=digits
+    else:
+        return None
+    if verification_required(page): return None
+    field=page.get_by_role("combobox",name=re.compile(r"^country(?: code)?\s*\*?$",re.I))
+    if field.count()!=1:
+        field=page.get_by_label(re.compile(r"^country(?: code)?\s*\*?$",re.I))
+    if field.count()!=1 or not field.is_visible() or not field.is_enabled(): return None
+    tag=field.evaluate("el=>el.tagName.toLowerCase()")
+    is_india=re.compile(r"^(?:India(?:\s*\(\+91\)|\s+\+91)?|\+91\s+India)$",re.I)
+    if tag=="select":
+        options=field.locator("option").evaluate_all("els=>els.map(e=>({label:e.textContent.trim(),value:e.value,selected:e.selected,disabled:e.disabled}))")
+        candidates=[x for x in options if not x["disabled"] and is_india.fullmatch(x["label"])]
+        if len(candidates)!=1: return None
+        selected=[x for x in options if x["selected"] and x["value"]]
+        if selected and selected[0]["value"]!=candidates[0]["value"]: return None
+        if not candidates[0]["selected"]: field.select_option(value=candidates[0]["value"])
+        return national if field.input_value()==candidates[0]["value"] else None
+    # Only a labelled dropdown with a visible, exact country option is eligible.
+    if field.get_attribute("role")!="combobox": return None
+    field.click()
+    if verification_required(page): return None
+    options=page.get_by_role("option",name=is_india)
+    visible=[options.nth(i) for i in range(options.count()) if options.nth(i).is_visible() and options.nth(i).is_enabled()]
+    if len(visible)!=1:
+        field.press("Escape")
+        return None
+    visible[0].click()
+    if verification_required(page): return None
+    rendered=field.evaluate("el=>[el.value,el.innerText,el.getAttribute('aria-valuetext'),el.getAttribute('aria-label')].filter(Boolean).join(' ')")
+    return national if re.search(r"\bIndia\b|\+91",rendered,re.I) else None
+
+def fill_contact_fields(page,data,greenhouse=False):
     """Only fill ordinary empty candidate inputs, stopping on active verification."""
     filled=0
     fields=(
@@ -186,9 +238,10 @@ def fill_contact_fields(page,data):
         ("urls[GitHub]",r"^github(?: profile| url)?\b"),
     )
     data_keys={"org":"current_company","urls[LinkedIn]":"linkedin","urls[GitHub]":"github"}
+    national=fill_greenhouse_country(page,data) if greenhouse else None
     for key,label in fields:
         if verification_required(page): break
-        value=data.get(data_keys.get(key,key))
+        value=national if key=="phone" and national else data.get(data_keys.get(key,key))
         if not value: continue
         loc=page.locator('input[name="'+key+'"],input[id="'+key+'"]')
         if loc.count()!=1:
@@ -257,7 +310,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                         return "portal_review_missing_screening_v3"
                     return "portal_review_location_autocomplete"
             stage="contact_fields"
-            diagnostic["contact_fields_filled"]=fill_contact_fields(page,data)
+            diagnostic["contact_fields_filled"]=fill_contact_fields(page,data,greenhouse=u.hostname in {"job-boards.greenhouse.io","boards.greenhouse.io"})
             if verification_required(page): return "portal_review_human_verification_v2"
             stage="resume_field"
             files=page.locator('input[type=file][name="resume"], input[type=file][id="resume"], input[type=file][name="resumeFile"]')
@@ -351,6 +404,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             if invalid.count():
                 diagnostic["invalid_field_count"]=invalid.count()
+                diagnostic["validation_details"]=validation_details(page)
                 return "portal_review_validation_failed"
             stage="submit"
             if verification_required(page): return "portal_review_human_verification_v2"
@@ -359,6 +413,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 return any(success.nth(i).is_visible() for i in range(min(success.count(),10)))
             already_visible=visible_success()
             diagnostic["attempted_at_utc"]=__import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+            diagnostic["submit_clicked"]=True
+            response_count_before_click=len(responses)
             submitted=True
             buttons.click(timeout=10000)
             stage="confirmation"
@@ -380,6 +436,8 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 page.wait_for_timeout(1000)
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
             diagnostic["invalid_field_count"]=invalid.count()
+            diagnostic["validation_details"]=validation_details(page)
+            diagnostic["post_click_response_count"]=len(responses)-response_count_before_click
             labels=[]
             for i in range(min(invalid.count(),20)):
                 try:
@@ -403,19 +461,19 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 diagnostic["confirmation"]="ashby_form_render_validation"
                 return "portal_review_server_validation"
             if invalid.count():
-                return "portal_review_validation_failed"
+                return "portal_uncertain_validation_after_submit"
             if u.hostname=="jobs.ashbyhq.com" and not submit_responses():
-                return "portal_review_no_submit_operation"
+                return "portal_uncertain_no_submit_operation"
             if any(x==409 for x in codes):
-                return "portal_review_duplicate_possible"
+                return "portal_uncertain_duplicate_possible"
             if any(x in (400,422) for x in codes):
-                return "portal_review_server_validation"
+                return "portal_uncertain_http_validation_after_submit"
             if any(x in (401,403) for x in codes):
-                return "portal_review_access_denied"
+                return "portal_uncertain_access_denied_after_submit"
             if any(x==429 for x in codes):
-                return "portal_review_rate_limited"
+                return "portal_uncertain_rate_limited_after_submit"
             if any(x>=500 for x in codes):
-                return "portal_review_server_error"
+                return "portal_uncertain_server_error"
             if any(200<=x<300 for x in codes):
                 return "portal_uncertain_submit_response"
             return "portal_uncertain_no_submission_response"

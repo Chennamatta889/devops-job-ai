@@ -2,7 +2,7 @@
 import unittest
 from playwright.sync_api import sync_playwright
 from screening import location_suggestion_matches, select_lever_location, answer_for, fill_screening, unanswered_required
-from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields
+from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields, validation_details, fill_greenhouse_country
 from supabase_worker import public_status
 
 class BrowserEngineTests(unittest.TestCase):
@@ -116,6 +116,28 @@ class BrowserEngineTests(unittest.TestCase):
             page.locator("#resume").set_input_files({"name":"Fixture.pdf","mimeType":"application/pdf","buffer":b"%PDF-1.4 fixture"})
             self.assertEqual(page.locator("#resume").evaluate("el=>el.files.length"),1)
             browser.close()
+
+
+    def test_country_and_phone_and_validation_safe(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch(); page=b.new_page()
+            page.set_content('<label for="country">Country</label><select id="country"><option value="">Choose</option><option value="IN">India (+91)</option><option value="US">United States (+1)</option></select><label for="phone">Phone</label><input id="phone" pattern="[0-9]{10}" required><label for="email">Email</label><input id="email" type="email" required>')
+            profile={"phone":"9876543210","screening_answers":{"Country":"India"}}
+            self.assertEqual(fill_contact_fields(page,profile,greenhouse=True),1)
+            self.assertEqual(page.locator("#country").input_value(),"IN")
+            self.assertEqual(page.locator("#phone").input_value(),"9876543210")
+            page.locator("#email").fill("invalid")
+            self.assertEqual(validation_details(page),[{"category":"email","flags":["typeMismatch"]}])
+            self.assertEqual(public_status("portal_uncertain_validation_after_submit"),"UNCERTAIN")
+            b.close()
+    def test_country_unknown_and_no_overwrite(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch(); page=b.new_page()
+            page.set_content('<label for="country">Country</label><select id="country"><option value="US" selected>United States (+1)</option><option value="IN">India (+91)</option></select>')
+            self.assertIsNone(fill_greenhouse_country(page,{"phone":"9876543210"}))
+            self.assertIsNone(fill_greenhouse_country(page,{"phone":"+919876543210","country":"India"}))
+            self.assertEqual(page.locator("#country").input_value(),"US")
+            b.close()
 
 if __name__ == "__main__":
     unittest.main()
