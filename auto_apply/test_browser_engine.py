@@ -1,7 +1,7 @@
 """Local fixture tests: no external employer traffic or candidate data."""
 import unittest
 from playwright.sync_api import sync_playwright
-from screening import location_suggestion_matches, select_lever_location
+from screening import location_suggestion_matches, select_lever_location, answer_for, fill_screening, unanswered_required
 from portal import verification_required, ashby_submit_signal
 from supabase_worker import public_status
 
@@ -31,6 +31,24 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertEqual(page.locator("input").input_value(),"Hyderabad, Telangana, India")
             self.assertEqual(trace["match_count"],1)
             browser.close()
+    def test_question_aliases(self):
+        profile={"years_experience":3,"notice_period_days":30,"screening_answers":{"Current location":"Example City"}}
+        self.assertEqual(answer_for("Number of years of experience",profile),3)
+        self.assertEqual(answer_for("Current notice period (in days)",profile),30)
+        self.assertEqual(answer_for("Current location",profile),"Example City")
+        self.assertIsNone(answer_for("Have you received security clearance?",profile))
+    def test_required_and_unknown(self):
+        with sync_playwright() as p:
+            browser=p.chromium.launch()
+            page=browser.new_page()
+            page.set_content('<label for="city">Current location</label><input id="city" required><label for="x">Unverified declaration</label><input id="x" required>')
+            self.assertEqual(fill_screening(page,{"current_location":"Example City"},verification_required),1)
+            self.assertEqual(unanswered_required(page),["Unverified declaration"])
+            browser.close()
+    def test_no_dropdown_classification(self):
+        self.assertEqual(public_status("portal_review_location_autocomplete"),"REVIEW_REQUIRED")
+        self.assertEqual(public_status("portal_review_human_verification_v2"),"HUMAN_VERIFICATION_REQUIRED")
+        self.assertEqual(public_status("portal_uncertain_no_submission_response"),"UNCERTAIN")
     def test_challenge_stop(self):
         with sync_playwright() as p:
             browser=p.chromium.launch()

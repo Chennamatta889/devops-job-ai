@@ -329,6 +329,13 @@ def queue_new_matches() -> int:
             observed = verification.get(job_id) if isinstance(verification, dict) else None
             if not isinstance(observed, dict) or observed.get("status") != "no_verification_detected":
                 continue
+            try:
+                checked = datetime.fromisoformat(str(observed.get("checked_at_utc") or "").replace("Z", "+00:00"))
+                age = (datetime.now(timezone.utc) - checked).total_seconds()
+                if not 0 <= age <= 24 * 3600:
+                    continue
+            except (ValueError, TypeError):
+                continue
             score = match_score(job, matching_profile)
             if score >= threshold:
                 ranked.append((score, job))
@@ -418,8 +425,6 @@ def public_status(portal_status: str) -> str:
         return "PROFILE_REQUIRED"
     if "unsupported" in portal_status:
         return "UNSUPPORTED"
-    if portal_status.startswith("portal_uncertain"):
-        return "UNCERTAIN"
     return "REVIEW_REQUIRED"
 
 
@@ -518,6 +523,9 @@ def process_attempt(attempt: dict) -> None:
             message = "Candidate profile needs additional required contact information."
         elif status == "SUBMITTED":
             message = "Application submission confirmed by the employer ATS."
+        elif portal_status == "portal_review_location_autocomplete":
+            reason = diagnostic.get("location_trace", {}).get("result")
+            message = ("Employer location dropdown returned no visible suggestions; manual action required." if reason == "no_visible_options" else "Employer location selection could not be verified; manual action required.")
 
         patch_attempt(
             attempt_id,
@@ -554,7 +562,7 @@ def retry_answered_attempts() -> None:
     for attempt in rows:
         msg = str(attempt.get("message") or "")
         prefix = "Required information needed: "
-        if not msg.startswith(prefix):
+        if not msg.startswith(prefix) or "select an unambiguous autocomplete suggestion" in msg:
             continue
         questions = [normalize(q) for q in msg[len(prefix):].split("; ") if normalize(q)]
         if not questions:

@@ -8,12 +8,16 @@ def answer_for(question, profile):
     answers=profile.get("screening_answers",{})
     if isinstance(answers,dict):
         for key,value in answers.items():
-            if normalize(key)==q and isinstance(value,(str,int,float,bool)):
+            if normalize(key)==q and isinstance(value,(str,int,float,bool)) and str(value).strip():
                 if isinstance(value, str) and value.strip().lower() in ("yes", "no"):
                     return value.strip().lower() == "yes"
                 return value
     q=re.sub(r"^(?:please (?:enter|provide|specify|share|select) (?:your )?|what (?:is|are) your )","",q)
     q=re.sub(r" (?:required|optional)$","",q)
+    if q in ("number of years of experience","years of experience","total work experience in a similar role capacity"):
+        return profile.get("experience_years",profile.get("years_experience"))
+    if q in ("current notice period in days","notice period in days","current notice period"):
+        return profile.get("notice_period_days")
     city_match=re.fullmatch(r"(?:are you )?(?:currently )?(?:living|located|based|residing) in ([a-z0-9 ]+)",q)
     if city_match and profile.get("current_location"):
         city=normalize(city_match.group(1))
@@ -207,15 +211,19 @@ def select_lever_location(page, profile, verification_required, diagnostic=None)
         return stop("no_matching_option")
     return stop("no_visible_options")
 
-def fill_screening(page,profile):
+def fill_screening(page,profile,verification_required=None):
+    def blocked():
+        return verification_required is not None and verification_required(page)
     fields=page.locator('input:visible:not([type=hidden]):not([type=submit]):not([type=button]):not([type=file]):not([type=checkbox]):not([type=radio]), textarea:visible, select:visible')
     filled=0
     for i in range(fields.count()):
+        if blocked(): return filled
         field=fields.nth(i)
         if not field.is_enabled() or field.get_attribute("readonly") is not None: continue
         tag=field.evaluate("el => el.tagName.toLowerCase()")
         if field.input_value().strip() and tag!="select": continue
         if field.get_attribute("role")=="combobox": continue
+        if field.get_attribute("name")=="location" and "location-input" in (field.get_attribute("class") or ""): continue
         question=field_question(field)
         answer=answer_for(question,profile)
         if answer is None: continue
@@ -231,6 +239,7 @@ def fill_screening(page,profile):
         filled+=1
     radios=page.locator('fieldset:visible, [role=radiogroup]:visible, .application-question:visible, .application-field:visible')
     for i in range(radios.count()):
+        if blocked(): return filled
         group=radios.nth(i)
         legend=group.locator("legend")
         if group.get_by_role("radio").count()==0: continue
@@ -252,6 +261,7 @@ def fill_screening(page,profile):
             filled+=1
     checks=page.locator('input[type=checkbox]:visible')
     for i in range(checks.count()):
+        if blocked(): return filled
         field=checks.nth(i)
         if not field.is_enabled(): continue
         # Only explicitly supplied Boolean answers authorize checking a box.
@@ -263,6 +273,7 @@ def fill_screening(page,profile):
             filled+=1
     combos=page.locator('[role=combobox]:visible:not(select)')
     for i in range(combos.count()):
+        if blocked(): return filled
         field=combos.nth(i)
         question=field_question(field)
         answer=answer_for(question,profile)
@@ -270,12 +281,10 @@ def fill_screening(page,profile):
         # Select only an unambiguous exact visible option from the linked listbox.
         controls=field.get_attribute("aria-controls")
         if not controls:
-            if re.search(r"\b(?:location|city)\b",normalize(question)):
-                field.fill(as_text(answer))
-                field.press("Tab")
-                filled+=1
+            # Never treat typed text as an accepted autocomplete selection.
             continue
         field.click()
+        if blocked(): return filled
         scope=page.locator('[role=listbox]:visible')
         if scope.count()!=1 or scope.get_attribute("id")!=controls:
             field.press("Escape"); continue
@@ -286,6 +295,7 @@ def fill_screening(page,profile):
             if opt.is_visible() and opt.is_enabled() and option_match(question,answer,opt.inner_text(),profile):
                 matches.append(opt)
         if len(matches)==1:
+            if blocked(): return filled
             matches[0].click()
             filled+=1
         else:

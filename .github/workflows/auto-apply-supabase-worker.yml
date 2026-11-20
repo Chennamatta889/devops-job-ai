@@ -10,6 +10,7 @@ on:
       - 'auto_apply/supabase_worker.py'
       - 'auto_apply/portal.py'
       - 'auto_apply/screening.py'
+      - 'auto_apply/test_browser_engine.py'
       - '.github/workflows/auto-apply-supabase-worker.yml'
 
 permissions:
@@ -39,4 +40,5 @@ jobs:
       - name: Run browser engine tests (synthetic forms only)
         run: python -m unittest discover -s auto_apply -p "test_browser_engine.py"
       - name: Process queued applications
+        if: github.event_name != 'push'
         run: python auto_apply/supabase_worker.py

@@ -202,9 +202,20 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if urlparse(page.url).hostname not in HOSTS: return "portal_review_redirect"
             page.wait_for_timeout(2000)
             if verification_required(page): return "portal_review_human_verification_v2"
+            stage="location_preflight"
+            if u.hostname == "jobs.lever.co":
+                location_result = select_lever_location(page, data, verification_required, diagnostic.setdefault("location_trace", {}))
+                if location_result == "verification":
+                    return "portal_review_human_verification_v2"
+                if location_result == "unresolved":
+                    if diagnostic["location_trace"].get("result") == "missing_profile_answer":
+                        diagnostic["missing_fields"] = ["Current location"]
+                        return "portal_review_missing_screening_v3"
+                    return "portal_review_location_autocomplete"
             stage="contact_fields"
             fields={"first_name":data.get("first_name"),"last_name":data.get("last_name"),"name":data.get("name"),"email":data.get("email"),"phone":data.get("phone"),"org":data.get("current_company"),"urls[LinkedIn]":data.get("linkedin"),"urls[GitHub]":data.get("github")}
             for key,val in fields.items():
+                if verification_required(page): return "portal_review_human_verification_v2"
                 if not val: continue
                 locator=page.locator('input[name="'+key+'"],input[id="'+key+'"]')
                 if locator.count()==1 and locator.is_visible(): locator.fill(str(val))
@@ -218,15 +229,9 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                 files=page.get_by_label(re.compile(r"resume|curriculum vitae",re.I)).and_(page.locator("input[type=file]"))
             if files.count()!=1: return "portal_review_resume_field"
             stage="screening"
-            if u.hostname == "jobs.lever.co":
-                location_result = select_lever_location(page, data, verification_required, diagnostic.setdefault("location_trace", {}))
-                if location_result == "verification":
-                    return "portal_review_human_verification_v2"
-                if location_result == "unresolved":
-                    diagnostic["missing_fields"] = ["Current location (select an unambiguous autocomplete suggestion)"]
-                    return "portal_review_missing_screening_v3"
             if verification_required(page): return "portal_review_human_verification_v2"
-            print("Screening fields filled:",fill_screening(page,data))
+            print("Screening fields filled:",fill_screening(page,data,verification_required))
+            if verification_required(page): return "portal_review_human_verification_v2"
             missing=unanswered_required(page)
             if missing:
                 diagnostic["missing_fields"]=missing
@@ -301,6 +306,16 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             if not wait_form_quiet():
                 if verification_required(page): return "portal_review_human_verification_v2"
                 return "portal_review_form_sync_busy"
+            stage="final_validation"
+            if verification_required(page): return "portal_review_human_verification_v2"
+            missing=unanswered_required(page)
+            if missing:
+                diagnostic["missing_fields"]=missing
+                return "portal_review_missing_screening_v3"
+            invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
+            if invalid.count():
+                diagnostic["invalid_field_count"]=invalid.count()
+                return "portal_review_validation_failed"
             stage="submit"
             if verification_required(page): return "portal_review_human_verification_v2"
             success=page.get_by_text(re.compile(r"^(?:thank you for applying|thanks for applying|(?:your )?application (?:has been )?(?:successfully )?(?:submitted|received))[.!]?$",re.I))
