@@ -285,7 +285,7 @@ class PrivateLinkedInFallbackTests(unittest.TestCase):
         body="LinkedIn: https://www.linkedin.com/in/chenna123/\nRecruiter: https://www.linkedin.com/in/other-person/"
         self.assertEqual(extract_candidate_linkedin(body,"Matta Chenna Rao"),"https://www.linkedin.com/in/chenna123")
     @patch("portal.linkedin_from_sent_mail",return_value="https://www.linkedin.com/in/chenna123")
-    @patch.dict("os.environ", {"SMTP_USER":"candidate@example.com","PORTAL_PROFILE_JSON":""})
+    @patch.dict("os.environ", {"SMTP_USER":"candidate@example.com","PORTAL_PROFILE_JSON":"","ALLOW_PRIVATE_MAIL_LOOKUP":"true"})
     def test_candidate_data_private_linkedin_fallback(self,mock_linkedin):
         from portal import candidate_data
         d=candidate_data({"name":"Matta Chenna Rao","phone":"+919876543210","current_company":"Example Ltd"},b"%PDF-invalid")
