@@ -502,7 +502,13 @@ def process_attempt(attempt: dict) -> None:
             "url": str(attempt.get("apply_url") or ""),
             "apply_url": str(attempt.get("apply_url") or ""),
         }
-        portal_status = portal_apply(job, candidate, pdf, diagnostic)
+        from email_verification import wait_for_user_code
+        def provide_code(page, still_valid):
+            def authorized():
+                latest=get_profile(user_id)
+                return bool(latest and latest.get("auto_apply_enabled") and latest.get("consent_version")==CONSENT_VERSION and still_valid())
+            return wait_for_user_code(page, attempt_id, user_id, (headers,base_url,rest_get,rest_insert), authorized)
+        portal_status = portal_apply(job, candidate, pdf, diagnostic, email_code_provider=provide_code)
         status = public_status(portal_status)
         # Never publish input values, screenshots, employer HTML, or question content in public logs.
         print("Attempt diagnostics:", json.dumps({"attempt": attempt_id, "stage": diagnostic.get("stage"), "result": portal_status, "location": diagnostic.get("location_trace", {}), "validation": diagnostic.get("validation_details", []), "validation_step": diagnostic.get("validation_step"), "resume_attachment": diagnostic.get("resume_attachment"), "exception_type": diagnostic.get("exception_type"), "submit_clicked": diagnostic.get("submit_clicked", False), "post_click_response_count": diagnostic.get("post_click_response_count")}, sort_keys=True))
@@ -525,6 +531,8 @@ def process_attempt(attempt: dict) -> None:
             categories = sorted({item["category"] for item in diagnostic.get("validation_details", []) if item.get("category") in {"phone","country","email","linkedin","resume","first_name","last_name","website","other"}})
             message = ("Submission outcome uncertain; do not retry without checking employer receipt." if status == "UNCERTAIN" else "Form validation failed before submission.")
             if categories: message += " Fields: " + ", ".join(categories)
+        elif "email_verification" in portal_status or "email_code" in portal_status:
+            message = "Employer email verification not confirmed; do not retry automatically. Check the application receipt."
         elif status == "SUBMITTED":
             message = "Application submission confirmed by the employer ATS."
         elif portal_status == "portal_review_location_autocomplete":

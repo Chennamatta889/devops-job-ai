@@ -9,6 +9,7 @@ on:
     paths:
       - 'auto_apply/supabase_worker.py'
       - 'auto_apply/portal.py'
+      - 'auto_apply/email_verification.py'
       - 'auto_apply/screening.py'
       - 'auto_apply/test_browser_engine.py'
       - '.github/workflows/auto-apply-supabase-worker.yml'
@@ -23,7 +24,7 @@ concurrency:
 jobs:
   process-queue:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 35
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

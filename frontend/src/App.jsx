@@ -121,6 +121,38 @@ async function readResumeText(file) {
   } finally { await doc.destroy() }
 }
 
+function ApplicationEmailCode({ challenge, attempt, onSubmitted }) {
+  const [code,setCode] = useState('')
+  const [busy,setBusy] = useState(false)
+  const [message,setMessage] = useState('')
+  const [sent,setSent] = useState(false)
+  const expired = Date.parse(challenge.expires_at) <= Date.now()
+  async function sendCode(event) {
+    event.preventDefault()
+    if (busy || sent || expired || !/^[A-Za-z0-9]{6,12}$/.test(code.trim())) return
+    setBusy(true); setMessage('')
+    try {
+      const keyBytes = Uint8Array.from(atob(challenge.public_key), c=>c.charCodeAt(0))
+      const key = await crypto.subtle.importKey('spki',keyBytes,{name:'RSA-OAEP',hash:'SHA-256'},false,['encrypt'])
+      const cipher = await crypto.subtle.encrypt({name:'RSA-OAEP'},key,new TextEncoder().encode(code.trim()))
+      const encrypted = btoa(String.fromCharCode(...new Uint8Array(cipher)))
+      const {data,error} = await supabaseClient.from('application_email_challenges').update({encrypted_code:encrypted}).eq('id',challenge.id).eq('status','WAITING').select('id')
+      if (error || data?.length !== 1) throw new Error('Session no longer accepts a code. Refresh status.')
+      setSent(true); setCode(''); setMessage('Code sent to your active application. Employer confirmation is pending.')
+      onSubmitted()
+    } catch { setMessage('Could not send the code. Check whether this session is still active.') }
+    finally { setBusy(false); setCode('') }
+  }
+  return <div className="upgrade-message" style={{margin:'12px 0',padding:'14px'}}>
+    <strong>Email verification required {attempt ? '— '+attempt.title : ''}</strong>
+    <p>Enter only the security code from the employer's job application email. The existing browser session is waiting. Never enter a login or bank code.</p>
+    <p>Expires at {new Date(challenge.expires_at).toLocaleTimeString()}.</p>
+    <input aria-label="Employer application verification code" type="password" autoComplete="off" inputMode="text" maxLength={12} value={code} onChange={e=>setCode(e.target.value)} disabled={busy||sent||expired} placeholder="Application email code" />
+    <button type="button" className="primary-button" onClick={sendCode} disabled={busy||sent||expired||!/^[A-Za-z0-9]{6,12}$/.test(code.trim())}>{busy?'Sending…':'Verify application'}</button>
+    {message && <p role="status">{message}</p>}
+  </div>
+}
+
 function App() {
   const [feed, setFeed] = useState({ jobs: [], count: 0, generated_at_utc: null })
   const [query, setQuery] = useState('')
@@ -148,6 +180,7 @@ function App() {
   const [authBusy, setAuthBusy] = useState(false)
   const [authMessage, setAuthMessage] = useState('')
   const [applicationAttempts, setApplicationAttempts] = useState([])
+  const [emailChallenges,setEmailChallenges] = useState([])
   const [screeningAnswers, setScreeningAnswers] = useState({})
   const [screeningDrafts, setScreeningDrafts] = useState({})
   const [screeningCustom, setScreeningCustom] = useState('')
@@ -276,6 +309,19 @@ function App() {
       email_received_at: byAttempt.get(String(a.id)) || null
     })))
   }
+
+
+  useEffect(() => {
+    if(!supabaseClient || !authUser?.id){setEmailChallenges([]);return}
+    let active=true
+    async function refreshChallenges(){
+      const {data,error}=await supabaseClient.from('application_email_challenges').select('id,attempt_id,status,expires_at,public_key').eq('status','WAITING').gt('expires_at',new Date().toISOString()).order('expires_at')
+      if(active && !error)setEmailChallenges(data||[])
+    }
+    refreshChallenges()
+    const timer=window.setInterval(refreshChallenges,4000)
+    return ()=>{active=false;window.clearInterval(timer)}
+  },[authUser?.id])
 
   const missingScreeningQuestions = useMemo(() => [...new Set(applicationAttempts
     .filter(a => a.status === 'QUESTION_REQUIRED' && String(a.message || '').startsWith('Required information needed: '))
@@ -1212,6 +1258,7 @@ function App() {
               </div>
             )}
             {supabaseClient && authUser && autoEnabled && applicationAttempts.length === 0 && <div className="upgrade-message">No application attempts recorded yet. The worker runs on a scheduled basis; refresh status after it runs. A match is not a confirmed submission. <button type="button" className="text-button" onClick={loadApplicationAttempts}>Refresh status</button></div>}
+            {authUser && emailChallenges.map(challenge=><ApplicationEmailCode key={challenge.id} challenge={challenge} attempt={applicationAttempts.find(a=>String(a.id)===String(challenge.attempt_id))} onSubmitted={loadApplicationAttempts}/>)}
             {supabaseClient && authUser && applicationAttempts.length > 0 && (
               <div className="application-history">
                 <div className="history-heading">

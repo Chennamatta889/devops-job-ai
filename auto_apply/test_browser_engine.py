@@ -1,5 +1,6 @@
 """Local fixture tests: no external employer traffic or candidate data."""
 import unittest
+from portal import email_code_form
 from playwright.sync_api import sync_playwright
 from screening import location_suggestion_matches, select_lever_location, answer_for, fill_screening, unanswered_required
 from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields, validation_details, fill_greenhouse_country, resume_attachment_state, verify_resume_attachment, required_after_resume, greenhouse_phone_state
@@ -243,6 +244,23 @@ class BrowserEngineTests(unittest.TestCase):
             page.locator("#country").evaluate("el=>el.setAttribute('aria-expanded','false')")
             page.locator("#phone").fill("")
             self.assertFalse(greenhouse_phone_state(page,data)["verified"])
+            b.close()
+
+
+    def test_job_email_verification_form_is_scoped(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch(); page=b.new_page()
+            page.set_content('<div role="dialog"><p>A verification code was sent to your email.</p><label for="code">Security code</label><input id="code"><button>Verify</button></div>')
+            controls=email_code_form(page)
+            self.assertIsNotNone(controls)
+            controls[0].fill("12345678")
+            self.assertEqual(controls[0].input_value(),"12345678")
+            page.set_content('<div role="dialog"><p>A verification code was sent to your email. Sign in to your account.</p><label for="code">Security code</label><input id="code"><button>Verify</button></div>')
+            self.assertIsNone(email_code_form(page))
+            page.set_content('<form><label for="code">Security code</label><input id="code"><button>Submit</button></form>')
+            self.assertIsNone(email_code_form(page))
+            page.set_content('<div role="dialog"><p>A verification code was sent to your email.</p><label for="code">Security code</label><input id="code"><button>Verify</button><button>Submit</button></div>')
+            self.assertIsNone(email_code_form(page))
             b.close()
 
 if __name__ == "__main__":

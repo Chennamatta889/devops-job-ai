@@ -12,7 +12,7 @@ jobs:
   apply:
     if: contains(github.event.head_commit.message, '[verified-phone-submit-8]')
     runs-on: ubuntu-24.04
-    timeout-minutes: 7
+    timeout-minutes: 12
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

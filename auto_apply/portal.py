@@ -400,7 +400,33 @@ def required_after_resume(page,data=None,greenhouse=False,diagnostic=None):
             missing.append("Phone")
     return missing
 
-def portal_apply(job, profile, pdf, diagnostic=None):
+def application_email_code_controls(page, job_url):
+    """Identify only a visible post-submit job-board email code form, not login/MFA/CAPTCHA."""
+    current=urlparse(page.url); target=urlparse(job_url)
+    if current.scheme!="https" or current.hostname not in {"job-boards.greenhouse.io","boards.greenhouse.io"} or current.hostname!=target.hostname or current.path.rstrip("/")!=target.path.rstrip("/"):
+        return None
+    if verification_required(page): return None
+    return email_code_form(page)
+
+def email_code_form(page):
+    """Strict scoped code input and verification action; never infer missing controls."""
+    notice=re.compile(r"(?:verification|security|confirmation) code (?:was |has been )?sent to|(?:sent|emailed) (?:you )?(?:a |an |the )?(?:verification|security|confirmation) code|code (?:from|in) your email",re.I)
+    forbidden=re.compile(r"\b(?:sign in|log in|login|password|two.factor authentication|multi.factor authentication|captcha|authenticator app)\b",re.I)
+    label=re.compile(r"^(?:(?:enter (?:the |your )?)?(?:email |security |verification |confirmation )?code)(?:\s*\*)?$",re.I)
+    action=re.compile(r"^(?:verify(?: (?:email|code|and submit))?|submit(?: (?:application|code))?|confirm(?: (?:email|code))?|continue)$",re.I)
+    scopes=page.get_by_role("dialog").filter(has_text=notice)
+    if scopes.count()==0: scopes=page.locator("form:visible").filter(has_text=notice)
+    visible=[scopes.nth(i) for i in range(scopes.count()) if scopes.nth(i).is_visible()]
+    if len(visible)!=1: return None
+    scope=visible[0]
+    if forbidden.search(scope.inner_text()) or scope.locator('input[type=password]').count(): return None
+    field=scope.get_by_label(label).and_(scope.locator('input:visible:not([type=hidden]):not([type=password])'))
+    if field.count()!=1: field=scope.locator('input[autocomplete="one-time-code"]:visible')
+    button=scope.get_by_role("button",name=action)
+    if field.count()!=1 or button.count()!=1 or not field.is_enabled() or not field.is_editable() or not button.is_visible(): return None
+    return field,button
+
+def portal_apply(job, profile, pdf, diagnostic=None, email_code_provider=None):
     diagnostic=diagnostic if diagnostic is not None else {}
     stage="candidate"
     submitted=False
@@ -558,6 +584,7 @@ def portal_apply(job, profile, pdf, diagnostic=None):
             submitted=True
             buttons.click(timeout=10000)
             stage="confirmation"
+            email_code_used=False
             for tick in range(38):
                 if "success" in ashby_signals:
                     diagnostic["confirmation"]="ashby_form_submit_success"
@@ -573,6 +600,28 @@ def portal_apply(job, profile, pdf, diagnostic=None):
                     return "portal_confirmed"
                 if verification_required(page):
                     return "portal_uncertain_human_verification_after_submit"
+                if application_email_code_controls(page,url):
+                    diagnostic["email_verification_required"]=True
+                    if email_code_used:
+                        return "portal_uncertain_email_code_not_confirmed"
+                    if email_code_provider is None:
+                        return "portal_uncertain_email_verification_required"
+                    stage="email_verification"
+                    code=email_code_provider(page,lambda: application_email_code_controls(page,url) is not None)
+                    controls=application_email_code_controls(page,url)
+                    if not code or controls is None:
+                        return "portal_uncertain_email_verification_expired"
+                    field,button=controls
+                    field.fill(code)
+                    code=None
+                    if verification_required(page): return "portal_uncertain_human_verification_after_submit"
+                    if not button.is_enabled(): return "portal_uncertain_email_code_not_confirmed"
+                    email_code_used=True
+                    button.click(timeout=10000)
+                    diagnostic["email_code_entered"]=True
+                    stage="confirmation"
+                    # Allow the employer to transition after the code, without a second application submit.
+                    page.wait_for_timeout(2500)
                 page.wait_for_timeout(1000)
             diagnostic["validation_step"]="invalid_controls"
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")

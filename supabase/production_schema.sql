@@ -197,3 +197,28 @@ create policy "resume_objects_delete_own" on storage.objects
     bucket_id = 'resumes'
     and (storage.foldername(name))[1] = (select auth.uid())::text
   );
+
+-- Short-lived application email challenges; authenticated owners have write-only ciphertext access.
+create table if not exists public.application_email_challenges (
+  id uuid primary key default gen_random_uuid(),
+  attempt_id bigint not null references public.application_attempts(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  public_key text not null check (length(public_key) between 100 and 2000),
+  encrypted_code text check (encrypted_code is null or (length(encrypted_code)=344 and encrypted_code ~ '^[A-Za-z0-9+/]+={0,2}$')),
+  status text not null default 'WAITING' check (status in ('WAITING','RECEIVED','CLOSED','EXPIRED')),
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null check (expires_at > created_at and expires_at <= created_at + interval '5 minutes')
+);
+create index if not exists application_email_challenges_owner_idx on public.application_email_challenges(user_id, expires_at);
+create unique index if not exists application_email_challenges_active_attempt_idx on public.application_email_challenges(attempt_id) where status='WAITING';
+alter table public.application_email_challenges enable row level security;
+revoke all on public.application_email_challenges from public, anon, authenticated;
+grant select (id,attempt_id,status,expires_at,public_key) on public.application_email_challenges to authenticated;
+grant update (encrypted_code) on public.application_email_challenges to authenticated;
+grant all on public.application_email_challenges to service_role;
+drop policy if exists "email_challenge_read_own" on public.application_email_challenges;
+create policy "email_challenge_read_own" on public.application_email_challenges for select to authenticated using ((select auth.uid())=user_id and expires_at > now());
+drop policy if exists "email_challenge_send_once" on public.application_email_challenges;
+create policy "email_challenge_send_once" on public.application_email_challenges for update to authenticated
+using ((select auth.uid())=user_id and status='WAITING' and expires_at > now() and encrypted_code is null)
+with check ((select auth.uid())=user_id and status='WAITING' and expires_at > now() and encrypted_code is not null);
