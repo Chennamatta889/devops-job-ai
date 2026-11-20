@@ -714,3 +714,36 @@ footer strong { color: #344054; }
     justify-self: start;
   }
 }
+
+
+.history-message {
+  margin-top: 5px !important;
+  color: #98a2b3 !important;
+  white-space: normal !important;
+  line-height: 1.35;
+}
+
+.history-status-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.history-action {
+  color: #4f46e5;
+  font-size: 10px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.history-action:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 620px) {
+  .history-status-wrap {
+    grid-column: 1 / -1;
+    align-items: flex-start;
+  }
+}
