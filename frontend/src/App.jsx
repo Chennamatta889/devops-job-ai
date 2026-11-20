@@ -107,6 +107,7 @@ function App() {
   const [authBusy, setAuthBusy] = useState(false)
   const [authMessage, setAuthMessage] = useState('')
   const [applicationAttempts, setApplicationAttempts] = useState([])
+  const [autoEnabled, setAutoEnabled] = useState(false)
   const [autoProfile, setAutoProfile] = useState({
     name: '',
     email: '',
@@ -168,11 +169,44 @@ function App() {
     loadJobs()
   }, [])
 
+  async function loadAutoApplyProfile() {
+    if (!supabaseClient) return
+    const { data, error: profileError } = await supabaseClient
+      .from('candidate_profiles')
+      .select('*')
+      .maybeSingle()
+
+    if (profileError || !data) {
+      if (!profileError) setAutoEnabled(false)
+      return
+    }
+
+    setAutoEnabled(Boolean(data.auto_apply_enabled))
+    setAutoConsent(Boolean(data.auto_apply_enabled && data.consent_version === AUTO_APPLY_CONSENT_VERSION))
+    setAutoProfile((current) => ({
+      ...current,
+      name: data.name || '',
+      email: data.email || current.email || '',
+      phone: data.phone || '',
+      linkedin: data.linkedin || '',
+      current_location: data.current_location || '',
+      notice_period_days: data.notice_period_days == null ? '' : String(data.notice_period_days),
+      current_ctc_lpa: data.current_ctc_lpa == null ? '' : String(data.current_ctc_lpa),
+      expected_ctc_lpa: data.expected_ctc_lpa == null ? '' : String(data.expected_ctc_lpa),
+      years_experience: data.years_experience == null ? current.years_experience : String(data.years_experience),
+      target_roles: Array.isArray(data.target_roles) ? data.target_roles.join(', ') : '',
+      skills: Array.isArray(data.skills) ? data.skills.join(', ') : '',
+      preferred_locations: Array.isArray(data.preferred_locations) ? data.preferred_locations.join(', ') : 'India',
+      minimum_match_score: String(data.minimum_match_score || 80),
+      daily_application_limit: String(data.daily_application_limit || 10)
+    }))
+  }
+
   async function loadApplicationAttempts() {
     if (!supabaseClient) return
     const { data, error: attemptError } = await supabaseClient
       .from('application_attempts')
-      .select('id,title,company,match_score,status,message,created_at')
+      .select('id,title,company,apply_url,match_score,status,message,created_at')
       .order('created_at', { ascending: false })
       .limit(10)
     if (!attemptError) setApplicationAttempts(Array.isArray(data) ? data : [])
@@ -192,6 +226,7 @@ function App() {
           ...current,
           email: current.email || user.email
         }))
+        loadAutoApplyProfile()
         loadApplicationAttempts()
       }
     })
@@ -206,7 +241,10 @@ function App() {
           ...current,
           email: current.email || user.email
         }))
-        window.setTimeout(loadApplicationAttempts, 0)
+        window.setTimeout(() => {
+          loadAutoApplyProfile()
+          loadApplicationAttempts()
+        }, 0)
       } else {
         setApplicationAttempts([])
       }
@@ -249,7 +287,31 @@ function App() {
     await supabaseClient.auth.signOut()
     setAuthUser(null)
     setApplicationAttempts([])
+    setAutoEnabled(false)
     setAuthMessage('Signed out.')
+  }
+
+  async function pauseAutoApply() {
+    if (!supabaseClient || !authUser?.id) return
+    setAutoBusy(true)
+    setAutoMessage('')
+    try {
+      const { error: pauseError } = await supabaseClient
+        .from('candidate_profiles')
+        .update({
+          auto_apply_enabled: false,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', authUser.id)
+      if (pauseError) throw pauseError
+      setAutoEnabled(false)
+      setAutoConsent(false)
+      setAutoMessage('Auto Apply paused. Existing completed applications are unchanged; no new jobs will be queued.')
+    } catch (err) {
+      setAutoMessage(err.message || 'Could not pause Auto Apply.')
+    } finally {
+      setAutoBusy(false)
+    }
   }
 
   const sourceOptions = useMemo(
@@ -555,6 +617,7 @@ function App() {
         if (enableError) throw enableError
 
         await loadApplicationAttempts()
+        setAutoEnabled(true)
         setTestMatchSummary(previewMatchSummary(autoProfile))
         setAutoMessage(
           'Auto Apply enabled securely. ' +
@@ -896,9 +959,12 @@ function App() {
               {authUser ? (
                 <>
                   <div>
-                    <strong>Signed in</strong>
+                    <strong>{autoEnabled ? 'Auto Apply active' : 'Signed in'}</strong>
                     <span>{authUser.email}</span>
                   </div>
+                  {autoEnabled && (
+                    <button className="secondary-button" type="button" onClick={pauseAutoApply} disabled={autoBusy}>Pause Auto Apply</button>
+                  )}
                   <button className="secondary-button" type="button" onClick={signOutAutoApply}>Sign out</button>
                 </>
               ) : (
@@ -1045,11 +1111,17 @@ function App() {
                     <div>
                       <strong>{attempt.title}</strong>
                       <span>{prettyCompany(attempt.company)}</span>
+                      {attempt.message && <span className="history-message">{attempt.message}</span>}
                     </div>
                     <span>{Math.round(Number(attempt.match_score || 0))}%</span>
-                    <span className={'history-status status-' + String(attempt.status || '').toLowerCase().replaceAll('_', '-')}>
-                      {String(attempt.status || '').replaceAll('_', ' ')}
-                    </span>
+                    <div className="history-status-wrap">
+                      <span className={'history-status status-' + String(attempt.status || '').toLowerCase().replaceAll('_', '-')}>
+                        {String(attempt.status || '').replaceAll('_', ' ')}
+                      </span>
+                      {['HUMAN_VERIFICATION_REQUIRED', 'QUESTION_REQUIRED', 'PROFILE_REQUIRED', 'REVIEW_REQUIRED', 'UNCERTAIN'].includes(attempt.status) && attempt.apply_url && (
+                        <a className="history-action" href={attempt.apply_url} target="_blank" rel="noopener noreferrer">Open application</a>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
