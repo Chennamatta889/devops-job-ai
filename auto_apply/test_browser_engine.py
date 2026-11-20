@@ -1,6 +1,6 @@
 """Local fixture tests: no external employer traffic or candidate data."""
 import unittest
-from portal import email_code_form
+from portal import email_code_form, enter_application_email_code
 from playwright.sync_api import sync_playwright
 from screening import location_suggestion_matches, select_lever_location, answer_for, fill_screening, unanswered_required
 from portal import verification_required, ashby_submit_signal, passive_recaptcha_frame, fill_contact_fields, validation_details, fill_greenhouse_country, resume_attachment_state, verify_resume_attachment, required_after_resume, greenhouse_phone_state
@@ -261,6 +261,44 @@ class BrowserEngineTests(unittest.TestCase):
             self.assertIsNone(email_code_form(page))
             page.set_content('<div role="dialog"><p>A verification code was sent to your email.</p><label for="code">Security code</label><input id="code"><button>Verify</button><button>Submit</button></div>')
             self.assertIsNone(email_code_form(page))
+            b.close()
+
+
+    def test_email_verification_delayed_button_and_keyboard_events(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch();page=b.new_page()
+            page.set_content('''<div role="dialog"><p>A verification code was sent to your email.</p><label for="code">Security code</label><input id="code" maxlength="8"><button id="verify" disabled>Verify</button></div><script>
+            window.clicks=0; window.keyEvents=0;
+            const field=document.querySelector('#code'),button=document.querySelector('#verify');
+            field.addEventListener('keyup',()=>{window.keyEvents++;if(field.value.length===8)setTimeout(()=>button.disabled=false,900)});
+            button.addEventListener('click',()=>window.clicks++);
+            </script>''')
+            diag={}
+            self.assertEqual(enter_application_email_code(page,"12345678",lambda:email_code_form(page),diag,3000),"clicked")
+            self.assertEqual(page.evaluate("window.clicks"),1)
+            self.assertEqual(page.evaluate("window.keyEvents"),8)
+            self.assertTrue(diag["email_code_value_matches"])
+            self.assertTrue(diag["email_verify_clicked"])
+            b.close()
+
+    def test_email_verification_disabled_control_is_never_forced(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch();page=b.new_page()
+            page.set_content('''<div role="dialog"><p>A verification code was sent to your email.</p><label for="code">Security code</label><input id="code"><button id="verify" disabled>Verify</button></div><script>window.clicks=0;document.querySelector('#verify').onclick=()=>window.clicks++</script>''')
+            diag={}
+            self.assertEqual(enter_application_email_code(page,"12345678",lambda:email_code_form(page),diag,700),"button_not_ready")
+            self.assertEqual(page.evaluate("window.clicks"),0)
+            self.assertFalse(diag["email_verify_button_enabled"])
+            self.assertNotIn("email_verify_clicked",diag)
+            b.close()
+
+    def test_email_verification_stops_for_active_challenge(self):
+        with sync_playwright() as p:
+            b=p.chromium.launch();page=b.new_page()
+            page.set_content('''<div role="dialog"><p>A verification code was sent to your email.</p><label for="code">Security code</label><input id="code"><button>Verify</button></div><p>Verify you are human</p>''')
+            diag={}
+            self.assertEqual(enter_application_email_code(page,"12345678",lambda:email_code_form(page),diag),"human_verification")
+            self.assertEqual(page.locator("#code").input_value(),"")
             b.close()
 
 if __name__ == "__main__":

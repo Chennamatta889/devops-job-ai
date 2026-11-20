@@ -426,6 +426,43 @@ def email_code_form(page):
     if field.count()!=1 or button.count()!=1 or not field.is_enabled() or not field.is_editable() or not button.is_visible(): return None
     return field,button
 
+def enter_application_email_code(page, code, locate_controls, diagnostic, timeout_ms=12000):
+    """Enter a human-provided code through normal UI events and wait for readiness.
+
+    Never enable a disabled control, retry a code automatically, or act on CAPTCHA.
+    The return value is a safe status category, never the code or a field value.
+    """
+    import time
+    if verification_required(page): return "human_verification"
+    controls=locate_controls()
+    if not controls: return "form_unavailable"
+    field,button=controls
+    if field.input_value(): return "field_not_empty"
+    # Some controlled inputs depend on per-key event handling.
+    field.press_sequentially(code,delay=45,timeout=5000)
+    diagnostic["email_code_typed"]=True
+    if verification_required(page): return "human_verification"
+    deadline=time.monotonic()+timeout_ms/1000
+    while time.monotonic()<deadline:
+        if verification_required(page): return "human_verification"
+        controls=locate_controls()
+        if controls:
+            field,button=controls
+            same=field.input_value()==code
+            diagnostic["email_code_value_matches"]=same
+            valid=field.evaluate("el=>el.validity?.valid!==false && el.getAttribute('aria-invalid')!=='true'")
+            diagnostic["email_code_input_valid"]=valid
+            enabled=button.is_enabled()
+            diagnostic["email_verify_button_enabled"]=enabled
+            if same and valid and enabled:
+                # The final click uses ordinary actionability checks.
+                if verification_required(page): return "human_verification"
+                button.click(timeout=5000)
+                diagnostic["email_verify_clicked"]=True
+                return "clicked"
+        page.wait_for_timeout(150)
+    return "button_not_ready"
+
 def portal_apply(job, profile, pdf, diagnostic=None, email_code_provider=None):
     diagnostic=diagnostic if diagnostic is not None else {}
     stage="candidate"
@@ -602,26 +639,32 @@ def portal_apply(job, profile, pdf, diagnostic=None, email_code_provider=None):
                     return "portal_uncertain_human_verification_after_submit"
                 if application_email_code_controls(page,url):
                     diagnostic["email_verification_required"]=True
-                    if email_code_used:
+                    if not email_code_used:
+                        if email_code_provider is None:
+                            return "portal_uncertain_email_verification_required"
+                        stage="email_verification"
+                        code=email_code_provider(page,lambda: application_email_code_controls(page,url) is not None)
+                        if not code:
+                            return "portal_uncertain_email_verification_expired"
+                        diagnostic["email_code_received"]=True
+                        outcome=enter_application_email_code(page,code,lambda: application_email_code_controls(page,url),diagnostic)
+                        code=None
+                        diagnostic["email_code_outcome"]=outcome
+                        if outcome=="human_verification": return "portal_uncertain_human_verification_after_submit"
+                        if outcome!="clicked": return "portal_uncertain_email_code_"+outcome
+                        email_code_used=True
+                        stage="confirmation"
+                        # Observe the normal confirmation UI for a full bounded interval.
+                        # The dialog may remain visible during server validation.
+                        verify_deadline=__import__("time").monotonic()+38
+                        while __import__("time").monotonic()<verify_deadline:
+                            if not already_visible and visible_success():
+                                diagnostic["confirmation"]="new_visible_success_message"
+                                return "portal_confirmed"
+                            if verification_required(page):
+                                return "portal_uncertain_human_verification_after_submit"
+                            page.wait_for_timeout(500)
                         return "portal_uncertain_email_code_not_confirmed"
-                    if email_code_provider is None:
-                        return "portal_uncertain_email_verification_required"
-                    stage="email_verification"
-                    code=email_code_provider(page,lambda: application_email_code_controls(page,url) is not None)
-                    controls=application_email_code_controls(page,url)
-                    if not code or controls is None:
-                        return "portal_uncertain_email_verification_expired"
-                    field,button=controls
-                    field.fill(code)
-                    code=None
-                    if verification_required(page): return "portal_uncertain_human_verification_after_submit"
-                    if not button.is_enabled(): return "portal_uncertain_email_code_not_confirmed"
-                    email_code_used=True
-                    button.click(timeout=10000)
-                    diagnostic["email_code_entered"]=True
-                    stage="confirmation"
-                    # Allow the employer to transition after the code, without a second application submit.
-                    page.wait_for_timeout(2500)
                 page.wait_for_timeout(1000)
             diagnostic["validation_step"]="invalid_controls"
             invalid=page.locator("input:invalid:visible, textarea:invalid:visible, select:invalid:visible, [aria-invalid=true]:visible")
