@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-21T16:48:09.533093+00:00",
+  "generated_at_utc": "2026-11-21T22:12:25.144308+00:00",
   "count": 660,
   "jobs": [
     {
@@ -2541,14 +2541,14 @@
       "experience_label": "9+ years"
     },
     {
-      "id": "1f00f9a52b5be313",
+      "id": "ea62a8f0a4e578ae",
       "title": "Staff Software Engineer - Ingestion",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8201686002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8200692002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -2566,14 +2566,14 @@
       "experience_label": "15+ years"
     },
     {
-      "id": "ea62a8f0a4e578ae",
+      "id": "1f00f9a52b5be313",
       "title": "Staff Software Engineer - Ingestion",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8200692002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8201686002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -2981,14 +2981,14 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "9d21952976fa9876",
+      "id": "c7fbac2fb46198a7",
       "title": "Specialist Solutions Architect - AI/ML",
       "company": "databricks",
-      "location": "Bengaluru, India",
+      "location": "Mumbai, India",
       "source": "greenhouse",
       "category": "Product / Technical",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8585164002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8593505002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -3007,14 +3007,14 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "c7fbac2fb46198a7",
+      "id": "9d21952976fa9876",
       "title": "Specialist Solutions Architect - AI/ML",
       "company": "databricks",
-      "location": "Mumbai, India",
+      "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Product / Technical",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8593505002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8585164002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -3222,14 +3222,14 @@
       "experience_label": "15+ years"
     },
     {
-      "id": "2edf017d930c8996",
+      "id": "c6354ec907864c79",
       "title": "Senior Staff Software Engineer (Backend)",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651326002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651345002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -3244,14 +3244,14 @@
       "experience_label": "15+ years"
     },
     {
-      "id": "c6354ec907864c79",
+      "id": "2edf017d930c8996",
       "title": "Senior Staff Software Engineer (Backend)",
       "company": "databricks",
       "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651345002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=7651326002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -10144,14 +10144,14 @@
       "experience_label": "2-5 years"
     },
     {
-      "id": "ee697b2d7e602620",
+      "id": "d3e72fdb22928714",
       "title": "Software Engineer 3",
       "company": "mongodb",
       "location": "Gurugram",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-16T14:27:51+00:00",
-      "url": "https://www.mongodb.com/careers/job/?gh_jid=8083366",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8208074",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -10159,19 +10159,22 @@
       "source_listings": {},
       "resolution": "",
       "skills": [
+        "java",
         "python",
         "javascript",
+        "react",
+        "golang",
         "mongodb",
-        "machine learning",
         "aws",
         "azure",
         "gcp",
-        "ci/cd",
-        "salesforce"
+        "kubernetes",
+        "openshift",
+        "docker"
       ],
-      "experience_min": 3,
+      "experience_min": 4,
       "experience_max": null,
-      "experience_label": "3+ years"
+      "experience_label": "4+ years"
     },
     {
       "id": "3343a68d72d73a68",
@@ -10204,14 +10207,14 @@
       "experience_label": "3-4 years"
     },
     {
-      "id": "d3e72fdb22928714",
+      "id": "ee697b2d7e602620",
       "title": "Software Engineer 3",
       "company": "mongodb",
       "location": "Gurugram",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-16T14:27:51+00:00",
-      "url": "https://www.mongodb.com/careers/job/?gh_jid=8208074",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8083366",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -10219,22 +10222,19 @@
       "source_listings": {},
       "resolution": "",
       "skills": [
-        "java",
         "python",
         "javascript",
-        "react",
-        "golang",
         "mongodb",
+        "machine learning",
         "aws",
         "azure",
         "gcp",
-        "kubernetes",
-        "openshift",
-        "docker"
+        "ci/cd",
+        "salesforce"
       ],
-      "experience_min": 4,
+      "experience_min": 3,
       "experience_max": null,
-      "experience_label": "4+ years"
+      "experience_label": "3+ years"
     },
     {
       "id": "741e4a9e663ea991",
@@ -14099,34 +14099,6 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "db848b6e9af4c615",
-      "title": "Senior Staff Software Engineer",
-      "company": "druva",
-      "location": "Pune, Maharashtra, India",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-04T21:41:46+00:00",
-      "url": "https://www.druva.com/why-druva/explore/careers/jobs/8598308002/?gh_jid=8598308002",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": false,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "java",
-        ".net",
-        "python",
-        "genai",
-        "aws",
-        "azure",
-        "kubernetes"
-      ],
-      "experience_min": 6,
-      "experience_max": null,
-      "experience_label": "6+ years"
-    },
-    {
       "id": "1d67ebe974c06aaa",
       "title": "Senior Staff Software Engineer",
       "company": "druva",
@@ -14153,6 +14125,34 @@
       "experience_min": 6,
       "experience_max": 9,
       "experience_label": "6-9 years"
+    },
+    {
+      "id": "db848b6e9af4c615",
+      "title": "Senior Staff Software Engineer",
+      "company": "druva",
+      "location": "Pune, Maharashtra, India",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-04T21:41:46+00:00",
+      "url": "https://www.druva.com/why-druva/explore/careers/jobs/8598308002/?gh_jid=8598308002",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": false,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "java",
+        ".net",
+        "python",
+        "genai",
+        "aws",
+        "azure",
+        "kubernetes"
+      ],
+      "experience_min": 6,
+      "experience_max": null,
+      "experience_label": "6+ years"
     },
     {
       "id": "25654dce86adcdef",
