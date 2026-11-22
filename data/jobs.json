@@ -1,7 +1,80 @@
 {
-  "generated_at_utc": "2026-11-22T02:15:42.201429+00:00",
-  "count": 660,
+  "generated_at_utc": "2026-11-22T09:53:09.915673+00:00",
+  "count": 659,
   "jobs": [
+    {
+      "id": "eeae4a10fbcf025c",
+      "title": "Staff Software Engineer, AI Native Engineering, Integrations",
+      "company": "ServiceNow",
+      "location": "Hyderabad |  | India",
+      "source": "smartrecruiters",
+      "category": "Software Engineering",
+      "published": "2026-11-22T07:42:12.831000+00:00",
+      "url": "https://jobs.smartrecruiters.com/ServiceNow/744000163090339",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": false,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "typescript",
+        "postgresql",
+        "servicenow"
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
+    },
+    {
+      "id": "1072a35f5de96689",
+      "title": "Senior Staff Software Development Engineer- (Rust/C++/Go) + Networking",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-22T05:29:41+00:00",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5291922007",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "llm",
+        "kubernetes",
+        "linux",
+        "ci/cd",
+        "git"
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
+    },
+    {
+      "id": "2af56016322b46c0",
+      "title": "Senior Software Development Engineer- (Rust/C++/Go) + Networking",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-22T05:27:32+00:00",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5291924007",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "python",
+        "llm"
+      ],
+      "experience_min": 3,
+      "experience_max": null,
+      "experience_label": "3+ years"
+    },
     {
       "id": "c1681daf5d5bc79e",
       "title": "Senior AI Engineer - Enterprise Agentic Systems",
@@ -4550,55 +4623,6 @@
         "kubernetes",
         "docker",
         "prometheus"
-      ],
-      "experience_min": 8,
-      "experience_max": null,
-      "experience_label": "8+ years"
-    },
-    {
-      "id": "9e0403bed102b25d",
-      "title": "Senior Software Development Engineer",
-      "company": "zscaler",
-      "location": "Bangalore, IND",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-19T17:19:27+00:00",
-      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5291924007",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": true,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "python",
-        "llm"
-      ],
-      "experience_min": 3,
-      "experience_max": null,
-      "experience_label": "3+ years"
-    },
-    {
-      "id": "183f7c8ba60c1520",
-      "title": "Senior Staff Software Development Engineer",
-      "company": "zscaler",
-      "location": "Bangalore, IND",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-19T17:18:36+00:00",
-      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5291922007",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": true,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "llm",
-        "kubernetes",
-        "linux",
-        "ci/cd",
-        "git"
       ],
       "experience_min": 8,
       "experience_max": null,
@@ -11570,30 +11594,6 @@
       "experience_label": "8+ years"
     },
     {
-      "id": "18db6c8a19776eb1",
-      "title": "Staff Software Engineer, AI Native Engineering, Integrations",
-      "company": "ServiceNow",
-      "location": "Hyderabad |  | India",
-      "source": "smartrecruiters",
-      "category": "Software Engineering",
-      "published": "2026-11-12T19:24:59.688000+00:00",
-      "url": "https://jobs.smartrecruiters.com/ServiceNow/744000161370789",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": false,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "typescript",
-        "postgresql",
-        "servicenow"
-      ],
-      "experience_min": 8,
-      "experience_max": null,
-      "experience_label": "8+ years"
-    },
-    {
       "id": "2668aa6d351488be",
       "title": "Software Engineer - UI Test",
       "company": "rubrik",
@@ -17897,28 +17897,6 @@
       "experience_min": 3,
       "experience_max": 5,
       "experience_label": "3-5 years"
-    },
-    {
-      "id": "65fa90b7b75e6170",
-      "title": "Solution Architect, Public Sector India",
-      "company": "ServiceNow",
-      "location": "Gurgaon |  | India",
-      "source": "smartrecruiters",
-      "category": "Product / Technical",
-      "published": "2026-10-23T03:58:08.139000+00:00",
-      "url": "https://jobs.smartrecruiters.com/ServiceNow/744000157376639",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": false,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "servicenow"
-      ],
-      "experience_min": 8,
-      "experience_max": 10,
-      "experience_label": "8-10 years"
     }
   ]
 }
