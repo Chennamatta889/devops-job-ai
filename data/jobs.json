@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-11-22T17:50:42.579434+00:00",
-  "count": 649,
+  "generated_at_utc": "2026-11-22T23:37:34.294687+00:00",
+  "count": 647,
   "jobs": [
     {
       "id": "4ee345e061690c36",
@@ -4977,29 +4977,6 @@
       "experience_min": 3,
       "experience_max": 8,
       "experience_label": "3-8 years"
-    },
-    {
-      "id": "a6935e5746aaf058",
-      "title": "Product Manager",
-      "company": "uptimeai",
-      "location": "Bangalore (India) | India",
-      "source": "ashby",
-      "category": "Product / Technical",
-      "published": "2026-11-19T09:57:20.921000+00:00",
-      "url": "https://jobs.ashbyhq.com/uptimeai/2d5e4fe6-2cc0-4203-b534-071645cbc6f8/application",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": true,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "genai",
-        "sap"
-      ],
-      "experience_min": 3,
-      "experience_max": null,
-      "experience_label": "3+ years"
     },
     {
       "id": "c160f2ebaec0136d",
@@ -12263,39 +12240,6 @@
       "experience_min": 8,
       "experience_max": null,
       "experience_label": "8+ years"
-    },
-    {
-      "id": "33356fd47c94b80b",
-      "title": "DevOps Engineer",
-      "company": "uptimeai",
-      "location": "Bangalore (India) | India",
-      "source": "ashby",
-      "category": "Cloud / DevOps / SRE",
-      "published": "2026-11-11T08:15:27.326000+00:00",
-      "url": "https://jobs.ashbyhq.com/uptimeai/29a206e1-146e-4348-8b73-3fe7f9fcdca2/application",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": true,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "python",
-        "aws",
-        "azure",
-        "github actions",
-        "kubernetes",
-        "docker",
-        "terraform",
-        "bash",
-        "ci/cd",
-        "prometheus",
-        "grafana",
-        "datadog"
-      ],
-      "experience_min": 4,
-      "experience_max": null,
-      "experience_label": "4+ years"
     },
     {
       "id": "c028a7770a939217",
