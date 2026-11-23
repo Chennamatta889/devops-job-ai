@@ -1,10 +1,10 @@
 {
-  "generated_at_utc": "2026-11-23T07:30:36.506459+00:00",
+  "generated_at_utc": "2026-11-23T23:50:18.781267+00:00",
   "note": "Observed status only. Human verification may still appear later or vary by session/IP.",
   "counts": {
-    "verification_detected": 229,
-    "no_verification_detected": 62,
-    "unknown": 2
+    "verification_detected": 232,
+    "no_verification_detected": 61,
+    "unknown": 1
   },
   "jobs": {
     "0f8530a858fd1c78": {
@@ -118,13 +118,6 @@
       "checked_at_utc": "2026-11-22T06:41:16.079503+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
-    },
-    "5fa6d702ea04e58b": {
-      "job_id": "5fa6d702ea04e58b",
-      "url": "https://jobs.ashbyhq.com/sophos/0b9af89e-23ae-4e34-a206-8db40e2c10f4/application",
-      "checked_at_utc": "2026-11-22T06:41:16.445160+00:00",
-      "status": "no_verification_detected",
-      "reason": "application_form_visible"
     },
     "eccfe496b3f386d5": {
       "job_id": "eccfe496b3f386d5",
@@ -413,13 +406,6 @@
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
-    "dd7923510c8a7bc3": {
-      "job_id": "dd7923510c8a7bc3",
-      "url": "https://jobs.ashbyhq.com/sophos/91c7637a-548c-4b45-b6eb-4583d9710707/application",
-      "checked_at_utc": "2026-11-22T19:32:14.584676+00:00",
-      "status": "no_verification_detected",
-      "reason": "application_form_visible"
-    },
     "84490edc92bb0256": {
       "job_id": "84490edc92bb0256",
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240438004",
@@ -543,13 +529,6 @@
       "job_id": "73ab6035ec07305c",
       "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7805761003",
       "checked_at_utc": "2026-11-22T19:32:23.490723+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
-    "5055bdf8b7e8e2d6": {
-      "job_id": "5055bdf8b7e8e2d6",
-      "url": "https://job-boards.greenhouse.io/coherehealth/jobs/7813430003",
-      "checked_at_utc": "2026-11-22T19:32:23.521747+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
@@ -685,20 +664,6 @@
       "checked_at_utc": "2026-11-22T19:32:32.202781+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
-    },
-    "a64fc5d6583dba11": {
-      "job_id": "a64fc5d6583dba11",
-      "url": "https://jobs.ashbyhq.com/sophos/46929d7f-2677-4837-a033-134d9fde79fe/application",
-      "checked_at_utc": "2026-11-23T07:29:58.092613+00:00",
-      "status": "unknown",
-      "reason": "application_form_not_confirmed"
-    },
-    "a84eda5b888339ae": {
-      "job_id": "a84eda5b888339ae",
-      "url": "https://jobs.lever.co/smart-working-solutions/6d1c3e24-068c-4209-bbd6-bfe13d44987b",
-      "checked_at_utc": "2026-11-23T07:29:58.094576+00:00",
-      "status": "no_verification_detected",
-      "reason": "application_form_visible"
     },
     "db796d856aa7f01b": {
       "job_id": "db796d856aa7f01b",
@@ -1109,329 +1074,322 @@
     "18ffe4f96ac9ec32": {
       "job_id": "18ffe4f96ac9ec32",
       "url": "https://jobs.lever.co/brillio-2/f73dd26c-a7d3-45cb-aa0f-1191d9c90adc",
-      "checked_at_utc": "2026-11-20T20:09:23.324510+00:00",
-      "status": "no_verification_detected",
-      "reason": "application_form_visible"
-    },
-    "9ac50744f0373987": {
-      "job_id": "9ac50744f0373987",
-      "url": "https://jobs.lever.co/brillio-2/d36f119a-9835-4e84-bb76-11caed33f4c3",
-      "checked_at_utc": "2026-11-20T20:09:23.338599+00:00",
+      "checked_at_utc": "2026-11-23T23:49:53.238120+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "3c5ae16ab69190d7": {
       "job_id": "3c5ae16ab69190d7",
       "url": "https://jobs.lever.co/brillio-2/2fb0b0bc-1e48-4a94-80c4-2c6ad54ce51f",
-      "checked_at_utc": "2026-11-20T20:09:24.888240+00:00",
+      "checked_at_utc": "2026-11-23T23:49:54.154909+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "39eca93bdc296632": {
       "job_id": "39eca93bdc296632",
       "url": "https://jobs.ashbyhq.com/buspatrol/ecf9c172-daf7-4ca9-8843-237acb500010/application",
-      "checked_at_utc": "2026-11-20T20:09:25.246780+00:00",
+      "checked_at_utc": "2026-11-23T23:49:54.256074+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "37538ff2e07a1673": {
       "job_id": "37538ff2e07a1673",
       "url": "https://jobs.lever.co/zeta/095cff54-0a10-40b2-baa7-199c5e03d092",
-      "checked_at_utc": "2026-11-21T07:00:02.907005+00:00",
+      "checked_at_utc": "2026-11-23T23:49:54.327691+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "cfd90ed8978c567b": {
       "job_id": "cfd90ed8978c567b",
       "url": "https://job-boards.greenhouse.io/machinify-india/jobs/4473693009",
-      "checked_at_utc": "2026-11-21T07:00:02.907845+00:00",
+      "checked_at_utc": "2026-11-23T23:49:55.779733+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "d44d83854cc7c1a3": {
       "job_id": "d44d83854cc7c1a3",
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240502004",
-      "checked_at_utc": "2026-11-21T07:00:02.908621+00:00",
+      "checked_at_utc": "2026-11-23T23:49:56.778246+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "f3e111330bd6076e": {
       "job_id": "f3e111330bd6076e",
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5174334007",
-      "checked_at_utc": "2026-11-21T07:00:02.910148+00:00",
+      "checked_at_utc": "2026-11-23T23:49:57.088869+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "fa59310564fd310a": {
       "job_id": "fa59310564fd310a",
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5279066007",
-      "checked_at_utc": "2026-11-21T07:00:02.910827+00:00",
+      "checked_at_utc": "2026-11-23T23:49:57.592922+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "b03af7431ca629a1": {
       "job_id": "b03af7431ca629a1",
       "url": "https://jobs.lever.co/smart-working-solutions/ea7609d0-fbe7-443e-ae95-5e92f5d1939f",
-      "checked_at_utc": "2026-11-21T07:00:05.368368+00:00",
+      "checked_at_utc": "2026-11-23T23:49:57.826729+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "b16e9e6bbaa2c80e": {
       "job_id": "b16e9e6bbaa2c80e",
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4464885009",
-      "checked_at_utc": "2026-11-21T07:00:06.083258+00:00",
+      "checked_at_utc": "2026-11-23T23:49:59.126763+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "3f7fc55aef41009e": {
       "job_id": "3f7fc55aef41009e",
       "url": "https://jobs.lever.co/shyftlabs/75e1eb51-c562-4f01-a029-1a8823a16b4a",
-      "checked_at_utc": "2026-11-21T07:00:06.241648+00:00",
+      "checked_at_utc": "2026-11-23T23:49:59.299257+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "fa66824ebbfe7a18": {
       "job_id": "fa66824ebbfe7a18",
       "url": "https://job-boards.greenhouse.io/addepar1/jobs/8516188002",
-      "checked_at_utc": "2026-11-21T07:00:06.377483+00:00",
+      "checked_at_utc": "2026-11-23T23:49:59.583658+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "402c70a939020c1d": {
       "job_id": "402c70a939020c1d",
       "url": "https://job-boards.greenhouse.io/tide/jobs/7817071003",
-      "checked_at_utc": "2026-11-21T07:00:06.660259+00:00",
+      "checked_at_utc": "2026-11-23T23:50:00.993117+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "efde5c6bf608011e": {
       "job_id": "efde5c6bf608011e",
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5210019007",
-      "checked_at_utc": "2026-11-21T07:00:08.388236+00:00",
+      "checked_at_utc": "2026-11-23T23:50:01.410835+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "f2342df578a8fb52": {
       "job_id": "f2342df578a8fb52",
       "url": "https://jobs.lever.co/lingarogroup/0e96ae73-e8ad-4866-a53d-0011bdfae680",
-      "checked_at_utc": "2026-11-21T07:00:08.688272+00:00",
+      "checked_at_utc": "2026-11-23T23:50:01.666867+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "c106bf1294b39a70": {
       "job_id": "c106bf1294b39a70",
       "url": "https://job-boards.greenhouse.io/deepintent/jobs/6240412004",
-      "checked_at_utc": "2026-11-21T07:00:08.981246+00:00",
+      "checked_at_utc": "2026-11-23T23:50:02.223275+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "2bd3ff0a17553f96": {
       "job_id": "2bd3ff0a17553f96",
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278551007",
-      "checked_at_utc": "2026-11-21T07:00:09.066833+00:00",
+      "checked_at_utc": "2026-11-23T23:50:03.240079+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "b79251baa7717233": {
       "job_id": "b79251baa7717233",
       "url": "https://job-boards.greenhouse.io/truveta/jobs/6114475004",
-      "checked_at_utc": "2026-11-21T07:00:09.287844+00:00",
+      "checked_at_utc": "2026-11-23T23:50:03.563675+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "525a243282517276": {
       "job_id": "525a243282517276",
       "url": "https://job-boards.greenhouse.io/truveta/jobs/6114473004",
-      "checked_at_utc": "2026-11-21T07:00:10.762601+00:00",
+      "checked_at_utc": "2026-11-23T23:50:03.601251+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "10a3e5eefe945a23": {
       "job_id": "10a3e5eefe945a23",
       "url": "https://job-boards.greenhouse.io/pointwild/jobs/5474748008",
-      "checked_at_utc": "2026-11-21T07:00:11.075276+00:00",
+      "checked_at_utc": "2026-11-23T23:50:04.346604+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "7828b47a4c6ea834": {
       "job_id": "7828b47a4c6ea834",
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267167007",
-      "checked_at_utc": "2026-11-21T07:00:11.292561+00:00",
+      "checked_at_utc": "2026-11-23T23:50:05.523605+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "7453f9763f53eca0": {
       "job_id": "7453f9763f53eca0",
       "url": "https://job-boards.greenhouse.io/zscaler/jobs/5278549007",
-      "checked_at_utc": "2026-11-21T07:00:11.442010+00:00",
+      "checked_at_utc": "2026-11-23T23:50:05.542261+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "d32967fa7a649091": {
       "job_id": "d32967fa7a649091",
       "url": "https://jobs.ashbyhq.com/sarvam/fa96b55d-0c77-423d-8eef-f579c8496adb/application",
-      "checked_at_utc": "2026-11-21T07:00:12.457459+00:00",
+      "checked_at_utc": "2026-11-23T23:50:05.742787+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "2abd0f83b22e397c": {
       "job_id": "2abd0f83b22e397c",
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8928675002",
-      "checked_at_utc": "2026-11-21T07:00:12.850637+00:00",
+      "checked_at_utc": "2026-11-23T23:50:05.903908+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "0d82bc35b32610f4": {
       "job_id": "0d82bc35b32610f4",
       "url": "https://jobs.lever.co/brillio-2/5da50ae5-c9b2-4d0f-8e66-2ddc598c9405",
-      "checked_at_utc": "2026-11-21T07:00:13.223798+00:00",
+      "checked_at_utc": "2026-11-23T23:50:06.465503+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "803b056d4c57876e": {
       "job_id": "803b056d4c57876e",
       "url": "https://jobs.lever.co/brillio-2/a2dd5a37-46f5-4e80-a2a8-792e05f295b5",
-      "checked_at_utc": "2026-11-21T07:00:13.451110+00:00",
+      "checked_at_utc": "2026-11-23T23:50:07.694849+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "505600664ce7751f": {
       "job_id": "505600664ce7751f",
       "url": "https://jobs.lever.co/gohighlevel/ea8ed99e-59bf-4c23-8cb6-71609f2d9313",
-      "checked_at_utc": "2026-11-21T07:00:13.583175+00:00",
+      "checked_at_utc": "2026-11-23T23:50:07.819703+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "91318078feac37dc": {
       "job_id": "91318078feac37dc",
       "url": "https://job-boards.greenhouse.io/addepar1/jobs/8799881002",
-      "checked_at_utc": "2026-11-21T07:00:14.741089+00:00",
+      "checked_at_utc": "2026-11-23T23:50:07.861895+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "c205ac4107aec206": {
       "job_id": "c205ac4107aec206",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8642437002",
-      "checked_at_utc": "2026-11-21T07:00:14.901296+00:00",
+      "checked_at_utc": "2026-11-23T23:50:07.951368+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "7a7fc1a9954727d9": {
       "job_id": "7a7fc1a9954727d9",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8047928002",
-      "checked_at_utc": "2026-11-21T07:00:16.874210+00:00",
+      "checked_at_utc": "2026-11-23T23:50:09.098258+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "977533dd1b9cc9ec": {
       "job_id": "977533dd1b9cc9ec",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/4808098002",
-      "checked_at_utc": "2026-11-21T07:00:16.995873+00:00",
+      "checked_at_utc": "2026-11-23T23:50:09.838319+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "b2345a7367eefa30": {
       "job_id": "b2345a7367eefa30",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/4685999002",
-      "checked_at_utc": "2026-11-21T07:00:17.166366+00:00",
+      "checked_at_utc": "2026-11-23T23:50:09.915037+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "0d3a8336a1819989": {
       "job_id": "0d3a8336a1819989",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/4985961002",
-      "checked_at_utc": "2026-11-21T07:00:17.387561+00:00",
+      "checked_at_utc": "2026-11-23T23:50:11.258041+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "0f85270f5cde76ce": {
       "job_id": "0f85270f5cde76ce",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/5090277002",
-      "checked_at_utc": "2026-11-21T07:00:17.478904+00:00",
+      "checked_at_utc": "2026-11-23T23:50:11.678847+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "514536981e2ccc33": {
       "job_id": "514536981e2ccc33",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8741978002",
-      "checked_at_utc": "2026-11-21T07:00:19.060722+00:00",
+      "checked_at_utc": "2026-11-23T23:50:11.838918+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "044e1d48439f9353": {
       "job_id": "044e1d48439f9353",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/8675459002",
-      "checked_at_utc": "2026-11-21T07:00:19.184853+00:00",
+      "checked_at_utc": "2026-11-23T23:50:11.983609+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "8d65aa3a83624bc1": {
       "job_id": "8d65aa3a83624bc1",
       "url": "https://job-boards.greenhouse.io/sigmoid/jobs/5083674002",
-      "checked_at_utc": "2026-11-21T07:00:19.331259+00:00",
+      "checked_at_utc": "2026-11-23T23:50:13.056080+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "40f21341aceb325a": {
       "job_id": "40f21341aceb325a",
       "url": "https://jobs.lever.co/brillio-2/8e613417-a6c1-4e88-85d0-a5c88970395a",
-      "checked_at_utc": "2026-11-21T07:00:19.582345+00:00",
+      "checked_at_utc": "2026-11-23T23:50:13.389660+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "9a67fad74925dec1": {
       "job_id": "9a67fad74925dec1",
       "url": "https://job-boards.greenhouse.io/gitlab/jobs/8827370002",
-      "checked_at_utc": "2026-11-21T07:00:19.724640+00:00",
+      "checked_at_utc": "2026-11-23T23:50:13.786978+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "36b216d570c7d05f": {
       "job_id": "36b216d570c7d05f",
       "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8185664",
-      "checked_at_utc": "2026-11-21T07:00:21.285106+00:00",
+      "checked_at_utc": "2026-11-23T23:50:14.055488+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "b0024a6a041321e3": {
       "job_id": "b0024a6a041321e3",
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4375638009",
-      "checked_at_utc": "2026-11-21T07:00:21.433306+00:00",
+      "checked_at_utc": "2026-11-23T23:50:14.185808+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "5786a07014ad020b": {
       "job_id": "5786a07014ad020b",
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4475901009",
-      "checked_at_utc": "2026-11-21T07:00:21.732026+00:00",
+      "checked_at_utc": "2026-11-23T23:50:15.362971+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "9964e9e70cebd363": {
       "job_id": "9964e9e70cebd363",
       "url": "https://job-boards.greenhouse.io/redwoodsoftware/jobs/4467210009",
-      "checked_at_utc": "2026-11-21T07:00:21.859987+00:00",
+      "checked_at_utc": "2026-11-23T23:50:15.878594+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "082b1913b9d6c9aa": {
       "job_id": "082b1913b9d6c9aa",
       "url": "https://jobs.lever.co/brillio-2/3c794f6c-18ac-4de6-b64a-a395d25a8f56",
-      "checked_at_utc": "2026-11-21T07:00:22.665215+00:00",
+      "checked_at_utc": "2026-11-23T23:50:16.146876+00:00",
       "status": "no_verification_detected",
       "reason": "application_form_visible"
     },
     "a0408a86b9d336a4": {
       "job_id": "a0408a86b9d336a4",
       "url": "https://job-boards.greenhouse.io/neweratech/jobs/8908562002",
-      "checked_at_utc": "2026-11-21T07:00:23.620673+00:00",
+      "checked_at_utc": "2026-11-23T23:50:16.376292+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
     "d9bb142a60476d5f": {
       "job_id": "d9bb142a60476d5f",
       "url": "https://job-boards.greenhouse.io/neweratech/jobs/8870372002",
-      "checked_at_utc": "2026-11-21T07:00:23.706785+00:00",
+      "checked_at_utc": "2026-11-23T23:50:16.627625+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
@@ -1505,20 +1463,6 @@
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
-    "5d171e5a3affccdf": {
-      "job_id": "5d171e5a3affccdf",
-      "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4731054005",
-      "checked_at_utc": "2026-11-21T07:00:28.407423+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
-    "8355ffa23a52b8af": {
-      "job_id": "8355ffa23a52b8af",
-      "url": "https://job-boards.greenhouse.io/sigmoid/jobs/7916306002",
-      "checked_at_utc": "2026-11-21T07:00:29.934588+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
     "a6059636e60e1236": {
       "job_id": "a6059636e60e1236",
       "url": "https://jobs.lever.co/smart-working-solutions/b54f0d60-9226-4292-b0a3-9caec516a2fd",
@@ -1579,13 +1523,6 @@
       "job_id": "2f42e206445602a7",
       "url": "https://job-boards.greenhouse.io/celonis/jobs/6647315003?gh_jid=6647315003",
       "checked_at_utc": "2026-11-21T19:10:40.433668+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
-    "1bdf06d461294167": {
-      "job_id": "1bdf06d461294167",
-      "url": "https://job-boards.greenhouse.io/celonis/jobs/7777102003?gh_jid=7777102003",
-      "checked_at_utc": "2026-11-21T19:10:42.840589+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
@@ -1729,13 +1666,6 @@
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
-    "8f58342f5cb7f838": {
-      "job_id": "8f58342f5cb7f838",
-      "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8402674",
-      "checked_at_utc": "2026-11-21T19:10:52.930017+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
     "da5a8bc3a4a79b1f": {
       "job_id": "da5a8bc3a4a79b1f",
       "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8402700",
@@ -1792,24 +1722,10 @@
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
-    "eccf670d60d0d5f6": {
-      "job_id": "eccf670d60d0d5f6",
-      "url": "https://job-boards.greenhouse.io/conviva/jobs/8004215003",
-      "checked_at_utc": "2026-11-21T19:10:57.281846+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
     "b7e223ef0ae0f5f3": {
       "job_id": "b7e223ef0ae0f5f3",
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8009079003",
       "checked_at_utc": "2026-11-21T19:10:57.809367+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
-    "dabf47bc59cff5e8": {
-      "job_id": "dabf47bc59cff5e8",
-      "url": "https://job-boards.greenhouse.io/conviva/jobs/8030484003",
-      "checked_at_utc": "2026-11-21T19:10:57.848282+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
@@ -1894,13 +1810,6 @@
       "job_id": "e8b95ed37ef3fe10",
       "url": "https://job-boards.greenhouse.io/workatbackbase/jobs/8124286",
       "checked_at_utc": "2026-11-21T19:11:03.702156+00:00",
-      "status": "verification_detected",
-      "reason": "visible_challenge"
-    },
-    "5ddf627e21385bf2": {
-      "job_id": "5ddf627e21385bf2",
-      "url": "https://job-boards.greenhouse.io/sureify/jobs/5490369008",
-      "checked_at_utc": "2026-11-21T19:11:04.375703+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     },
@@ -2055,6 +1964,104 @@
       "job_id": "4ee345e061690c36",
       "url": "https://job-boards.greenhouse.io/conviva/jobs/8030074003",
       "checked_at_utc": "2026-11-22T19:32:04.050114+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "807701d73ec7a289": {
+      "job_id": "807701d73ec7a289",
+      "url": "https://jobs.lever.co/brillio-2/aa294b22-8aa6-4cb4-b547-0878501a6558",
+      "checked_at_utc": "2026-11-23T23:49:47.761547+00:00",
+      "status": "no_verification_detected",
+      "reason": "application_form_visible"
+    },
+    "794ccf4495d4b321": {
+      "job_id": "794ccf4495d4b321",
+      "url": "https://job-boards.greenhouse.io/conviva/jobs/8004215003",
+      "checked_at_utc": "2026-11-23T23:49:47.763215+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "181651ee40f34e37": {
+      "job_id": "181651ee40f34e37",
+      "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8410709",
+      "checked_at_utc": "2026-11-23T23:49:47.764072+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "fe564d539aec3837": {
+      "job_id": "fe564d539aec3837",
+      "url": "https://job-boards.greenhouse.io/conviva/jobs/8030484003",
+      "checked_at_utc": "2026-11-23T23:49:47.765239+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "332ff77f5378155c": {
+      "job_id": "332ff77f5378155c",
+      "url": "https://job-boards.greenhouse.io/celonis/jobs/7791303003?gh_jid=7791303003",
+      "checked_at_utc": "2026-11-23T23:49:47.765836+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "0c0323996d5edae2": {
+      "job_id": "0c0323996d5edae2",
+      "url": "https://job-boards.greenhouse.io/celonis/jobs/7791343003?gh_jid=7791343003",
+      "checked_at_utc": "2026-11-23T23:49:49.963822+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "72d64258dbd8f99d": {
+      "job_id": "72d64258dbd8f99d",
+      "url": "https://job-boards.greenhouse.io/twilio/jobs/8065032",
+      "checked_at_utc": "2026-11-23T23:49:49.982713+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "7585af1e55cacb1c": {
+      "job_id": "7585af1e55cacb1c",
+      "url": "https://job-boards.greenhouse.io/razorpaysoftwareprivatelimited/jobs/4747004005",
+      "checked_at_utc": "2026-11-23T23:49:50.088906+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "e4b7c3e82cc2b1a0": {
+      "job_id": "e4b7c3e82cc2b1a0",
+      "url": "https://jobs.ashbyhq.com/uptimeai/0fedf5a5-4d2c-4fc1-912c-8f350434bfd8/application",
+      "checked_at_utc": "2026-11-23T23:49:50.266014+00:00",
+      "status": "no_verification_detected",
+      "reason": "application_form_visible"
+    },
+    "f40f0bf5f2ed0ead": {
+      "job_id": "f40f0bf5f2ed0ead",
+      "url": "https://job-boards.greenhouse.io/sonicwall/jobs/8397051",
+      "checked_at_utc": "2026-11-23T23:49:51.174546+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "79b7f3be449f7c9d": {
+      "job_id": "79b7f3be449f7c9d",
+      "url": "https://job-boards.greenhouse.io/sureify/jobs/5490369008",
+      "checked_at_utc": "2026-11-23T23:49:52.218021+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "31ba64af58e1d238": {
+      "job_id": "31ba64af58e1d238",
+      "url": "https://job-boards.greenhouse.io/sureify/jobs/5491893008",
+      "checked_at_utc": "2026-11-23T23:49:52.255548+00:00",
+      "status": "verification_detected",
+      "reason": "visible_challenge"
+    },
+    "75b5f7af763dba68": {
+      "job_id": "75b5f7af763dba68",
+      "url": "https://jobs.lever.co/pditechnologies/5dc69df4-e224-4265-8372-5931e7e49de2",
+      "checked_at_utc": "2026-11-23T23:49:52.392591+00:00",
+      "status": "no_verification_detected",
+      "reason": "application_form_visible"
+    },
+    "cea3fa1be520a532": {
+      "job_id": "cea3fa1be520a532",
+      "url": "https://job-boards.greenhouse.io/saucelabs/jobs/8402654",
+      "checked_at_utc": "2026-11-23T23:49:52.453004+00:00",
       "status": "verification_detected",
       "reason": "visible_challenge"
     }
