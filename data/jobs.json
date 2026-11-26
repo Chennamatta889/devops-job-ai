@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-25T19:57:49.948265+00:00",
+  "generated_at_utc": "2026-11-26T02:51:47.077011+00:00",
   "count": 622,
   "jobs": [
     {
@@ -211,14 +211,14 @@
       "experience_label": "7-11 years"
     },
     {
-      "id": "8aac806c535b7b7b",
+      "id": "5fdfcd2c6683fdfe",
       "title": "Staff Software Development Engineer - Java/Go + Distributed Systems",
       "company": "zscaler",
       "location": "Bangalore, IND; Hyderabad, IND",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-25T16:04:55+00:00",
-      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5242480007",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5242482007",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": true,
@@ -242,14 +242,14 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "5fdfcd2c6683fdfe",
+      "id": "8aac806c535b7b7b",
       "title": "Staff Software Development Engineer - Java/Go + Distributed Systems",
       "company": "zscaler",
       "location": "Bangalore, IND; Hyderabad, IND",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-25T16:04:55+00:00",
-      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5242482007",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5242480007",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": true,
@@ -369,6 +369,36 @@
       "experience_label": "5+ years"
     },
     {
+      "id": "2cc0e9d718b9b523",
+      "title": "Staff Software Development Engineer",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-25T16:04:55+00:00",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5209653007",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "java",
+        "python",
+        "golang",
+        "aws",
+        "azure",
+        "gcp",
+        "kubernetes",
+        "docker",
+        "iam"
+      ],
+      "experience_min": 5,
+      "experience_max": null,
+      "experience_label": "5+ years"
+    },
+    {
       "id": "fa59310564fd310a",
       "title": "Staff Software Development Engineer",
       "company": "zscaler",
@@ -443,36 +473,6 @@
         "prometheus",
         "grafana",
         "argocd"
-      ],
-      "experience_min": 5,
-      "experience_max": null,
-      "experience_label": "5+ years"
-    },
-    {
-      "id": "2cc0e9d718b9b523",
-      "title": "Staff Software Development Engineer",
-      "company": "zscaler",
-      "location": "Bangalore, IND",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-25T16:04:55+00:00",
-      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5209653007",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": true,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "java",
-        "python",
-        "golang",
-        "aws",
-        "azure",
-        "gcp",
-        "kubernetes",
-        "docker",
-        "iam"
       ],
       "experience_min": 5,
       "experience_max": null,
@@ -775,6 +775,33 @@
       "experience_label": "7+ years"
     },
     {
+      "id": "838cdb795c7776d4",
+      "title": "Sr. Staff Software Development Engineer",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-25T16:04:55+00:00",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5253927007",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "python",
+        "golang",
+        "aws",
+        "azure",
+        "gcp",
+        "cybersecurity"
+      ],
+      "experience_min": 8,
+      "experience_max": null,
+      "experience_label": "8+ years"
+    },
+    {
       "id": "45e13abb427ef195",
       "title": "Sr. Staff Software Development Engineer",
       "company": "zscaler",
@@ -826,33 +853,6 @@
         "kubernetes",
         "docker",
         "prometheus"
-      ],
-      "experience_min": 8,
-      "experience_max": null,
-      "experience_label": "8+ years"
-    },
-    {
-      "id": "838cdb795c7776d4",
-      "title": "Sr. Staff Software Development Engineer",
-      "company": "zscaler",
-      "location": "Bangalore, IND",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-25T16:04:55+00:00",
-      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5253927007",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": true,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "python",
-        "golang",
-        "aws",
-        "azure",
-        "gcp",
-        "cybersecurity"
       ],
       "experience_min": 8,
       "experience_max": null,
@@ -1091,29 +1091,6 @@
       "experience_label": "8+ years"
     },
     {
-      "id": "bf7fdaccf5ec13cd",
-      "title": "Senior Staff Software Development Engineer",
-      "company": "zscaler",
-      "location": "Bangalore, IND",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-25T16:04:55+00:00",
-      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267726007",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": true,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "java",
-        "javascript"
-      ],
-      "experience_min": 10,
-      "experience_max": null,
-      "experience_label": "10+ years"
-    },
-    {
       "id": "ae246ca981abcb45",
       "title": "Senior Staff Software Development Engineer",
       "company": "zscaler",
@@ -1163,6 +1140,29 @@
       "experience_min": 8,
       "experience_max": null,
       "experience_label": "8+ years"
+    },
+    {
+      "id": "bf7fdaccf5ec13cd",
+      "title": "Senior Staff Software Development Engineer",
+      "company": "zscaler",
+      "location": "Bangalore, IND",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-25T16:04:55+00:00",
+      "url": "https://job-boards.greenhouse.io/zscaler/jobs/5267726007",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": true,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "java",
+        "javascript"
+      ],
+      "experience_min": 10,
+      "experience_max": null,
+      "experience_label": "10+ years"
     },
     {
       "id": "2af56016322b46c0",
@@ -1957,14 +1957,14 @@
       "experience_label": "2-5 years"
     },
     {
-      "id": "ee697b2d7e602620",
+      "id": "d3e72fdb22928714",
       "title": "Software Engineer 3",
       "company": "mongodb",
       "location": "Gurugram",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-25T14:33:36+00:00",
-      "url": "https://www.mongodb.com/careers/job/?gh_jid=8083366",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8208074",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -1972,19 +1972,22 @@
       "source_listings": {},
       "resolution": "",
       "skills": [
+        "java",
         "python",
         "javascript",
+        "react",
+        "golang",
         "mongodb",
-        "machine learning",
         "aws",
         "azure",
         "gcp",
-        "ci/cd",
-        "salesforce"
+        "kubernetes",
+        "openshift",
+        "docker"
       ],
-      "experience_min": 3,
+      "experience_min": 4,
       "experience_max": null,
-      "experience_label": "3+ years"
+      "experience_label": "4+ years"
     },
     {
       "id": "3343a68d72d73a68",
@@ -2017,14 +2020,14 @@
       "experience_label": "3-4 years"
     },
     {
-      "id": "d3e72fdb22928714",
+      "id": "ee697b2d7e602620",
       "title": "Software Engineer 3",
       "company": "mongodb",
       "location": "Gurugram",
       "source": "greenhouse",
       "category": "Software Engineering",
       "published": "2026-11-25T14:33:36+00:00",
-      "url": "https://www.mongodb.com/careers/job/?gh_jid=8208074",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8083366",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -2032,22 +2035,19 @@
       "source_listings": {},
       "resolution": "",
       "skills": [
-        "java",
         "python",
         "javascript",
-        "react",
-        "golang",
         "mongodb",
+        "machine learning",
         "aws",
         "azure",
         "gcp",
-        "kubernetes",
-        "openshift",
-        "docker"
+        "ci/cd",
+        "salesforce"
       ],
-      "experience_min": 4,
+      "experience_min": 3,
       "experience_max": null,
-      "experience_label": "4+ years"
+      "experience_label": "3+ years"
     },
     {
       "id": "741e4a9e663ea991",
@@ -2297,34 +2297,6 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "18e73e8669f77f98",
-      "title": "Senior Data Analyst",
-      "company": "mongodb",
-      "location": "Gurugram",
-      "source": "greenhouse",
-      "category": "Data / AI / ML",
-      "published": "2026-11-25T14:33:36+00:00",
-      "url": "https://www.mongodb.com/careers/job/?gh_jid=8224590",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": false,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "python",
-        "sql",
-        "mongodb",
-        "tableau",
-        "aws",
-        "azure",
-        "gcp"
-      ],
-      "experience_min": 4,
-      "experience_max": null,
-      "experience_label": "4+ years"
-    },
-    {
       "id": "ca88d7e8e97c44f9",
       "title": "Senior Data Analyst",
       "company": "mongodb",
@@ -2351,6 +2323,34 @@
       "experience_min": 5,
       "experience_max": null,
       "experience_label": "5+ years"
+    },
+    {
+      "id": "18e73e8669f77f98",
+      "title": "Senior Data Analyst",
+      "company": "mongodb",
+      "location": "Gurugram",
+      "source": "greenhouse",
+      "category": "Data / AI / ML",
+      "published": "2026-11-25T14:33:36+00:00",
+      "url": "https://www.mongodb.com/careers/job/?gh_jid=8224590",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": false,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "python",
+        "sql",
+        "mongodb",
+        "tableau",
+        "aws",
+        "azure",
+        "gcp"
+      ],
+      "experience_min": 4,
+      "experience_max": null,
+      "experience_label": "4+ years"
     },
     {
       "id": "b892d5c85f3eb8ce",
@@ -7466,14 +7466,14 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "9d21952976fa9876",
+      "id": "c7fbac2fb46198a7",
       "title": "Specialist Solutions Architect - AI/ML",
       "company": "databricks",
-      "location": "Bengaluru, India",
+      "location": "Mumbai, India",
       "source": "greenhouse",
       "category": "Product / Technical",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8585164002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8593505002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -7492,14 +7492,14 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "c7fbac2fb46198a7",
+      "id": "9d21952976fa9876",
       "title": "Specialist Solutions Architect - AI/ML",
       "company": "databricks",
-      "location": "Mumbai, India",
+      "location": "Bengaluru, India",
       "source": "greenhouse",
       "category": "Product / Technical",
       "published": "2026-11-19T21:47:39+00:00",
-      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8593505002",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8585164002",
       "listing_url": "",
       "direct_apply": true,
       "auto_apply_supported": false,
@@ -14617,34 +14617,6 @@
       "experience_label": "5+ years"
     },
     {
-      "id": "db848b6e9af4c615",
-      "title": "Senior Staff Software Engineer",
-      "company": "druva",
-      "location": "Pune, Maharashtra, India",
-      "source": "greenhouse",
-      "category": "Software Engineering",
-      "published": "2026-11-04T21:41:46+00:00",
-      "url": "https://www.druva.com/why-druva/explore/careers/jobs/8598308002/?gh_jid=8598308002",
-      "listing_url": "",
-      "direct_apply": true,
-      "auto_apply_supported": false,
-      "discovered_via": [],
-      "source_listings": {},
-      "resolution": "",
-      "skills": [
-        "java",
-        ".net",
-        "python",
-        "genai",
-        "aws",
-        "azure",
-        "kubernetes"
-      ],
-      "experience_min": 6,
-      "experience_max": null,
-      "experience_label": "6+ years"
-    },
-    {
       "id": "1d67ebe974c06aaa",
       "title": "Senior Staff Software Engineer",
       "company": "druva",
@@ -14671,6 +14643,34 @@
       "experience_min": 6,
       "experience_max": 9,
       "experience_label": "6-9 years"
+    },
+    {
+      "id": "db848b6e9af4c615",
+      "title": "Senior Staff Software Engineer",
+      "company": "druva",
+      "location": "Pune, Maharashtra, India",
+      "source": "greenhouse",
+      "category": "Software Engineering",
+      "published": "2026-11-04T21:41:46+00:00",
+      "url": "https://www.druva.com/why-druva/explore/careers/jobs/8598308002/?gh_jid=8598308002",
+      "listing_url": "",
+      "direct_apply": true,
+      "auto_apply_supported": false,
+      "discovered_via": [],
+      "source_listings": {},
+      "resolution": "",
+      "skills": [
+        "java",
+        ".net",
+        "python",
+        "genai",
+        "aws",
+        "azure",
+        "kubernetes"
+      ],
+      "experience_min": 6,
+      "experience_max": null,
+      "experience_label": "6+ years"
     },
     {
       "id": "25654dce86adcdef",
